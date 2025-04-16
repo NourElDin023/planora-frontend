@@ -1,0 +1,8 @@
+react
+react-dom
+react-router-dom
+axios
+vite
+@vitejs/plugin-react
+tailwindcss 
+react-hook-form 
