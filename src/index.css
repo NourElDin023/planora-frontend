@@ -1,0 +1,35 @@
+/* @import '~@fortawesome/fontawesome-free/css/all.min.css'; */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom purple color */
+.text-purple {
+    color: #6a11cb;
+  }
+  
+  .border-purple {
+    border-color: #6a11cb !important;
+  }
+  
+  /* Better markdown rendering */
+  .prose {
+    max-width: 100%;
+    line-height: 1.6;
+  }
+  
+  .prose p {
+    margin-bottom: 1rem;
+  }
+  
+  .prose h1, .prose h2, .prose h3 {
+    color: #6a11cb;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .prose ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
