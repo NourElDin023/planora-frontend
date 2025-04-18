@@ -6,6 +6,8 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Notes from './pages/Notes';
+import './index.css';
 
 function App() {
   return (
@@ -16,7 +18,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
+          <Route path="/notes" element={<Notes />} />
+
           {/* Protected routes - requires authentication */}
           <Route 
             path="/profile" 
@@ -78,10 +81,11 @@ function App() {
               </div>
             } 
           />
+
         </Routes>
       </Router>
     </AuthProvider>
+
   );
 }
-
 export default App;
