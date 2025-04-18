@@ -8,7 +8,8 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Notes from './pages/Notes';
 import './index.css';
-
+import TestSharePage from './pages/TestSharePage ';
+import NotificationsPage from './pages/NotificationsPage';
 function App() {
   return (
     <AuthProvider>
@@ -19,6 +20,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/notes" element={<Notes />} />
+          <Route path="/test-share" element={<TestSharePage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
 
           {/* Protected routes - requires authentication */}
           <Route 
