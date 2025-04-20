@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,8 +10,27 @@ const Login = () => {
   });
   const [formError, setFormError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState('');
+  const [resendingEmail, setResendingEmail] = useState(false);
+  const [resendMessage, setResendMessage] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for email verification query params (when user comes from verification link)
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const verificationStatus = searchParams.get('verificationStatus');
+    const email = searchParams.get('email');
+    
+    if (verificationStatus === 'failed' && email) {
+      setVerificationEmail(email);
+      setFormError('Your email verification failed or the link has expired. Please request a new verification link.');
+    } else if (verificationStatus === 'success') {
+      setFormError('');
+      setResendMessage('Your email has been verified successfully! You can now log in.');
+    }
+  }, [location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,16 +40,49 @@ const Login = () => {
     });
   };
 
+  const handleResendVerification = async () => {
+    if (!verificationEmail) return;
+    
+    setResendingEmail(true);
+    setResendMessage('');
+    
+    try {
+      const response = await axios.post('http://localhost:8000/api/users/resend-verification/', 
+        { email: verificationEmail },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      
+      setResendMessage(response.data.message);
+    } catch (error) {
+      setResendMessage('Failed to resend verification email. Please try again.');
+    } finally {
+      setResendingEmail(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
     setIsLoading(true);
+    setVerificationEmail(''); // Reset verification email state
+    setResendMessage('');
 
     try {
       await login(formData.username, formData.password);
       navigate('/'); // Redirect to homepage after login
     } catch (err) {
-      setFormError(err.response?.data?.error || 'Login failed. Please check your credentials.');
+      console.log("Login error:", err.response?.data);
+      if (err.response?.data?.verification_required) {
+        // Handle case where email verification is required
+        setVerificationEmail(err.response.data.email);
+        setFormError('Your email address has not been verified. Please check your inbox for the verification link or request a new one.');
+      } else {
+        setFormError(err.response?.data?.error || 'Login failed. Please check your credentials.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -56,10 +109,51 @@ const Login = () => {
                   <p className="text-muted">Sign in to your Life Tracker account</p>
                 </div>
                 
-                {formError && (
+                {formError && !verificationEmail && (
                   <div className="alert alert-danger" role="alert">
                     <i className="fas fa-exclamation-circle me-2"></i>
                     {formError}
+                  </div>
+                )}
+                
+                {/* Success Message */}
+                {resendMessage && !verificationEmail && (
+                  <div className="alert alert-success" role="alert">
+                    <i className="fas fa-check-circle me-2"></i>
+                    {resendMessage}
+                  </div>
+                )}
+                
+                {/* Email Verification Required Message */}
+                {verificationEmail && (
+                  <div className="alert alert-warning" role="alert">
+                    <div className="d-flex align-items-center mb-2">
+                      <i className="fas fa-envelope me-2"></i>
+                      <strong>Email verification required</strong>
+                    </div>
+                    <p>{formError}</p>
+                    
+                    <div className="mt-3">
+                      <button 
+                        type="button" 
+                        className="btn btn-primary w-100"
+                        onClick={handleResendVerification}
+                        disabled={resendingEmail}
+                      >
+                        {resendingEmail ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            Sending...
+                          </>
+                        ) : 'Resend Verification Email'}
+                      </button>
+                      
+                      {resendMessage && (
+                        <div className="alert alert-info mt-2 mb-0 py-2">
+                          {resendMessage}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
                 
