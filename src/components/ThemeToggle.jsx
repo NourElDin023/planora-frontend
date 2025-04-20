@@ -12,12 +12,22 @@ const ThemeToggleButton = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+  };
+
   return (
     <button
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      className="btn btn-secondary"
+      onClick={toggleTheme}
+      className="btn btn-link nav-link px-2 d-flex align-items-center text-white"
+      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
-      Toggle {theme === 'light' ? 'Dark' : 'Light'} Mode
+      {theme === 'light' ? (
+        <i className="bi bi-moon-fill fs-5"></i>
+      ) : (
+        <i className="bi bi-brightness-high-fill fs-5"></i>
+      )}
     </button>
   );
 };
