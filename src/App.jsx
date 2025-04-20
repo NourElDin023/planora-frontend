@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import VerifyEmail from './pages/VerifyEmail'; // Import the new VerifyEmail page
 import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -11,10 +12,11 @@ import './index.css';
 import TestSharePage from './pages/TestSharePage ';
 import NotificationsPage from './pages/NotificationsPage';
 import ThemeToggleButton from './components/ThemeToggle';
+
 function App() {
   return (
     <AuthProvider>
- <Router>
+      <Router>
         <Navbar />
         <div className="container mt-3">
           {/* Add ThemeToggleButton anywhere you want */}
@@ -24,6 +26,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/test-share" element={<TestSharePage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
@@ -89,11 +92,10 @@ function App() {
               </div>
             } 
           />
-
         </Routes>
       </Router>
     </AuthProvider>
-
   );
 }
+
 export default App;
