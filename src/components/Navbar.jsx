@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggleButton from './ThemeToggle';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -51,7 +52,7 @@ const Navbar = () => {
                         )}
                     </ul>
                     
-                    <ul className="navbar-nav">
+                    <ul className="navbar-nav align-items-center">
                         {!currentUser ? (
                             <>
                                 <li className="nav-item">
@@ -88,6 +89,10 @@ const Navbar = () => {
                                 </ul>
                             </li>
                         )}
+                        {/* Theme toggle button */}
+                        <li className="nav-item">
+                            <ThemeToggleButton />
+                        </li>
                     </ul>
                 </div>
             </div>

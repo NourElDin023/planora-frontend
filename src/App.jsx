@@ -10,16 +10,12 @@ import Notes from './pages/Notes';
 import './index.css';
 import TestSharePage from './pages/TestSharePage ';
 import NotificationsPage from './pages/NotificationsPage';
-import ThemeToggleButton from './components/ThemeToggle';
+
 function App() {
   return (
     <AuthProvider>
  <Router>
         <Navbar />
-        <div className="container mt-3">
-          {/* Add ThemeToggleButton anywhere you want */}
-          <ThemeToggleButton />
-        </div>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
