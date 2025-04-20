@@ -18,10 +18,6 @@ function App() {
     <AuthProvider>
       <Router>
         <Navbar />
-        <div className="container mt-3">
-          {/* Add ThemeToggleButton anywhere you want */}
-          <ThemeToggleButton />
-        </div>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
