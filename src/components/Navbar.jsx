@@ -15,8 +15,8 @@ const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
             <div className="container">
-                <Link className="navbar-brand" to="/">
-                    <img src="/src/assets/LifeTracker.png" alt="Life Tracker Logo" height="30" className="me-2" />
+                <Link className="navbar-brand d-flex fw-bold" to="/">
+                    <img src="/src/assets/Life-Tracker-logo.png" alt="Life Tracker Logo" height="30" className="me-2" />
                     Life Tracker
                 </Link>
                 
