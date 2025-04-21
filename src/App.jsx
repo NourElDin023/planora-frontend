@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Notes from './pages/Notes';
+import Tasks from './pages/Tasks';
 import './index.css';
 import TestSharePage from './pages/TestSharePage ';
 import NotificationsPage from './pages/NotificationsPage';
@@ -28,34 +29,34 @@ function App() {
           <Route path="/notifications" element={<NotificationsPage />} />
 
           {/* Protected routes - requires authentication */}
-          <Route 
-            path="/profile" 
+          <Route
+            path="/profile"
             element={
               <ProtectedRoute>
                 {/* Profile component will be added later */}
                 <div className="container mt-4">
                   <h1>Profile Page</h1>
-                  <p>This is a protected route that only authenticated users can access.</p>
+                  <p>
+                    This is a protected route that only authenticated users can
+                    access.
+                  </p>
                 </div>
               </ProtectedRoute>
-            } 
+            }
           />
-          
+
           {/* Add more protected routes as needed */}
-          <Route 
-            path="/tasks" 
+          <Route
+            path="/tasks"
             element={
               <ProtectedRoute>
-                <div className="container mt-4">
-                  <h1>Tasks</h1>
-                  <p>Your tasks will appear here.</p>
-                </div>
+                <Tasks />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/habits" 
+
+          <Route
+            path="/habits"
             element={
               <ProtectedRoute>
                 <div className="container mt-4">
@@ -63,11 +64,11 @@ function App() {
                   <p>Your habits will appear here.</p>
                 </div>
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/calendar" 
+
+          <Route
+            path="/calendar"
             element={
               <ProtectedRoute>
                 <div className="container mt-4">
@@ -75,18 +76,18 @@ function App() {
                   <p>Your calendar will appear here.</p>
                 </div>
               </ProtectedRoute>
-            } 
+            }
           />
-          
+
           {/* Catch-all route for 404 */}
-          <Route 
-            path="*" 
+          <Route
+            path="*"
             element={
               <div className="container mt-4 text-center">
                 <h1>404 - Page Not Found</h1>
                 <p>The page you are looking for does not exist.</p>
               </div>
-            } 
+            }
           />
         </Routes>
       </Router>
