@@ -107,7 +107,7 @@ const ResetPassword = () => {
               <div className="card-body p-5">
                 <div className="text-center mb-4">
                   <img 
-                    src="/src/assets/LifeTracker.png" 
+                    src="/src/assets/Life-Tracker-logo-Blue.png" 
                     alt="Life Tracker Logo" 
                     className="img-fluid mb-3" 
                     style={{ maxHeight: '80px' }} 
