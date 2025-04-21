@@ -215,7 +215,7 @@ const Login = () => {
                   </button>
                   
                   <div className="text-end mt-2">
-                    <a href="#" className="text-decoration-none">Forgot password?</a>
+                    <Link to="/forgot-password" className="text-decoration-none">Forgot password?</Link>
                   </div>
                 </form>
                 

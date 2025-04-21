@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail'; // Import the new VerifyEmail page
+import ForgotPassword from './pages/ForgotPassword'; // Import the ForgotPassword page
+import ResetPassword from './pages/ResetPassword'; // Import the ResetPassword page
 import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -26,6 +28,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/test-share" element={<TestSharePage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
