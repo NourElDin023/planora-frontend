@@ -13,6 +13,8 @@ import './index.css';
 import TestSharePage from './pages/TestSharePage ';
 import NotificationsPage from './pages/NotificationsPage';
 import ThemeToggleButton from './components/ThemeToggle';
+import AddCollection from './pages/AddCollection';
+import CollectionsList from './pages/CollectionsList';
 
 function App() {
   return (
@@ -54,7 +56,22 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/addcollections"
+            element={
+              <ProtectedRoute>
+                <AddCollection />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/viewcollections"
+            element={
+              <ProtectedRoute>
+                <CollectionsList />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/habits"
             element={

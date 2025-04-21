@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../utils/axios"; 
 
-const SharePageComponent = ({ pageId, currentUser }) => {
+const SharePageComponent = ({ pageId }) => {
   const [usernames, setUsernames] = useState([]);
   const [selectedUsernames, setSelectedUsernames] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
