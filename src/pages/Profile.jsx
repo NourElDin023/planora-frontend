@@ -337,13 +337,22 @@ const Profile = () => {
                   <div className="row mb-3">
                     <div className="col-md-6">
                       <label className="form-label">Phone Number</label>
-                      <input 
-                        type="tel" 
-                        className="form-control" 
-                        name="phone_number" 
-                        value={profileData.phone_number || ''}
-                        onChange={handleInputChange}
-                      />
+                      <div className="input-group">
+                        <span className="input-group-text">+20</span>
+                        <input 
+                          type="tel" 
+                          className="form-control" 
+                          name="phone_number" 
+                          value={profileData.phone_number || ''}
+                          onChange={handleInputChange}
+                          placeholder="1XXXXXXXXX"
+                          maxLength="10"
+                          pattern="^\d{10}$"
+                        />
+                      </div>
+                      <small className="form-text text-muted">
+                        Egyptian phone number format (10 digits)
+                      </small>
                     </div>
                     <div className="col-md-6">
                       <label className="form-label">Birthdate</label>
@@ -448,7 +457,7 @@ const Profile = () => {
                         <p className="mb-0">Phone</p>
                       </div>
                       <div className="col-sm-9">
-                        <p className="text-muted mb-0">{profileData.phone_number}</p>
+                        <p className="text-muted mb-0">+20 {profileData.phone_number}</p>
                       </div>
                     </div>
                     <hr />
