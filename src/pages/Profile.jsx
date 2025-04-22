@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Profile = () => {
-  const { currentUser, logout } = useContext(AuthContext);
+  const { currentUser, logout, refreshUserData } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState({
@@ -31,11 +31,12 @@ const Profile = () => {
     fetchUserProfile();
   }, []);
 
+  // Use the same function for both initial loading and refreshing
   const fetchUserProfile = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/users/profile/');
-      const userData = response.data;
+      // Use the refreshUserData function which will update both context and localStorage
+      const userData = await refreshUserData();
       
       setProfileData({
         username: userData.username || '',
@@ -113,15 +114,15 @@ const Profile = () => {
         formData.append('profile_picture', profileData.profile_picture);
       }
 
-      console.log('Submitting profile data:', Object.fromEntries(formData));
-
       const response = await axios.put('/users/profile/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
 
-      console.log('Profile update response:', response.data);
+      // Refresh user data in context and localStorage to ensure consistency
+      await refreshUserData();
+      
       toast.success('Profile updated successfully');
       setIsEditing(false);
       setLoading(false);
@@ -159,18 +160,17 @@ const Profile = () => {
     
     setLoading(true);
     try {
-      console.log('Submitting password change data');
       const response = await axios.post('/users/change-password/', {
         current_password: passwordData.current_password,
         new_password: passwordData.new_password
       });
       
-      console.log('Password change response:', response.data);
-      
       // If tokens are returned in the response, update them
       if (response.data.access && response.data.refresh) {
         localStorage.setItem('accessToken', response.data.access);
         localStorage.setItem('refreshToken', response.data.refresh);
+        // Refresh user data to ensure context is updated
+        await refreshUserData();
       }
       
       toast.success('Password changed successfully');

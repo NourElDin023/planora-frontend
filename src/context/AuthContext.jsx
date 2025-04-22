@@ -11,12 +11,29 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Check if user is logged in on page load
-    const user = localStorage.getItem('user');
-    if (user) {
-      setCurrentUser(JSON.parse(user));
-    }
-    setLoading(false);
+    // Improved auth check that fetches fresh data from the server
+    const checkAuthStatus = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        try {
+          // Verify token and get fresh user data
+          const response = await axiosInstance.get('users/profile/');
+          setCurrentUser(response.data);
+          // Update localStorage with the latest data
+          localStorage.setItem('user', JSON.stringify(response.data));
+        } catch (error) {
+          console.error('Auth verification failed:', error);
+          // Token invalid or expired - clear auth data
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('user');
+          setCurrentUser(null);
+        }
+      }
+      setLoading(false);
+    };
+    
+    checkAuthStatus();
   }, []);
 
   const login = async (username, password) => {
@@ -62,6 +79,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Add function to refresh user profile data
+  const refreshUserData = async () => {
+    try {
+      const response = await axiosInstance.get('users/profile/');
+      setCurrentUser(response.data);
+      localStorage.setItem('user', JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error('Failed to refresh user data:', error);
+      throw error;
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
@@ -75,7 +105,8 @@ export const AuthProvider = ({ children }) => {
     error,
     login,
     register,
-    logout
+    logout,
+    refreshUserData // Expose the new function to refresh user data
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
