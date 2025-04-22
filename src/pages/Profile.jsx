@@ -245,7 +245,13 @@ const Profile = () => {
               )}
               <h5 className="my-3">{profileData.first_name} {profileData.last_name}</h5>
               <p className="text-muted mb-1">@{profileData.username}</p>
-              {profileData.bio && <p className="text-muted mb-4">{profileData.bio}</p>}
+              {profileData.bio && <p className="text-muted mb-4" style={{
+                display: '-webkit-box',
+                WebkitLineClamp: '3',
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>{profileData.bio}</p>}
               
               {!isEditing && (
                 <button 
