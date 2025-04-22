@@ -17,6 +17,7 @@ import NotificationsPage from './pages/NotificationsPage';
 import ThemeToggleButton from './components/ThemeToggle';
 import AddCollection from './pages/AddCollection';
 import CollectionsList from './pages/CollectionsList';
+import Profile from './pages/Profile'; // Import the new Profile component
 
 function App() {
   return (
@@ -39,14 +40,7 @@ function App() {
             path="/profile"
             element={
               <ProtectedRoute>
-                {/* Profile component will be added later */}
-                <div className="container mt-4">
-                  <h1>Profile Page</h1>
-                  <p>
-                    This is a protected route that only authenticated users can
-                    access.
-                  </p>
-                </div>
+                <Profile />
               </ProtectedRoute>
             }
           />
