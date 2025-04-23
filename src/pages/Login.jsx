@@ -8,6 +8,7 @@ const Login = () => {
     username: '',
     password: '',
   });
+  const [rememberMe, setRememberMe] = useState(false);
   const [formError, setFormError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
@@ -38,6 +39,10 @@ const Login = () => {
       ...formData,
       [name]: value
     });
+  };
+
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
   };
 
   const handleResendVerification = async () => {
@@ -72,7 +77,8 @@ const Login = () => {
     setResendMessage('');
 
     try {
-      await login(formData.username, formData.password);
+      // Pass the rememberMe preference to login function
+      await login(formData.username, formData.password, rememberMe);
       navigate('/'); // Redirect to homepage after login
     } catch (err) {
       console.log("Login error:", err.response?.data);
@@ -197,7 +203,13 @@ const Login = () => {
                   </div>
                   
                   <div className="mb-3 form-check">
-                    <input type="checkbox" className="form-check-input" id="rememberMe" />
+                    <input 
+                      type="checkbox" 
+                      className="form-check-input" 
+                      id="rememberMe" 
+                      checked={rememberMe}
+                      onChange={handleRememberMeChange}
+                    />
                     <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
                   </div>
                   
