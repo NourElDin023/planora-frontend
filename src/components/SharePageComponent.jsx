@@ -1,27 +1,64 @@
-import React, { useEffect, useState } from "react";
-import axios from "../utils/axios"; 
+import React, { useEffect, useState } from 'react';
+import axios from '../utils/axios';
 
 const SharePageComponent = ({ pageId }) => {
   const [usernames, setUsernames] = useState([]);
   const [selectedUsernames, setSelectedUsernames] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [permission, setPermission] = useState("view");
-  const [mode, setMode] = useState("user");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [permission, setPermission] = useState('view');
+  const [mode, setMode] = useState('user');
   const [linkSettings, setLinkSettings] = useState({});
-  const [sharedPageUrl, setSharedPageUrl] = useState("");
+  const [sharedPageUrl, setSharedPageUrl] = useState('');
 
   useEffect(() => {
+    // Fetch usernames
     axios
-      .get("users/all-usernames/")
+      .get('users/all-usernames/')
       .then((res) => {
-        console.log("Fetched usernames:", res.data);
         setUsernames(res.data.usernames);
       })
       .catch((err) => {
-        console.error("Failed to fetch usernames", err);
+        console.error('Failed to fetch usernames', err);
       });
-  }, []);
-  
+
+    // Fetch current sharing state
+    axios
+      .get(`/collections/${pageId}/get-share-settings/`)
+      .then((res) => {
+        setLinkSettings(res.data);
+        if (res.data.is_link_shareable) {
+          setMode('link');
+        } else {
+          axios
+            .get(`/collections/${pageId}/shared-users/`)
+            .then((resShared) => {
+              if (resShared.data.shared_users.length > 0) {
+                setMode('user');
+                setSelectedUsernames(resShared.data.shared_users);
+              } else {
+                setMode('private');
+              }
+            })
+            .catch((err) => console.error('Failed to fetch shared users', err));
+        }
+      })
+      .catch((err) => console.error('Failed to fetch link settings', err));
+  }, [pageId]);
+  const handleMakePrivate = async () => {
+    try {
+      await axios.post(`/collections/${pageId}/share-settings/`, {
+        is_link_shareable: false,
+        shareable_permission: permission,
+      });
+      await axios.post(`/collections/${pageId}/unshare-all/`);
+      alert('Page is now private.');
+      setMode('private');
+      setLinkSettings({ is_link_shareable: false });
+      setSelectedUsernames([]);
+    } catch (err) {
+      console.error('Error making page private:', err);
+    }
+  };
 
   const handleAddUsername = (username) => {
     if (!selectedUsernames.includes(username)) {
@@ -29,52 +66,87 @@ const SharePageComponent = ({ pageId }) => {
     }
   };
 
+  const handleShareableLink = async () => {
+    try {
+      await axios.post(`/collections/${pageId}/unshare-all/`);
+      const res = await axios.post(`/collections/${pageId}/share-settings/`, {
+        is_link_shareable: true,
+        shareable_permission: permission,
+      });
+      setLinkSettings(res.data);
+      setMode('link');
+      alert("Link sharing enabled!");
+    } catch (err) {
+      console.error("Error generating shareable link:", err);
+    }
+  };
+  
   const handleShareWithUsers = async () => {
     try {
-      const res = await axios.post("/pages/share/", {
+      await axios.post(`/collections/${pageId}/share-settings/`, {
+        is_link_shareable: false,
+        shareable_permission: permission,
+      });
+      const res = await axios.post("/collections/share/", {
         page_id: pageId,
         usernames: selectedUsernames,
         permission: permission,
       });
       alert("Page shared with: " + res.data.shared_with.join(", "));
-      setSharedPageUrl(res.data.shared_page_url);  // Save the URL to state
+      setMode('user');
     } catch (err) {
       console.error("Error sharing page:", err);
     }
   };
-  
-
-  const handleShareableLink = async () => {
-    try {
-      const res = await axios.post(`/pages/${pageId}/share-settings/`, {
-        is_link_shareable: true,
-        shareable_permission: permission,
-      });
-      setLinkSettings(res.data);
-    } catch (err) {
-      console.error("Error generating shareable link:", err);
-    }
-  };
-
   const filteredUsers = Array.isArray(usernames)
-  ? usernames.filter((username) =>
-      username.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  : [];
+    ? usernames.filter((username) =>
+        username.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   return (
-    <div className="card mt-4 mx-auto" style={{ maxWidth: "600px" }}>
+    <div className="card mt-4 mx-auto" style={{ maxWidth: '600px' }}>
       <div className="card-body">
         <div className="d-flex justify-content-center mb-3 gap-2">
-          <button className="btn btn-outline-primary" onClick={() => setMode("user")}>
-            Share With Users
-          </button>
-          <button className="btn btn-outline-secondary" onClick={() => setMode("link")}>
-            Generate Shareable Link
-          </button>
+          <div
+            className="btn-group d-flex justify-content-center mb-3"
+            role="group"
+          >
+            <button
+              className={`btn ${
+                mode === 'private' ? 'btn-primary' : 'btn-outline-primary'
+              }`}
+              onClick={() => setMode('private')}
+            >
+              Private
+            </button>
+            <button
+              className={`btn ${
+                mode === 'link' ? 'btn-primary' : 'btn-outline-secondary'
+              }`}
+              onClick={() => setMode('link')}
+            >
+              Link
+            </button>
+            <button
+              className={`btn ${
+                mode === 'user' ? 'btn-primary' : 'btn-outline-info'
+              }`}
+              onClick={() => setMode('user')}
+            >
+              Users
+            </button>
+          </div>
         </div>
-
-        {mode === "user" && (
+        {mode === 'private' && (
+          <div className="mt-3">
+            <p className="text-muted">This page is private and only accessible by you.</p>
+            <button className="btn btn-success" onClick={handleMakePrivate}>
+              Confirm Private
+            </button>
+          </div>
+        )}
+        {mode === 'user' && (
           <>
             <label className="form-label">Search Usernames</label>
             <input
@@ -84,7 +156,10 @@ const SharePageComponent = ({ pageId }) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <div className="border p-2 mb-2" style={{ maxHeight: "150px", overflowY: "auto" }}>
+            <div
+              className="border p-2 mb-2"
+              style={{ maxHeight: '150px', overflowY: 'auto' }}
+            >
               {filteredUsers.map((username, idx) => (
                 <div
                   key={idx}
@@ -123,25 +198,24 @@ const SharePageComponent = ({ pageId }) => {
               Share Page
             </button>
             {sharedPageUrl && (
-                <div className="mt-3">
-                    <label className="form-label">Shared Page URL:</label>
-                    <div>
-                    <a
-                        href={sharedPageUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="link-primary"
-                    >
-                        {sharedPageUrl}
-                    </a>
-                    </div>
+              <div className="mt-3">
+                <label className="form-label">Shared Page URL:</label>
+                <div>
+                  <a
+                    href={sharedPageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link-primary"
+                  >
+                    {sharedPageUrl}
+                  </a>
                 </div>
-                )}
-
+              </div>
+            )}
           </>
         )}
 
-        {mode === "link" && (
+        {mode === 'link' && (
           <>
             <div className="mb-3">
               <label className="form-label">Permission</label>
