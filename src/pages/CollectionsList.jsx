@@ -292,7 +292,7 @@ const CollectionsList = () => {
                   permission={"edit"}
                 />
               ) : (
-                <p>Select a task to view details</p>
+                <></>
               )}
             </div>
           ) : (

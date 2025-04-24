@@ -61,7 +61,12 @@ const TaskView = ({ taskId,permission , onClose }) => {
         }}
       >
         <h2 style={{ marginTop: 0 }}>{task.title}</h2>
-
+        <div style={{ marginBottom: '1rem' }}>
+          <strong>Owner:</strong>{' '}
+          <span style={{ color: '#7D26CD' }}>
+            {task.owner}
+          </span>
+        </div>
         <div style={{ marginBottom: '1rem' }}>
           <strong>Status:</strong>{' '}
           <span

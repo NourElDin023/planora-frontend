@@ -33,8 +33,8 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
         `tasks/?collection=${collectionId}`
       );
       setTasks(response.data);
-      console.log(collectionId)
-      console.log(response.data)
+      console.log(collectionId);
+      console.log(response.data);
       setError(null);
     } catch (err) {
       console.error('Error fetching tasks:', err);
@@ -464,9 +464,17 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
                   </div>
 
                   <div className="card-footer bg-transparent text-end">
-                    <small className="text-muted">
-                      Created: {new Date(task.created_at).toLocaleString()}
-                    </small>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <small className="text-muted">Owner: {task.owner}</small>
+                      <small className="text-muted">
+                        Created: {new Date(task.created_at).toLocaleString()}
+                      </small>
+                    </div>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();

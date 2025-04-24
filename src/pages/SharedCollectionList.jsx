@@ -33,6 +33,7 @@ const SharedCollectionList = () => {
       setSelectedCollection({
         ...res.data.collection,
         permission: collection.shareable_permission,
+        owner: collection.owner,
       });
       setSelectedTask(null);
     } catch (err) {
@@ -43,14 +44,12 @@ const SharedCollectionList = () => {
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {/* Sidebar */}
-      <div
-        style={{
-          width: '250px',
-          borderRight: '1px solid #ccc',
-          padding: '1rem',
-        }}
-      >
-        <h3>Shared Collections</h3>
+      <div style={{
+        width: '250px',
+        borderRight: '1px solid #ccc',
+        padding: '1rem',
+      }}>
+        <h3 style={{ margin: '0 0 1rem 0' }}>Shared Collections</h3>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {collections.map((collection) => (
             <li
@@ -59,23 +58,36 @@ const SharedCollectionList = () => {
                 padding: '8px',
                 cursor: 'pointer',
                 borderRadius: '6px',
-                backgroundColor:
-                  selectedCollection?.id === collection.id
-                    ? 'rgba(125, 38, 205, 0.1)'
-                    : 'transparent',
-                border:
-                  selectedCollection?.id === collection.id
-                    ? '1px solid #7D26CD'
-                    : 'none',
+                backgroundColor: selectedCollection?.id === collection.id 
+                  ? 'rgba(125, 38, 205, 0.1)' 
+                  : 'transparent',
+                border: selectedCollection?.id === collection.id 
+                  ? '1px solid #7D26CD' 
+                  : 'none',
+                position: 'relative',
+                marginBottom: '4px',
               }}
               onClick={() => handleCollectionClick(collection)}
             >
-              <strong>{collection.title}</strong>
-              {collection.description && (
-                <p style={{ fontSize: '0.9em', color: '#666' }}>
-                  {collection.description}
+              <div>
+                <strong>{collection.title}</strong>
+                <p style={{ 
+                  margin: '2px 0 0',
+                  fontSize: '0.8em',
+                  color: '#888'
+                }}>
+                  Owner: {collection.owner}
                 </p>
-              )}
+                {collection.description && (
+                  <p style={{ 
+                    margin: '4px 0 0',
+                    fontSize: '0.9em',
+                    color: '#666'
+                  }}>
+                    {collection.description}
+                  </p>
+                )}
+              </div>
             </li>
           ))}
         </ul>
@@ -86,26 +98,101 @@ const SharedCollectionList = () => {
         <Outlet />
         {selectedCollection ? (
           <div>
-            <h2>{selectedCollection.title}</h2>
-            {selectedCollection.description && (
-              <p style={{ fontStyle: 'italic', color: '#555' }}>
-                {selectedCollection.description}
-              </p>
-            )}
-            {!selectedTask && (
-              <TaskManager
-                collectionId={selectedCollection.id}
-                permission={selectedCollection.permission}
-                onTaskSelect={setSelectedTask}
-              />
-            )}
+            {/* Breadcrumb Tracker */}
+            <div style={{
+              marginBottom: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <button
+                onClick={() => {
+                  setSelectedCollection(null);
+                  setSelectedTask(null);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#7D26CD',
+                  cursor: 'pointer',
+                  padding: 0,
+                  textDecoration: 'underline',
+                }}
+              >
+                Shared Collections
+              </button>
+              {selectedCollection && (
+                <>
+                  <span>&gt;</span>
+                  {selectedTask ? (
+                    <button
+                      onClick={() => setSelectedTask(null)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#7D26CD',
+                        cursor: 'pointer',
+                        padding: 0,
+                        textDecoration: 'underline',
+                      }}
+                    >
+                      {selectedCollection.title}
+                    </button>
+                  ) : (
+                    <span style={{ color: '#7D26CD' }}>
+                      {selectedCollection.title}
+                    </span>
+                  )}
+                </>
+              )}
+              {selectedTask && (
+                <>
+                  <span>&gt;</span>
+                  <span style={{ color: '#7D26CD' }}>
+                    {selectedTask.title}
+                  </span>
+                </>
+              )}
+            </div>
 
-            {selectedTask && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1rem'
+            }}>
+              <div>
+                <h2 style={{ margin: 0 }}>{selectedCollection.title}</h2>
+                {selectedCollection.description && (
+                  <p style={{
+                    marginTop: '4px',
+                    color: '#555',
+                    fontStyle: 'italic'
+                  }}>
+                    {selectedCollection.description}
+                  </p>
+                )}
+                <p style={{ marginTop: '4px', color: '#777' }}>
+                  Shared with: {selectedCollection.permission} access
+                </p>
+              </div>
+              {!selectedTask && (
+                <TaskManager
+                  collectionId={selectedCollection.id}
+                  permission={selectedCollection.permission}
+                  onTaskSelect={setSelectedTask}
+                />
+              )}
+            </div>
+
+            {selectedTask ? (
               <TaskView
                 taskId={selectedTask.id}
                 permission={selectedCollection.permission}
                 onClose={() => setSelectedTask(null)}
               />
+            ) : (
+              <></>
             )}
           </div>
         ) : (
