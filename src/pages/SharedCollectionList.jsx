@@ -50,11 +50,11 @@ const SharedCollectionList = () => {
       setSelectedTask(null);
       
       // Update the URL without navigating away
-      if (collection.shareable_link_token) {
-        navigate(`/shared-page/${collection.shareable_link_token}/`, { replace: true });
-      } else {
+      // if (collection.shareable_link_token) {
+      //   navigate(`/shared-page/${collection.shareable_link_token}/`, { replace: true });
+      // } else {
         navigate(`/collections/${collection.id}/`, { replace: true });
-      }
+     // }
     } catch (err) {
       console.error('Error fetching tasks', err);
     }

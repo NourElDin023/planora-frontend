@@ -18,6 +18,7 @@ import AddCollection from './pages/AddCollection';
 import CollectionsList from './pages/CollectionsList';
 import Profile from './pages/Profile'; // Import the new Profile component
 import SharedCollectionList from './pages/SharedCollectionList';
+import PublicSharedPage from './pages/PublicSharedPage';
 function App() {
   return (
     <AuthProvider>
@@ -98,7 +99,7 @@ function App() {
             path="/shared-page/:token/"
             element={
               <ProtectedRoute>
-                <SharedCollectionList />
+                <PublicSharedPage />
               </ProtectedRoute>
             }
           />
