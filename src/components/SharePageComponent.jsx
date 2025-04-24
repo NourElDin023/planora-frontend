@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 
 const SharePageComponent = ({ pageId }) => {
@@ -9,6 +10,7 @@ const SharePageComponent = ({ pageId }) => {
   const [mode, setMode] = useState('user');
   const [linkSettings, setLinkSettings] = useState({});
   const [sharedPageUrl, setSharedPageUrl] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch usernames
@@ -44,6 +46,7 @@ const SharePageComponent = ({ pageId }) => {
       })
       .catch((err) => console.error('Failed to fetch link settings', err));
   }, [pageId]);
+
   const handleMakePrivate = async () => {
     try {
       await axios.post(`/collections/${pageId}/share-settings/`, {
@@ -80,7 +83,7 @@ const SharePageComponent = ({ pageId }) => {
       console.error("Error generating shareable link:", err);
     }
   };
-  
+
   const handleShareWithUsers = async () => {
     try {
       await axios.post(`/collections/${pageId}/share-settings/`, {
@@ -98,6 +101,14 @@ const SharePageComponent = ({ pageId }) => {
       console.error("Error sharing page:", err);
     }
   };
+
+  const handleLinkClick = (e, link) => {
+    e.preventDefault();
+    // Extract the path from the full URL
+    const url = new URL(link);
+    navigate(url.pathname);
+  };
+
   const filteredUsers = Array.isArray(usernames)
     ? usernames.filter((username) =>
         username.toLowerCase().includes(searchTerm.toLowerCase())
@@ -203,8 +214,7 @@ const SharePageComponent = ({ pageId }) => {
                 <div>
                   <a
                     href={sharedPageUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={(e) => handleLinkClick(e, sharedPageUrl)}
                     className="link-primary"
                   >
                     {sharedPageUrl}
@@ -239,8 +249,7 @@ const SharePageComponent = ({ pageId }) => {
                 <div>
                   <a
                     href={linkSettings.shareable_link_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={(e) => handleLinkClick(e, linkSettings.shareable_link_url)}
                     className="link-primary"
                   >
                     {linkSettings.shareable_link_url}

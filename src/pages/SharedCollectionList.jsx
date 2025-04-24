@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import axios from '../utils/axios';
 import TaskManager from '../components/TaskManager';
 import TaskView from '../components/TaskView';
@@ -8,20 +8,32 @@ const SharedCollectionList = () => {
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
-
+  const { id, token } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchSharedCollections();
   }, []);
 
+  useEffect(() => {
+    if (id || token) {
+      // If there's an ID or token in the URL, try to find and select that collection
+      const foundCollection = collections.find(c => 
+        id ? c.id === parseInt(id) : c.shareable_link_token === token
+      );
+      if (foundCollection) {
+        handleCollectionClick(foundCollection);
+      }
+    } else if (collections.length > 0) {
+      // Otherwise select the first collection by default
+      handleCollectionClick(collections[0]);
+    }
+  }, [collections, id, token]);
+
   const fetchSharedCollections = async () => {
     try {
       const res = await axios.get('collections/shared-collections/');
       setCollections(res.data);
-      if (res.data.length > 0) {
-        handleCollectionClick(res.data[0]);
-      }
     } catch (err) {
       console.error('Error fetching shared collections', err);
     }
@@ -36,6 +48,13 @@ const SharedCollectionList = () => {
         owner: collection.owner,
       });
       setSelectedTask(null);
+      
+      // Update the URL without navigating away
+      if (collection.shareable_link_token) {
+        navigate(`/shared-page/${collection.shareable_link_token}/`, { replace: true });
+      } else {
+        navigate(`/collections/${collection.id}/`, { replace: true });
+      }
     } catch (err) {
       console.error('Error fetching tasks', err);
     }
@@ -109,6 +128,7 @@ const SharedCollectionList = () => {
                 onClick={() => {
                   setSelectedCollection(null);
                   setSelectedTask(null);
+                  navigate('/shared-collections');
                 }}
                 style={{
                   background: 'none',

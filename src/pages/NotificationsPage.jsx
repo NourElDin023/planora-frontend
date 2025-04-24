@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../utils/axios"; 
 
 const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -16,24 +18,21 @@ const NotificationsPage = () => {
         console.error("Failed to fetch notifications", err);
       }).finally(() => {
         setLoading(false);
-      }
-    );
+      });
   }, []);
 
-//   const handleMarkAsRead = async (id) => {
-//     try {
-//       await axios.patch(`notifications/${id}/`, {
-//         is_read: true,
-//       });
-//       setNotifications((prevNotifications) =>
-//         prevNotifications.map((notification) =>
-//           notification.id === id ? { ...notification, is_read: true } : notification
-//         )
-//       );
-//     } catch (error) {
-//       console.error("Error marking notification as read:", error);
-//     }
-//   };
+  const handleLinkClick = (e, link) => {
+    e.preventDefault();
+    // Check if the link is a shared collection link
+    if (link.includes('/collections/') || link.includes('/shared-page/')) {
+      // Extract the path and navigate to it
+      const url = new URL(link);
+      navigate(url.pathname);
+    } else {
+      // For other links, use default behavior
+      window.location.href = link;
+    }
+  };
 
   return (
     <div className="container mt-5">
@@ -54,21 +53,17 @@ const NotificationsPage = () => {
                   <strong>{notification.sender_username}</strong> {notification.message}
                 </div>
                 <div>
-                  <a href={notification.link} target="_blank" rel="noopener noreferrer" className="link-primary">
+                  <a 
+                    href={notification.link} 
+                    onClick={(e) => handleLinkClick(e, notification.link)}
+                    className="link-primary"
+                  >
                     Go to page
                   </a>
                 </div>
                 <div>
                   <small>{new Date(notification.timestamp).toLocaleString()}</small>
                 </div>
-                {/* {!notification.is_read && (
-                  <button
-                    className="btn btn-primary btn-sm mt-2"
-                    onClick={() => handleMarkAsRead(notification.id)}
-                  >
-                    Mark as Read
-                  </button>
-                )} */}
               </div>
             ))
           )}
