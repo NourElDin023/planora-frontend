@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import axios from "../utils/axios";
-import TaskManager from "../components/TaskManager";
-import TaskView from "../components/TaskView";
+import React, { useEffect, useState } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import axios from '../utils/axios';
+import TaskManager from '../components/TaskManager';
+import TaskView from '../components/TaskView';
+import SharePageComponent from '../components/SharePageComponent';
 
 const CollectionsList = () => {
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [showSharePage, setShowSharePage] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,31 +19,36 @@ const CollectionsList = () => {
 
   const fetchCollections = async () => {
     try {
-      const res = await axios.get("collections/");
+      const res = await axios.get('collections/');
       setCollections(res.data);
+      console.log(res.data);  
       if (res.data.length > 0) {
         handleCollectionClick(res.data[0]);
       }
     } catch (err) {
-      console.error("Error fetching collections", err);
+      console.error('Error fetching collections', err);
     }
   };
 
   const handleDeleteCollection = async (collectionId) => {
-    if (!window.confirm("Are you sure you want to delete this collection and all its tasks?")) {
+    if (
+      !window.confirm(
+        'Are you sure you want to delete this collection and all its tasks?'
+      )
+    ) {
       return;
     }
-    
+
     try {
       await axios.delete(`collections/${collectionId}/`);
-      setCollections(collections.filter(c => c.id !== collectionId));
-      
+      setCollections(collections.filter((c) => c.id !== collectionId));
+
       if (selectedCollection?.id === collectionId) {
         setSelectedCollection(null);
       }
     } catch (err) {
-      console.error("Error deleting collection", err);
-      alert("Failed to delete collection");
+      console.error('Error deleting collection', err);
+      alert('Failed to delete collection');
     }
   };
 
@@ -50,48 +58,73 @@ const CollectionsList = () => {
       setSelectedCollection(res.data.collection);
       setSelectedTask(null);
     } catch (err) {
-      console.error("Error fetching tasks", err);
+      console.error('Error fetching tasks', err);
     }
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: 'flex', height: '100vh' }}>
       {/* Sidebar */}
-      <div style={{ width: "250px", borderRight: "1px solid #ccc", padding: "1rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+      <div
+        style={{
+          width: '250px',
+          borderRight: '1px solid #ccc',
+          padding: '1rem',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '1rem',
+          }}
+        >
           <h3 style={{ margin: 0 }}>Collections</h3>
           <Link
             to="/addcollections"
             style={{
-              padding: "4px 8px",
-              background: "#4CAF50",
-              color: "white",
-              textDecoration: "none",
-              borderRadius: "4px",
-              cursor: "pointer"
+              padding: '4px 8px',
+              background: '#4CAF50',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
             }}
           >
             +
           </Link>
         </div>
 
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
           {collections.map((collection) => (
             <li
               key={collection.id}
               style={{
-                padding: "8px",
-                cursor: "pointer",
-                borderRadius: "6px",
-                backgroundColor: selectedCollection?.id === collection.id ? "rgba(125, 38, 205, 0.1)" : "transparent",
-                border: selectedCollection?.id === collection.id ? "1px solid #7D26CD" : "none",
-                position: "relative",
+                padding: '8px',
+                cursor: 'pointer',
+                borderRadius: '6px',
+                backgroundColor:
+                  selectedCollection?.id === collection.id
+                    ? 'rgba(125, 38, 205, 0.1)'
+                    : 'transparent',
+                border:
+                  selectedCollection?.id === collection.id
+                    ? '1px solid #7D26CD'
+                    : 'none',
+                position: 'relative',
               }}
             >
               <div onClick={() => handleCollectionClick(collection)}>
                 <strong>{collection.title}</strong>
                 {collection.description && (
-                  <p style={{ margin: "4px 0 0", fontSize: "0.9em", color: "#666" }}>
+                  <p
+                    style={{
+                      margin: '4px 0 0',
+                      fontSize: '0.9em',
+                      color: '#666',
+                    }}
+                  >
                     {collection.description}
                   </p>
                 )}
@@ -102,16 +135,16 @@ const CollectionsList = () => {
                   handleDeleteCollection(collection.id);
                 }}
                 style={{
-                  position: "absolute",
-                  right: "8px",
-                  top: "8px",
-                  background: "transparent",
-                  border: "none",
-                  color: "#ff4444",
-                  cursor: "pointer",
-                  padding: "2px 5px",
-                  borderRadius: "50%",
-                  fontSize: "0.9em",
+                  position: 'absolute',
+                  right: '8px',
+                  top: '8px',
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#ff4444',
+                  cursor: 'pointer',
+                  padding: '2px 5px',
+                  borderRadius: '50%',
+                  fontSize: '0.9em',
                 }}
                 title="Delete collection"
               >
@@ -123,14 +156,21 @@ const CollectionsList = () => {
       </div>
 
       {/* Content Area */}
-      <div style={{ flex: 1, padding: "1rem" }}>
+      <div style={{ flex: 1, padding: '1rem' }}>
         <Outlet />
-        
-        {!window.location.pathname.includes('/new') && (
-          selectedCollection ? (
+
+        {!window.location.pathname.includes('/new') &&
+          (selectedCollection ? (
             <div>
               {/* Clickable Breadcrumb Tracker */}
-              <div style={{ marginBottom: "1rem", display: "flex", alignItems: "center", gap: "8px" }}>
+              <div
+                style={{
+                  marginBottom: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
                 <button
                   onClick={() => {
                     setSelectedCollection(null);
@@ -142,12 +182,12 @@ const CollectionsList = () => {
                     color: '#7D26CD',
                     cursor: 'pointer',
                     padding: 0,
-                    textDecoration: 'underline'
+                    textDecoration: 'underline',
                   }}
                 >
                   Collections
                 </button>
-                
+
                 {selectedCollection && (
                   <>
                     <span>&gt;</span>
@@ -160,49 +200,96 @@ const CollectionsList = () => {
                           color: '#7D26CD',
                           cursor: 'pointer',
                           padding: 0,
-                          textDecoration: 'underline'
+                          textDecoration: 'underline',
                         }}
                       >
                         {selectedCollection.title}
                       </button>
                     ) : (
-                      <span style={{ color: '#7D26CD' }}>{selectedCollection.title}</span>
+                      <span style={{ color: '#7D26CD' }}>
+                        {selectedCollection.title}
+                      </span>
                     )}
                   </>
                 )}
-                
+
                 {selectedTask && (
                   <>
                     <span>&gt;</span>
-                    <span style={{ color: '#7D26CD' }}>{selectedTask.title}</span>
+                    <span style={{ color: '#7D26CD' }}>
+                      {selectedTask.title}
+                    </span>
                   </>
                 )}
               </div>
 
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
                 <div>
                   <h2>{selectedCollection.title}</h2>
+
                   {selectedCollection.description && (
-                    <p style={{ marginTop: "4px", color: "#555", fontStyle: "italic" }}>
+                    <p
+                      style={{
+                        marginTop: '4px',
+                        color: '#555',
+                        fontStyle: 'italic',
+                      }}
+                    >
                       {selectedCollection.description}
                     </p>
                   )}
-                  <p style={{ marginTop: "4px", color: "#777" }}>
-                    Created: {new Date(selectedCollection.created_at).toLocaleString()}
-                  </p>
+                  {!showSharePage && !selectedTask && (
+                    <>
+                      <p style={{ marginTop: '4px', color: '#777' }}>
+                        Created:{' '}
+                        {new Date(
+                          selectedCollection.created_at
+                        ).toLocaleString()}
+                      </p>
+                      <button
+                        onClick={() => setShowSharePage(true)}
+                        style={{
+                          background: '#7D26CD',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          padding: '0.5rem 1rem',
+                          cursor: 'pointer',
+                          height: 'fit-content',
+                        }}
+                      >
+                        Share Collection
+                      </button>
+                    </>
+                  )}
                 </div>
-                {!selectedTask && (
-                  <TaskManager 
-                    collectionId={selectedCollection.id} 
+                {!selectedTask && !showSharePage && (
+                  <TaskManager
+                    collectionId={selectedCollection.id}
                     onTaskSelect={setSelectedTask}
+                    permission={"edit"}
                   />
                 )}
               </div>
-
-              {selectedTask ? (
-                <TaskView 
-                  taskId={selectedTask.id} 
+              {showSharePage && (
+                <div style={{ marginTop: '2rem' }}>
+                  <SharePageComponent
+                    pageId={selectedCollection.id}
+                    onClose={() => setShowSharePage(false)}
+                  />
+                </div>
+              )}
+              {selectedTask && !showSharePage ? (
+                <TaskView
+                  taskId={selectedTask.id}
                   onClose={() => setSelectedTask(null)}
+                  permission={"edit"}
                 />
               ) : (
                 <p>Select a task to view details</p>
@@ -210,8 +297,7 @@ const CollectionsList = () => {
             </div>
           ) : (
             <p>Select a collection to view its tasks.</p>
-          )
-        )}
+          ))}
       </div>
     </div>
   );

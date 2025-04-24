@@ -3,7 +3,7 @@ import axios from '../utils/axios';
 import NotesView from './NotesView';
 import AddNoteForm from './AddNoteForm';
 
-const TaskView = ({ taskId, onClose }) => {
+const TaskView = ({ taskId,permission , onClose }) => {
   const [task, setTask] = useState(null);
   const [showAddNote, setShowAddNote] = useState(false);
   const [refreshNotes, setRefreshNotes] = useState(0);
@@ -13,15 +13,16 @@ const TaskView = ({ taskId, onClose }) => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const res = await axios.get(`tasks/${taskId}/`);
+        const res = await axios.get(`tasks/${taskId}/`); 
         setTask(res.data);
+        console.log(res.data);
         setLoading(false);
       } catch (err) {
         setError("Task not found or you don't have permission to view it");
         setLoading(false);
       }
     };
-
+  
     if (taskId) fetchTask();
   }, [taskId]);
 
@@ -117,7 +118,7 @@ const TaskView = ({ taskId, onClose }) => {
         </div>
 
         <div style={{ marginTop: '2rem' }}>
-          {!showAddNote && (
+          {(!showAddNote && permission ==="edit")&& (
             <button
               onClick={() => setShowAddNote(true)}
               style={{
@@ -149,6 +150,7 @@ const TaskView = ({ taskId, onClose }) => {
         <NotesView 
           taskId={taskId}
           refreshDependency={refreshNotes}
+          permission={permission}
         />
       </div>
     </div>

@@ -43,7 +43,7 @@ const Navbar = () => {
                                     <Link className="nav-link" to="/viewcollections">Collections</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/habits">Habits</Link>
+                                    <Link className="nav-link" to="/shared-collections">Shared Collections</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/calendar">Calendar</Link>
