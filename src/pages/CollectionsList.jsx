@@ -21,6 +21,7 @@ const CollectionsList = () => {
     try {
       const res = await axios.get('collections/');
       setCollections(res.data);
+      console.log(res.data);  
       if (res.data.length > 0) {
         handleCollectionClick(res.data[0]);
       }
@@ -272,6 +273,7 @@ const CollectionsList = () => {
                   <TaskManager
                     collectionId={selectedCollection.id}
                     onTaskSelect={setSelectedTask}
+                    permission={"edit"}
                   />
                 )}
               </div>
@@ -287,6 +289,7 @@ const CollectionsList = () => {
                 <TaskView
                   taskId={selectedTask.id}
                   onClose={() => setSelectedTask(null)}
+                  permission={"edit"}
                 />
               ) : (
                 <p>Select a task to view details</p>

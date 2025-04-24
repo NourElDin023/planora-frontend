@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
 import TaskView from './TaskView';
-const TaskManager = ({ collectionId, onTaskSelect }) => {
+const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
   // State management
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +33,8 @@ const TaskManager = ({ collectionId, onTaskSelect }) => {
         `tasks/?collection=${collectionId}`
       );
       setTasks(response.data);
+      console.log(collectionId)
+      console.log(response.data)
       setError(null);
     } catch (err) {
       console.error('Error fetching tasks:', err);
@@ -172,16 +174,18 @@ const TaskManager = ({ collectionId, onTaskSelect }) => {
               </span>
             )}
           </h1>
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              resetForm();
-              setShowForm(true);
-            }}
-          >
-            <i className="fas fa-plus me-1"></i>
-            New Task
-          </button>
+          {permission === 'edit' && (
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                resetForm();
+                setShowForm(true);
+              }}
+            >
+              <i className="fas fa-plus me-1"></i>
+              New Task
+            </button>
+          )}
         </div>
 
         {/* Task Form */}
@@ -330,15 +334,20 @@ const TaskManager = ({ collectionId, onTaskSelect }) => {
                 style={{ color: '#6a11cb' }}
               ></i>
               <h3 className="text-muted">No tasks yet</h3>
-              <p className="lead">
-                Click the "New Task" button to add your first task
-              </p>
-              <button
-                className="btn btn-primary mt-2"
-                onClick={() => setShowForm(true)}
-              >
-                <i className="fas fa-plus me-2"></i>Add New Task
-              </button>
+
+              {permission === 'edit' && (
+                <>
+                  <p className="lead">
+                    Click the "New Task" button to add your first task
+                  </p>
+                  <button
+                    className="btn btn-primary mt-2"
+                    onClick={() => setShowForm(true)}
+                  >
+                    <i className="fas fa-plus me-2"></i>Add New Task
+                  </button>
+                </>
+              )}
             </div>
           </div>
         ) : (
@@ -382,26 +391,28 @@ const TaskManager = ({ collectionId, onTaskSelect }) => {
                         {task.title}
                       </h3>
                     </div>
-                    <div className="d-none d-md-flex">
-                      <button
-                        onClick={() => {
-                          setFormData({ ...task, task_icon: null });
-                          setEditingTask(task);
-                          setShowForm(true);
-                        }}
-                        className="btn btn-sm btn-outline-primary me-1"
-                        title="Edit task"
-                      >
-                        <i className="fas fa-edit"></i>
-                      </button>
-                      <button
-                        onClick={() => handleDeleteTask(task.id)}
-                        className="btn btn-sm btn-outline-danger"
-                        title="Delete task"
-                      >
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    </div>
+                    {permission === 'edit' && (
+                      <div className="d-none d-md-flex">
+                        <button
+                          onClick={() => {
+                            setFormData({ ...task, task_icon: null });
+                            setEditingTask(task);
+                            setShowForm(true);
+                          }}
+                          className="btn btn-sm btn-outline-primary me-1"
+                          title="Edit task"
+                        >
+                          <i className="fas fa-edit"></i>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteTask(task.id)}
+                          className="btn btn-sm btn-outline-danger"
+                          title="Delete task"
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div className="card-body">
@@ -421,21 +432,34 @@ const TaskManager = ({ collectionId, onTaskSelect }) => {
                           {task.due_time}
                         </span>
                       </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          checked={task.completed}
-                          onChange={() => handleCompleteToggle(task)}
-                          id={`complete-${task.id}`}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor={`complete-${task.id}`}
-                        >
-                          Mark as {task.completed ? 'incomplete' : 'complete'}
-                        </label>
-                      </div>
+                      {permission === 'edit' && (
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={task.completed}
+                            onChange={() => handleCompleteToggle(task)}
+                            id={`complete-${task.id}`}
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor={`complete-${task.id}`}
+                          >
+                            Mark as {task.completed ? 'incomplete' : 'complete'}
+                          </label>
+                        </div>
+                      )}
+                      {permission === 'view' && (
+                        <div className="form-check">
+                          <label
+                            className="form-check-label"
+                            htmlFor={`complete-${task.id}`}
+                          >
+                            Marked as{' '}
+                            {task.completed ? 'incomplete' : 'complete'}
+                          </label>
+                        </div>
+                      )}
                     </div>
                   </div>
 

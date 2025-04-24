@@ -12,13 +12,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Notes from './pages/Notes';
 import Tasks from './pages/Tasks';
 import './index.css';
-import TestSharePage from './pages/TestSharePage ';
 import NotificationsPage from './pages/NotificationsPage';
 import ThemeToggleButton from './components/ThemeToggle';
 import AddCollection from './pages/AddCollection';
 import CollectionsList from './pages/CollectionsList';
 import Profile from './pages/Profile'; // Import the new Profile component
-
+import SharedCollectionList from './pages/SharedCollectionList'; 
 function App() {
   return (
     <AuthProvider>
@@ -32,7 +31,6 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/notes" element={<Notes />} />
-          <Route path="/test-share" element={<TestSharePage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
 
           {/* Protected routes - requires authentication */}
@@ -62,7 +60,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/viewcollections"
             element={
               <ProtectedRoute>
@@ -70,6 +68,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* <Route
+            path="/shared-page/:token"
+            element={
+              <ProtectedRoute>
+                <SharedPage />
+              </ProtectedRoute>
+            }
+          /> */}
+
           <Route
             path="/habits"
             element={
@@ -81,7 +88,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/shared-collections"
+            element={
+              <ProtectedRoute>
+                <SharedCollectionList />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/calendar"
             element={
