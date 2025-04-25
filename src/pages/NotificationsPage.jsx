@@ -12,6 +12,7 @@ const NotificationsPage = () => {
       .get("notifications/my")
       .then((res) => {
         console.log("Fetched notifications:", res.data);
+        axios.post("notifications/mark_as_read/");
         setNotifications(res.data);
       })
       .catch((err) => {
