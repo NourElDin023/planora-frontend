@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCookie, getJsonCookie, removeCookie } from './cookies';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8000/api/', 
@@ -7,40 +8,21 @@ const axiosInstance = axios.create({
   },
 });
 
-// Helper function to get token from either storage
+// Helper function to get token from cookie
 const getToken = () => {
-  // Check sessionStorage first, then fallback to localStorage
-  const sessionToken = sessionStorage.getItem('accessToken');
-  if (sessionToken) return sessionToken;
-  
-  return localStorage.getItem('accessToken');
+  return getCookie('accessToken');
 };
 
-// Helper function to get refresh token from either storage
+// Helper function to get refresh token from cookie
 const getRefreshToken = () => {
-  // Check sessionStorage first, then fallback to localStorage
-  const sessionRefreshToken = sessionStorage.getItem('refreshToken');
-  if (sessionRefreshToken) return sessionRefreshToken;
-  
-  return localStorage.getItem('refreshToken');
+  return getCookie('refreshToken');
 };
 
-// Helper function to clear auth data from both storage types
+// Helper function to clear auth data from cookies
 const clearAuthData = () => {
-  // Clear sessionStorage
-  sessionStorage.removeItem('accessToken');
-  sessionStorage.removeItem('refreshToken');
-  sessionStorage.removeItem('user');
-  
-  // Clear localStorage
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
-  localStorage.removeItem('user');
-};
-
-// Helper to determine which storage is being used
-const getActiveStorage = () => {
-  return sessionStorage.getItem('accessToken') ? sessionStorage : localStorage;
+  removeCookie('accessToken');
+  removeCookie('refreshToken');
+  removeCookie('user');
 };
 
 // Request interceptor to add token to every request
@@ -82,9 +64,8 @@ axiosInstance.interceptors.response.use(
         );
 
         if (response.data.access) {
-          // Store the new access token in the same storage that was being used
-          const storage = getActiveStorage();
-          storage.setItem('accessToken', response.data.access);
+          // Store the new access token in cookie
+          document.cookie = `accessToken=${response.data.access}; path=/; SameSite=Lax`;
           
           originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
           return axiosInstance(originalRequest);

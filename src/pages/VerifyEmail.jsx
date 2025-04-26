@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
+import { setCookie } from '../utils/cookies';
 
 const VerifyEmail = () => {
   const [verificationStatus, setVerificationStatus] = useState('verifying'); // verifying, success, failed
@@ -33,9 +34,9 @@ const VerifyEmail = () => {
           setMessage(response.data.message);
           setUsername(response.data.username);
           
-          // Store the tokens in local storage for auto-login
-          localStorage.setItem('access_token', response.data.access);
-          localStorage.setItem('refresh_token', response.data.refresh);
+          // Store the tokens in cookies for auto-login
+          setCookie('accessToken', response.data.access);
+          setCookie('refreshToken', response.data.refresh);
         } else {
           setVerificationStatus('failed');
           setError(response.data.error);

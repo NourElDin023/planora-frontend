@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import axiosInstance from '../utils/axios';
+import { setCookie, getCookie, removeCookie, setJsonCookie, getJsonCookie } from '../utils/cookies';
 
 const AuthContext = createContext();
 
@@ -10,37 +11,20 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Helper functions for token storage
+  // Helper functions for token retrieval
   const getToken = () => {
-    // Check sessionStorage first, then fallback to localStorage
-    const sessionToken = sessionStorage.getItem('accessToken');
-    if (sessionToken) return sessionToken;
-    
-    return localStorage.getItem('accessToken');
+    return getCookie('accessToken');
   };
 
   const getUser = () => {
-    // Check both storage types and return the first found user data
-    const sessionUser = sessionStorage.getItem('user');
-    if (sessionUser) return JSON.parse(sessionUser);
-    
-    const localUser = localStorage.getItem('user');
-    if (localUser) return JSON.parse(localUser);
-    
-    return null;
+    return getJsonCookie('user');
   };
 
-  // Clear both storage types on logout
+  // Clear cookies on logout
   const clearAuthData = () => {
-    // Clear sessionStorage
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('refreshToken');
-    sessionStorage.removeItem('user');
-    
-    // Clear localStorage
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
+    removeCookie('accessToken');
+    removeCookie('refreshToken');
+    removeCookie('user');
   };
 
   useEffect(() => {
@@ -53,12 +37,8 @@ export const AuthProvider = ({ children }) => {
           const response = await axiosInstance.get('users/profile/');
           setCurrentUser(response.data);
           
-          // Update user data in the same storage that has the token
-          if (sessionStorage.getItem('accessToken')) {
-            sessionStorage.setItem('user', JSON.stringify(response.data));
-          } else if (localStorage.getItem('accessToken')) {
-            localStorage.setItem('user', JSON.stringify(response.data));
-          }
+          // Update user data in cookie
+          setJsonCookie('user', response.data);
         } catch (error) {
           console.error('Auth verification failed:', error);
           // Token invalid or expired - clear auth data
@@ -81,12 +61,12 @@ export const AuthProvider = ({ children }) => {
         password
       });
       
-      // Store tokens based on rememberMe preference
-      const storage = rememberMe ? localStorage : sessionStorage;
+      // Store tokens in cookies - use days parameter for persistent cookies if rememberMe is true
+      const options = rememberMe ? { days: 30 } : {};
       
-      storage.setItem('accessToken', response.data.access);
-      storage.setItem('refreshToken', response.data.refresh);
-      storage.setItem('user', JSON.stringify(response.data.user));
+      setCookie('accessToken', response.data.access, options);
+      setCookie('refreshToken', response.data.refresh, options);
+      setJsonCookie('user', response.data.user, options);
       
       setCurrentUser(response.data.user);
       return response.data;
@@ -104,10 +84,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axiosInstance.post('users/register/', userData);
       
-      // On registration, use sessionStorage (user can login with rememberMe later)
-      sessionStorage.setItem('accessToken', response.data.access);
-      sessionStorage.setItem('refreshToken', response.data.refresh);
-      sessionStorage.setItem('user', JSON.stringify(response.data.user));
+      // On registration, use session cookies (no days parameter)
+      setCookie('accessToken', response.data.access);
+      setCookie('refreshToken', response.data.refresh);
+      setJsonCookie('user', response.data.user);
       
       setCurrentUser(response.data.user);
       return response.data;
@@ -125,12 +105,8 @@ export const AuthProvider = ({ children }) => {
       const response = await axiosInstance.get('users/profile/');
       setCurrentUser(response.data);
       
-      // Update user data in the same storage that has the token
-      if (sessionStorage.getItem('accessToken')) {
-        sessionStorage.setItem('user', JSON.stringify(response.data));
-      } else if (localStorage.getItem('accessToken')) {
-        localStorage.setItem('user', JSON.stringify(response.data));
-      }
+      // Update user data in cookie
+      setJsonCookie('user', response.data);
       
       return response.data;
     } catch (error) {
