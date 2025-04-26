@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie, getJsonCookie, removeCookie } from './cookies';
+import { getCookie, getJsonCookie, removeCookie, setCookie } from './cookies';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, 
