@@ -65,7 +65,7 @@ axiosInstance.interceptors.response.use(
 
         if (response.data.access) {
           // Store the new access token in cookie
-          document.cookie = `accessToken=${response.data.access}; path=/; SameSite=Lax`;
+          setCookie('accessToken', response.data.access, { path: '/', sameSite: 'Lax' });
           
           originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
           return axiosInstance(originalRequest);
