@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie, getJsonCookie, removeCookie } from './cookies';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000/api/', 
+  baseURL: import.meta.env.VITE_API_BASE_URL, 
   headers: {
     'Content-Type': 'application/json',
   },
@@ -59,7 +59,7 @@ axiosInstance.interceptors.response.use(
         }
 
         const response = await axios.post(
-          'http://localhost:8000/api/users/token/refresh/',
+          `${import.meta.env.VITE_API_BASE_URL}users/token/refresh/`,
           { refresh: refreshToken }
         );
 
