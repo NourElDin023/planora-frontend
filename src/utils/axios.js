@@ -54,7 +54,7 @@ axiosInstance.interceptors.response.use(
         const refreshToken = getRefreshToken();
         if (!refreshToken) {
           // No refresh token, redirect to login
-          window.location.href = '/login';
+          clearAuthData();
           return Promise.reject(error);
         }
 
