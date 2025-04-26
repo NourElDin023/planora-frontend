@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 import { setCookie } from '../utils/cookies';
 
 const VerifyEmail = () => {
@@ -27,7 +27,7 @@ const VerifyEmail = () => {
       }
       
       try {
-        const response = await axios.get(`http://localhost:8000/api/users/verify-email/?token=${token}`);
+        const response = await axiosInstance.get(`users/verify-email/?token=${token}`);
         
         if (response.data.success) {
           setVerificationStatus('success');
@@ -63,7 +63,7 @@ const VerifyEmail = () => {
     setResendMessage('');
     
     try {
-      const response = await axios.post('http://localhost:8000/api/users/resend-verification/', 
+      const response = await axiosInstance.post(`users/resend-verification/`, 
         { email }, 
         {
           headers: {
