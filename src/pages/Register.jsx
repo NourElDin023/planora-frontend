@@ -165,9 +165,10 @@ const Register = () => {
                             className="form-control"
                             id="first_name"
                             name="first_name"
-                            placeholder="First name (optional)"
+                            placeholder="Enter your first name"
                             value={formData.first_name}
                             onChange={handleChange}
+                            required
                           />
                         </div>
                       </div>
@@ -183,9 +184,10 @@ const Register = () => {
                             className="form-control"
                             id="last_name"
                             name="last_name"
-                            placeholder="Last name (optional)"
+                            placeholder="Enter your last name"
                             value={formData.last_name}
                             onChange={handleChange}
+                            required
                           />
                         </div>
                       </div>
