@@ -89,11 +89,6 @@ const Register = () => {
                     <i className="fas fa-info-circle me-2"></i>
                     You must verify your email before you can log in to your account.
                   </div>
-                  <div className="mt-4">
-                    <Link to="/login" className="btn btn-primary">
-                      Go to Login Page
-                    </Link>
-                  </div>
                 </div>
               </div>
             ) : (
