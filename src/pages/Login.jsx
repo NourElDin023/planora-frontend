@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -52,7 +52,7 @@ const Login = () => {
     setResendMessage('');
     
     try {
-      const response = await axios.post('http://localhost:8000/api/users/resend-verification/', 
+      const response = await axiosInstance.post(`users/resend-verification/`, 
         { email: verificationEmail },
         {
           headers: {
