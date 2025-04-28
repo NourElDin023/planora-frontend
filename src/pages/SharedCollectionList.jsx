@@ -64,7 +64,7 @@ const SharedCollectionList = () => {
     <div style={{ display: 'flex', height: '100vh' }}>
       {/* Sidebar */}
       <div style={{
-        width: '250px',
+        width: '350px',
         borderRight: '1px solid #ccc',
         padding: '1rem',
       }}>

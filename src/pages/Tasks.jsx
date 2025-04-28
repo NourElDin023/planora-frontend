@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
+import PomodoroTimer from '../components/PomodoroTimer';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showPomodoro, setShowPomodoro] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
@@ -158,11 +160,41 @@ const Tasks = () => {
               </span>
             )}
           </h1>
-          <button className="btn btn-primary" onClick={handleAddButtonClick}>
-            <i className="fas fa-plus me-1"></i>
-            <span className="d-none d-md-inline">New Task</span>
-          </button>
+          <div className="d-flex gap-2">
+            <button
+              className="btn btn-outline-primary me-2"
+              onClick={() => setShowPomodoro(!showPomodoro)}
+            >
+              <i className="fas fa-clock me-1"></i>
+              <span className="d-none d-md-inline">Pomodoro Timer</span>
+            </button>
+            <button className="btn btn-primary" onClick={handleAddButtonClick}>
+              <i className="fas fa-plus me-1"></i>
+              <span className="d-none d-md-inline">New Task</span>
+            </button>
+          </div>
         </div>
+
+        {/* Pomodoro Timer (Collapsible) */}
+        {showPomodoro && (
+          <div className="card shadow mb-4">
+            <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+              <h5 className="mb-0">
+                <i className="fas fa-clock me-2"></i>
+                Focus Timer
+              </h5>
+              <button
+                className="btn btn-sm btn-light"
+                onClick={() => setShowPomodoro(false)}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="card-body">
+              <PomodoroTimer />
+            </div>
+          </div>
+        )}
 
         {/* Task Form (Collapsible) */}
         {showForm && (
