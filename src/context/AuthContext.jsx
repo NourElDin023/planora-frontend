@@ -83,13 +83,6 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     try {
       const response = await axiosInstance.post('users/register/', userData);
-      
-      // On registration, use session cookies (no days parameter)
-      setCookie('accessToken', response.data.access);
-      setCookie('refreshToken', response.data.refresh);
-      setJsonCookie('user', response.data.user);
-      
-      setCurrentUser(response.data.user);
       return response.data;
     } catch (error) {
       setError(error.response?.data || 'Registration failed');

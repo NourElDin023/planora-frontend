@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axiosInstance from '../utils/axios';
-import { setCookie } from '../utils/cookies';
 
 const VerifyEmail = () => {
   const [verificationStatus, setVerificationStatus] = useState('verifying'); // verifying, success, failed
@@ -33,10 +32,6 @@ const VerifyEmail = () => {
           setVerificationStatus('success');
           setMessage(response.data.message);
           setUsername(response.data.username);
-          
-          // Store the tokens in cookies for auto-login
-          setCookie('accessToken', response.data.access);
-          setCookie('refreshToken', response.data.refresh);
         } else {
           setVerificationStatus('failed');
           setError(response.data.error);
@@ -104,18 +99,9 @@ const VerifyEmail = () => {
               Congratulations, {username}! Your email has been verified and your Life Tracker account is now active.
             </p>
             <div className="d-grid gap-2 col-md-8 mx-auto">
-              <button 
-                className="btn btn-primary btn-lg"
-                onClick={() => navigate('/')}
-              >
-                Go to Dashboard
-              </button>
-              <button 
-                className="btn btn-outline-secondary"
-                onClick={() => navigate('/login')}
-              >
+              <Link to="/login" className="btn btn-primary btn-lg">
                 Go to Login
-              </button>
+              </Link>
             </div>
           </div>
         );
