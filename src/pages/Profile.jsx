@@ -3,11 +3,21 @@ import AuthContext from '../context/AuthContext';
 import axios from '../utils/axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const { currentUser, logout, refreshUserData } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  // New states for account management
+  const [showDeactivateModal, setShowDeactivateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [accountActionLoading, setAccountActionLoading] = useState(false);
+  const [accountActionData, setAccountActionData] = useState({
+    password: '',
+    confirm_deletion: false
+  });
   const [profileData, setProfileData] = useState({
     username: '',
     email: '',
@@ -207,6 +217,85 @@ const Profile = () => {
       
       toast.error(errorMessage);
       setLoading(false);
+    }
+  };
+
+  // New functions for account management
+  const handleAccountActionChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setAccountActionData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  // Handle deactivation request
+  const handleDeactivateAccount = async () => {
+    setAccountActionLoading(true);
+    try {
+      await axios.post('/users/deactivate-account/', {
+        password: accountActionData.password,
+        action: 'deactivate'
+      });
+      
+      toast.success('Account deactivated successfully');
+      setShowDeactivateModal(false);
+      
+      // Log out the user after deactivation
+      setTimeout(() => {
+        logout();
+        navigate('/login');
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Error deactivating account:', error);
+      let errorMessage = 'Failed to deactivate account';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      toast.error(errorMessage);
+    } finally {
+      setAccountActionLoading(false);
+    }
+  };
+
+  // Handle deletion request
+  const handleDeleteAccount = async () => {
+    if (!accountActionData.confirm_deletion) {
+      toast.error('You must confirm deletion by checking the box');
+      return;
+    }
+    
+    setAccountActionLoading(true);
+    try {
+      await axios.delete('/users/delete-account/', {
+        data: {
+          password: accountActionData.password
+        }
+      });
+      
+      toast.success('Account deleted successfully');
+      setShowDeleteModal(false);
+      
+      // Log out the user after deletion
+      setTimeout(() => {
+        logout();
+        navigate('/');
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      let errorMessage = 'Failed to delete account';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      toast.error(errorMessage);
+    } finally {
+      setAccountActionLoading(false);
     }
   };
 
@@ -582,8 +671,181 @@ const Profile = () => {
               </form>
             </div>
           </div>
+
+          {/* Account Management Section */}
+          <div className="card mb-4 border-danger">
+            <div className="card-header bg-danger text-white">
+              <h4 className="mb-0">Account Management</h4>
+            </div>
+            <div className="card-body">
+              <div className="alert alert-warning">
+                <h5>Warning</h5>
+                <p>The actions below can limit or permanently remove your access to this account.</p>
+              </div>
+              
+              <div className="d-flex flex-column gap-3">
+                <div>
+                  <h5>Deactivate Account</h5>
+                  <p>Temporarily disable your account. You can reactivate it by logging in again.</p>
+                  <button 
+                    className="btn btn-outline-warning" 
+                    onClick={() => setShowDeactivateModal(true)}
+                  >
+                    Deactivate My Account
+                  </button>
+                </div>
+                
+                <hr />
+                
+                <div>
+                  <h5>Delete Account</h5>
+                  <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                  <button 
+                    className="btn btn-outline-danger" 
+                    onClick={() => setShowDeleteModal(true)}
+                  >
+                    Delete My Account
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Deactivate Account Modal */}
+      {showDeactivateModal && (
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header bg-warning">
+                <h5 className="modal-title">Deactivate Account</h5>
+                <button type="button" className="btn-close" onClick={() => setShowDeactivateModal(false)} disabled={accountActionLoading}></button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to deactivate your account? Your account will be temporarily disabled but your data will be preserved.</p>
+                <p>You can reactivate your account by logging in again in the future.</p>
+                
+                <form>
+                  <div className="mb-3">
+                    <label htmlFor="deactivate-password" className="form-label">Enter your password to confirm</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="deactivate-password"
+                      name="password"
+                      value={accountActionData.password}
+                      onChange={handleAccountActionChange}
+                      required
+                    />
+                  </div>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={() => setShowDeactivateModal(false)}
+                  disabled={accountActionLoading}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-warning" 
+                  onClick={handleDeactivateAccount}
+                  disabled={!accountActionData.password || accountActionLoading}
+                >
+                  {accountActionLoading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Processing...
+                    </>
+                  ) : 'Deactivate Account'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Account Modal */}
+      {showDeleteModal && (
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header bg-danger text-white">
+                <h5 className="modal-title">Delete Account</h5>
+                <button type="button" className="btn-close" onClick={() => setShowDeleteModal(false)} disabled={accountActionLoading}></button>
+              </div>
+              <div className="modal-body">
+                <div className="alert alert-danger">
+                  <h5>Warning: This action cannot be undone!</h5>
+                  <p>Deleting your account will permanently remove:</p>
+                  <ul>
+                    <li>Your profile information</li>
+                    <li>All your tasks and collections</li>
+                    <li>Your notes and other data</li>
+                    <li>Shared content you own</li>
+                  </ul>
+                </div>
+                
+                <form>
+                  <div className="mb-3">
+                    <label htmlFor="delete-password" className="form-label">Enter your password to confirm</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="delete-password"
+                      name="password"
+                      value={accountActionData.password}
+                      onChange={handleAccountActionChange}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="mb-3 form-check">
+                    <input 
+                      type="checkbox" 
+                      className="form-check-input" 
+                      id="confirm-deletion" 
+                      name="confirm_deletion"
+                      checked={accountActionData.confirm_deletion}
+                      onChange={handleAccountActionChange}
+                    />
+                    <label className="form-check-label" htmlFor="confirm-deletion">
+                      I understand that this will permanently delete my account and all my data
+                    </label>
+                  </div>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={() => setShowDeleteModal(false)}
+                  disabled={accountActionLoading}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-danger" 
+                  onClick={handleDeleteAccount}
+                  disabled={!accountActionData.password || !accountActionData.confirm_deletion || accountActionLoading}
+                >
+                  {accountActionLoading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Processing...
+                    </>
+                  ) : 'Permanently Delete My Account'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
