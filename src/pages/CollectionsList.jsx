@@ -4,12 +4,14 @@ import axios from '../utils/axios';
 import TaskManager from '../components/TaskManager';
 import TaskView from '../components/TaskView';
 import SharePageComponent from '../components/SharePageComponent';
+import PomodoroTimer from '../components/PomodoroTimer';
 
 const CollectionsList = () => {
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [showSharePage, setShowSharePage] = useState(false);
+  const [showPomodoro, setShowPomodoro] = useState(false);
 
   const navigate = useNavigate();
 
@@ -67,7 +69,7 @@ const CollectionsList = () => {
       {/* Sidebar */}
       <div
         style={{
-          width: '250px',
+          width: '350px',
           borderRight: '1px solid #ccc',
           padding: '1rem',
         }}
@@ -81,20 +83,68 @@ const CollectionsList = () => {
           }}
         >
           <h3 style={{ margin: 0 }}>Collections</h3>
-          <Link
-            to="/addcollections"
-            style={{
-              padding: '4px 8px',
-              background: '#4CAF50',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            +
-          </Link>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            <button
+              onClick={() => setShowPomodoro(!showPomodoro)}
+              style={{
+                padding: '4px 8px',
+                background: '#7D26CD',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                border: 'none',
+              }}
+              title="Pomodoro Timer"
+            >
+              <i className="fas fa-clock"></i>
+            </button>
+            <Link
+              to="/addcollections"
+              style={{
+                padding: '4px 8px',
+                background: '#4CAF50',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              +
+            </Link>
+          </div>
         </div>
+
+        {/* Pomodoro Timer (Collapsible) */}
+        {showPomodoro && (
+          <div style={{ 
+            marginBottom: '1rem',
+            padding: '0.75rem',
+            border: '1px solid #e0e0e0',
+            borderRadius: '8px',
+            background: 'linear-gradient(135deg, rgba(125,38,205,0.05) 0%, rgba(125,38,205,0.1) 100%)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+              <h5 style={{ margin: '0', fontSize: '0.9rem', color: '#7D26CD' }}>
+                <i className="fas fa-clock me-1"></i> Focus Timer
+              </h5>
+              <button
+                onClick={() => setShowPomodoro(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#666',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  padding: 0
+                }}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <PomodoroTimer />
+          </div>
+        )}
 
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {collections.map((collection) => (
