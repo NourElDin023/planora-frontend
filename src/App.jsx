@@ -114,6 +114,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/editcollection/:id?"
+            element={
+              <ProtectedRoute>
+                <AddCollection />
+              </ProtectedRoute>
+            }
+          />
           {/* Catch-all route for 404 */}
           <Route
             path="*"

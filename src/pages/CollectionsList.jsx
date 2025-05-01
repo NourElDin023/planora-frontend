@@ -12,12 +12,21 @@ const CollectionsList = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [showSharePage, setShowSharePage] = useState(false);
   const [showPomodoro, setShowPomodoro] = useState(false);
+  const [activeMenuId, setActiveMenuId] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.collection-menu')) {
+        setActiveMenuId(null);
+      }
+    };
+    window.addEventListener('click', handleClickOutside);
     fetchCollections();
+    return () => window.removeEventListener('click', handleClickOutside);
   }, []);
+
 
   const fetchCollections = async () => {
     try {
@@ -156,61 +165,116 @@ const CollectionsList = () => {
         )}
 
         <ul style={{ listStyle: 'none', padding: 0 }}>
-          {collections.map((collection) => (
-            <li
-              key={collection.id}
+        {collections.map((collection) => (
+    <li
+      key={collection.id}
+      style={{
+        padding: '8px',
+        cursor: 'pointer',
+        borderRadius: '6px',
+        backgroundColor:
+          selectedCollection?.id === collection.id
+            ? 'rgba(125, 38, 205, 0.1)'
+            : 'transparent',
+        border:
+          selectedCollection?.id === collection.id
+            ? '1px solid #7D26CD'
+            : 'none',
+        position: 'relative',
+      }}
+    >
+      <div onClick={() => handleCollectionClick(collection)}>
+        <strong>{collection.title}</strong>
+        {collection.description && (
+          <p
+            style={{
+              margin: '4px 0 0',
+              fontSize: '0.9em',
+              color: '#666',
+            }}
+          >
+            {collection.description}
+          </p>
+        )}
+      </div>
+      
+      {/* Replace delete button with this menu */}
+      <div style={{
+        position: 'absolute',
+        right: '8px',
+        top: '8px',
+        zIndex: 1
+      }}>
+        <button
+          className="collection-menu"
+          onClick={(e) => {
+            e.stopPropagation();
+            setActiveMenuId(activeMenuId === collection.id ? null : collection.id);
+          }}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#666',
+            cursor: 'pointer',
+            padding: '2px 5px',
+            fontSize: '1.2em',
+          }}
+        >
+          <i className="fas fa-ellipsis-v"></i>
+        </button>
+
+        {activeMenuId === collection.id && (
+          <div
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: '100%',
+              backgroundColor: 'white',
+              borderRadius: '4px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              minWidth: '120px',
+              zIndex: 100
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => navigate(`/editcollection/${collection.id}`)}
               style={{
-                padding: '8px',
+                width: '100%',
+                padding: '8px 12px',
+                border: 'none',
+                background: 'none',
                 cursor: 'pointer',
-                borderRadius: '6px',
-                backgroundColor:
-                  selectedCollection?.id === collection.id
-                    ? 'rgba(125, 38, 205, 0.1)'
-                    : 'transparent',
-                border:
-                  selectedCollection?.id === collection.id
-                    ? '1px solid #7D26CD'
-                    : 'none',
-                position: 'relative',
+                textAlign: 'left',
+                ':hover': {
+                  backgroundColor: '#f5f5f5'
+                }
               }}
             >
-              <div onClick={() => handleCollectionClick(collection)}>
-                <strong>{collection.title}</strong>
-                {collection.description && (
-                  <p
-                    style={{
-                      margin: '4px 0 0',
-                      fontSize: '0.9em',
-                      color: '#666',
-                    }}
-                  >
-                    {collection.description}
-                  </p>
-                )}
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteCollection(collection.id);
-                }}
-                style={{
-                  position: 'absolute',
-                  right: '8px',
-                  top: '8px',
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#ff4444',
-                  cursor: 'pointer',
-                  padding: '2px 5px',
-                  borderRadius: '50%',
-                  fontSize: '0.9em',
-                }}
-                title="Delete collection"
-              >
-                ×
-              </button>
-            </li>
-          ))}
+              Edit
+            </button>
+            <button
+              onClick={() => handleDeleteCollection(collection.id)}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: 'none',
+                background: 'none',
+                cursor: 'pointer',
+                textAlign: 'left',
+                color: '#ff4444',
+                ':hover': {
+                  backgroundColor: '#ffecec'
+                }
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        )}
+      </div>
+    </li>
+  ))}
         </ul>
       </div>
 
