@@ -23,7 +23,7 @@ const CollectionsList = () => {
     try {
       const res = await axios.get('collections/');
       setCollections(res.data);
-      console.log(res.data);  
+      console.log(res.data);
       if (res.data.length > 0) {
         handleCollectionClick(res.data[0]);
       }
@@ -117,14 +117,23 @@ const CollectionsList = () => {
 
         {/* Pomodoro Timer (Collapsible) */}
         {showPomodoro && (
-          <div style={{ 
-            marginBottom: '1rem',
-            padding: '0.75rem',
-            border: '1px solid #e0e0e0',
-            borderRadius: '8px',
-            background: 'linear-gradient(135deg, rgba(125,38,205,0.05) 0%, rgba(125,38,205,0.1) 100%)'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+          <div
+            style={{
+              marginBottom: '1rem',
+              padding: '0.75rem',
+              border: '1px solid #e0e0e0',
+              borderRadius: '8px',
+              background:
+                'linear-gradient(135deg, rgba(125,38,205,0.05) 0%, rgba(125,38,205,0.1) 100%)',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '0.5rem',
+              }}
+            >
               <h5 style={{ margin: '0', fontSize: '0.9rem', color: '#7D26CD' }}>
                 <i className="fas fa-clock me-1"></i> Focus Timer
               </h5>
@@ -136,7 +145,7 @@ const CollectionsList = () => {
                   color: '#666',
                   cursor: 'pointer',
                   fontSize: '0.9rem',
-                  padding: 0
+                  padding: 0,
                 }}
               >
                 <i className="fas fa-times"></i>
@@ -225,6 +234,7 @@ const CollectionsList = () => {
                   onClick={() => {
                     setSelectedCollection(null);
                     setSelectedTask(null);
+                    setShowSharePage(false);
                   }}
                   style={{
                     background: 'none',
@@ -241,25 +251,22 @@ const CollectionsList = () => {
                 {selectedCollection && (
                   <>
                     <span>&gt;</span>
-                    {selectedTask ? (
-                      <button
-                        onClick={() => setSelectedTask(null)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#7D26CD',
-                          cursor: 'pointer',
-                          padding: 0,
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        {selectedCollection.title}
-                      </button>
-                    ) : (
-                      <span style={{ color: '#7D26CD' }}>
-                        {selectedCollection.title}
-                      </span>
-                    )}
+                    <button
+                      onClick={() => {
+                        setSelectedTask(null);
+                        setShowSharePage(false);
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#7D26CD',
+                        cursor: 'pointer',
+                        padding: 0,
+                        textDecoration: 'underline',
+                      }}
+                    >
+                      {selectedCollection.title}
+                    </button>
                   </>
                 )}
 
@@ -269,6 +276,13 @@ const CollectionsList = () => {
                     <span style={{ color: '#7D26CD' }}>
                       {selectedTask.title}
                     </span>
+                  </>
+                )}
+
+                {showSharePage && (
+                  <>
+                    <span>&gt;</span>
+                    <span style={{ color: '#7D26CD' }}>Share Settings</span>
                   </>
                 )}
               </div>
@@ -281,6 +295,8 @@ const CollectionsList = () => {
                 }}
               >
                 <div>
+                {!showSharePage && !selectedTask && (
+                    <>
                   <h2>{selectedCollection.title}</h2>
 
                   {selectedCollection.description && (
@@ -294,8 +310,7 @@ const CollectionsList = () => {
                       {selectedCollection.description}
                     </p>
                   )}
-                  {!showSharePage && !selectedTask && (
-                    <>
+                  
                       <p style={{ marginTop: '4px', color: '#777' }}>
                         Created:{' '}
                         {new Date(
@@ -321,9 +336,10 @@ const CollectionsList = () => {
                 </div>
                 {!selectedTask && !showSharePage && (
                   <TaskManager
+                    key={selectedCollection.id}
                     collectionId={selectedCollection.id}
                     onTaskSelect={setSelectedTask}
-                    permission={"edit"}
+                    permission={'edit'}
                   />
                 )}
               </div>
@@ -337,9 +353,10 @@ const CollectionsList = () => {
               )}
               {selectedTask && !showSharePage ? (
                 <TaskView
+                  key={selectedCollection.id}
                   taskId={selectedTask.id}
                   onClose={() => setSelectedTask(null)}
-                  permission={"edit"}
+                  permission={'edit'}
                 />
               ) : (
                 <></>

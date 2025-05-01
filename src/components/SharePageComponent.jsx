@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 
-const SharePageComponent = ({ pageId }) => {
+const SharePageComponent = ({ pageId, onClose  }) => {
   const [usernames, setUsernames] = useState([]);
   const [selectedUsernames, setSelectedUsernames] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -117,6 +117,19 @@ const SharePageComponent = ({ pageId }) => {
 
   return (
     <div className="card mt-4 mx-auto" style={{ maxWidth: '600px' }}>
+    {/* Add header with back button */}
+    <div className="card-header d-flex justify-content-between align-items-center">
+      <h5 className="mb-0">Share Settings</h5>
+      <button 
+        onClick={onClose}
+        className="btn btn-link text-decoration-none"
+        style={{ color: '#7D26CD' }}
+      >
+        <i className="fas fa-arrow-left me-2"></i>
+        Back to Collection
+      </button>
+    </div>
+
       <div className="card-body">
         <div className="d-flex justify-content-center mb-3 gap-2">
           <div
@@ -157,57 +170,80 @@ const SharePageComponent = ({ pageId }) => {
             </button>
           </div>
         )}
-        {mode === 'user' && (
-          <>
-            <label className="form-label">Search Usernames</label>
-            <input
-              type="text"
-              className="form-control mb-2"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+{mode === 'user' && (
+  <>
+    <label className="form-label">Search Usernames </label>
+    <input
+      type="text"
+      className="form-control mb-2"
+      placeholder="Start typing to search users..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      minLength={2}
+    />
+
+    {/* Only show user list when 3+ characters entered */}
+    {searchTerm.length >= 2 && (
+      <div
+        className="border p-2 mb-2"
+        style={{ maxHeight: '150px', overflowY: 'auto' }}
+      >
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((username, idx) => (
             <div
-              className="border p-2 mb-2"
-              style={{ maxHeight: '150px', overflowY: 'auto' }}
+              key={idx}
+              className="p-1 rounded hover bg-light cursor-pointer"
+              onClick={() => handleAddUsername(username)}
             >
-              {filteredUsers.map((username, idx) => (
-                <div
-                  key={idx}
-                  className="p-1 rounded hover bg-light cursor-pointer"
-                  onClick={() => handleAddUsername(username)}
-                >
-                  {username}
-                </div>
-              ))}
+              {username}
             </div>
+          ))
+        ) : (
+          <div className="p-1 text-muted">
+            {usernames.length === 0 
+              ? "Loading users..." 
+              : "No matching users found"}
+          </div>
+        )}
+      </div>
+    )}
 
-            <div className="mb-2">
-              <label className="form-label">Selected Users:</label>
-              <div className="d-flex flex-wrap gap-2">
-                {selectedUsernames.map((u, i) => (
-                  <span key={i} className="badge bg-secondary">
-                    {u}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Permission</label>
-              <select
-                className="form-select"
-                value={permission}
-                onChange={(e) => setPermission(e.target.value)}
-              >
-                <option value="view">View</option>
-                <option value="edit">Edit</option>
-              </select>
-            </div>
-
-            <button className="btn btn-success" onClick={handleShareWithUsers}>
-              Share Page
+    <div className="mb-2">
+      <label className="form-label">Selected Users:</label>
+      <div className="d-flex flex-wrap gap-2">
+        {selectedUsernames.map((u, i) => (
+          <span key={i} className="badge bg-secondary d-flex align-items-center">
+            {u}
+            <button 
+              onClick={() => setSelectedUsernames(selectedUsernames.filter(user => user !== u))}
+              className="ms-2 btn btn-sm p-0"
+            >
+              ×
             </button>
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <div className="mb-3">
+      <label className="form-label">Permission</label>
+      <select
+        className="form-select"
+        value={permission}
+        onChange={(e) => setPermission(e.target.value)}
+      >
+        <option value="view">View</option>
+        <option value="edit">Edit</option>
+      </select>
+    </div>
+
+    <button 
+      className="btn btn-success" 
+      onClick={handleShareWithUsers}
+      disabled={selectedUsernames.length === 0}
+    >
+      Share Page
+    </button>
             {sharedPageUrl && (
               <div className="mt-3">
                 <label className="form-label">Shared Page URL:</label>

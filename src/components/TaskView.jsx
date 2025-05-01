@@ -49,7 +49,7 @@ const TaskView = ({ taskId,permission , onClose }) => {
           cursor: 'pointer',
         }}
       >
-        &larr; Back to List
+        &larr; Back to Collection
       </button>
 
       <div

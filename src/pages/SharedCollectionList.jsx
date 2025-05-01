@@ -179,22 +179,30 @@ const SharedCollectionList = () => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '1rem'
             }}>
               <div>
-                <h2 style={{ margin: 0 }}>{selectedCollection.title}</h2>
-                {selectedCollection.description && (
-                  <p style={{
-                    marginTop: '4px',
-                    color: '#555',
-                    fontStyle: 'italic'
-                  }}>
-                    {selectedCollection.description}
-                  </p>
-                )}
+              <h2>{selectedCollection.title}</h2>
+              {selectedCollection.description && (
+                    <p
+                      style={{
+                        marginTop: '4px',
+                        color: '#555',
+                        fontStyle: 'italic',
+                      }}
+                    >
+                      {selectedCollection.description}
+                    </p>
+                  )}
+                   <p style={{ marginTop: '4px', color: '#777' }}>
+                        Created:{' '}
+                        {new Date(
+                          selectedCollection.created_at
+                        ).toLocaleString()}
+                      </p>
                 <p style={{ marginTop: '4px', color: '#777' }}>
                   Shared with: {selectedCollection.permission} access
                 </p>
+                
               </div>
               {!selectedTask && (
                 <TaskManager
