@@ -62,9 +62,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
-                                <li className="nav-item mx-2">
-                                    <NotificationIcon />
-                                </li>
+                               
                                 <li className="nav-item dropdown">
                                     <a 
                                         className="nav-link dropdown-toggle" 
@@ -89,6 +87,9 @@ const Navbar = () => {
                                             </button>
                                         </li>
                                     </ul>
+                                </li>
+                                <li className="nav-item mx-2">
+                                    <NotificationIcon />
                                 </li>
                             </>
                         )}
