@@ -79,7 +79,15 @@ const Login = () => {
     try {
       // Pass the rememberMe preference to login function
       await login(formData.username, formData.password, rememberMe);
-      navigate('/'); // Redirect to homepage after login
+      
+      // Check if there's a saved redirect path
+      const redirectPath = localStorage.getItem('lifetracker_redirectPath');
+      
+      // Navigate to the saved path or home page
+      navigate(redirectPath || '/');
+      
+      // Remove the saved path after use
+      localStorage.removeItem('lifetracker_redirectPath');
     } catch (err) {
       console.log("Login error:", err.response?.data);
       if (err.response?.data?.verification_required) {
