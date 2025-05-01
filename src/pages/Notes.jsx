@@ -39,7 +39,7 @@ const Notes = () => {
   }, []);
 
   return (
-    <div style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)' }}>
+    <div>
       <div className="container py-5">
         {/* Beautiful Editor */}
         <MarkdownEditor onSave={saveNote} />
