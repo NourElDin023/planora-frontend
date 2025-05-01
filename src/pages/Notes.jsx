@@ -35,6 +35,17 @@ const Notes = () => {
   };
 
   useEffect(() => {
+    const cachedNotes = localStorage.getItem('notes');
+    if (cachedNotes) {
+      setNotes(JSON.parse(cachedNotes));
+    }
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes]);
+
+  useEffect(() => {
     fetchNotes();
   }, []);
 
@@ -47,14 +58,14 @@ const Notes = () => {
         {/* Notes List */}
         <div className="row mt-5">
           <div className="col-12">
-            <h2 className="text-center mb-4 fw-bold" style={{ color: '#6a11cb' }}>
+            <h2 className="text-center mb-4 fw-bold" style={{ color: '#0d6efd' }}>
               <i className="fas fa-book-open me-2"></i>
               Your Notes
             </h2>
             
             {notes.length === 0 ? (
               <div className="text-center py-5">
-                <i className="fas fa-book fa-3x mb-3" style={{ color: '#6a11cb' }}></i>
+                <i className="fas fa-book fa-3x mb-3" style={{ color: '#0d6efd' }}></i>
                 <p className="h4 text-muted">No notes yet. Create your first one above!</p>
               </div>
             ) : (
@@ -67,7 +78,7 @@ const Notes = () => {
                         style={{ background: 'linear-gradient(135deg, rgba(106,17,203,0.1) 0%, rgba(37,117,252,0.1) 100%)' }}
                       >
                         <div className="d-flex justify-content-between align-items-center">
-                          <h3 className="h5 mb-0 fw-bold" style={{ color: '#6a11cb' }}>
+                          <h3 className="h5 mb-0 fw-bold" style={{ color: '#0d6efd' }}>
                             {note.title || 'Untitled Note'}
                           </h3>
                           <button 

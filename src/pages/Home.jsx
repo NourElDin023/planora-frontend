@@ -50,29 +50,30 @@ const styles = {
   header: {
     textAlign: 'center',
     padding: '40px 20px',
-    backgroundColor: '#f0f8ff',
+    backgroundColor: 'var(--header-bg)',
     borderRadius: '15px',
     marginBottom: '30px',
   },
   title: {
     fontSize: '2.5rem',
-    color: '#2c3e50',
+    color: 'var(--text-color)',
     marginBottom: '10px',
   },
   subtitle: {
     fontSize: '1.2rem',
-    color: '#7f8c8d',
+    color: 'var(--text-muted)',
   },
   quoteBox: {
-    backgroundColor: '#e8f4f8',
+    backgroundColor: 'var(--quote-bg)',
     padding: '20px',
     borderRadius: '10px',
     margin: '30px 0',
     textAlign: 'center',
+    border: '1px solid var(--quote-border)',
   },
   quoteText: {
     fontSize: '1.1rem',
-    color: '#34495e',
+    color: 'var(--quote-text)',
     fontStyle: 'italic',
   },
   gridContainer: {
@@ -82,31 +83,28 @@ const styles = {
     padding: '20px 0',
   },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: 'var(--card-bg)',
     borderRadius: '12px',
     padding: '25px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.3s ease',
-    ':hover': {
-      transform: 'translateY(-5px)',
-    },
   },
   icon: {
     fontSize: '2.5rem',
-    color: '#3498db',
+    color: 'var(--icon-color)',
     marginBottom: '15px',
   },
   cardTitle: {
-    color: '#2c3e50',
+    color: 'var(--text-color)',
     marginBottom: '10px',
   },
   cardDesc: {
-    color: '#7f8c8d',
+    color: 'var(--text-muted)',
     minHeight: '60px',
   },
   cardButton: {
-    backgroundColor: '#3498db',
-    color: 'white',
+    backgroundColor: 'var(--button-bg)',
+    color: 'var(--button-text)',
     border: 'none',
     padding: '10px 20px',
     borderRadius: '5px',
@@ -114,39 +112,31 @@ const styles = {
     fontSize: '1rem',
     marginTop: '15px',
     width: '100%',
-    transition: 'background-color 0.3s ease',
-    ':hover': {
-      backgroundColor: '#2980b9',
-    },
   },
   ctaSection: {
     textAlign: 'center',
     padding: '50px 20px',
     marginTop: '40px',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: 'var(--cta-bg)',
     borderRadius: '15px',
   },
   ctaTitle: {
     fontSize: '2rem',
-    color: '#2c3e50',
+    color: 'var(--text-color)',
     marginBottom: '15px',
   },
   ctaText: {
-    color: '#7f8c8d',
+    color: 'var(--text-muted)',
     marginBottom: '25px',
   },
   ctaButton: {
-    backgroundColor: '#2ecc71',
-    color: 'white',
+    backgroundColor: 'var(--cta-button-bg)',
+    color: 'var(--button-text)',
     padding: '15px 40px',
     fontSize: '1.1rem',
     borderRadius: '25px',
     border: 'none',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
-    ':hover': {
-      backgroundColor: '#27ae60',
-    },
   },
 };
 
