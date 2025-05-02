@@ -83,37 +83,55 @@ const CollectionsList = () => {
       console.error('Error fetching tasks', err);
     }
   };
-
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      {/* Sidebar */}
-      <div
-        style={{
-          width: '350px',
-          borderRight: '1px solid #ccc',
-          padding: '1rem',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1rem',
-          }}
-        >
-          <h3 style={{ margin: 0 }}>Collections</h3>
-          <div style={{ display: 'flex', gap: '4px' }}>
+    <div className="app-container" style={{ 
+      display: 'flex', 
+      height: '100vh',
+      backgroundColor: 'var(--bg-color)',
+      color: 'var(--text-color)'
+    }}>
+      {/* Modern Sidebar */}
+      <div className="sidebar" style={{
+        width: '320px',
+        padding: '1.5rem',
+        borderRight: '1px solid var(--border-color)',
+        backgroundColor: 'var(--sidebar-bg)',
+        overflowY: 'auto',
+        transition: 'all 0.3s ease'
+      }}>
+        <div className="sidebar-header" style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1.5rem',
+          paddingBottom: '1rem',
+          borderBottom: '1px solid var(--border-color)'
+        }}>
+          <h3 style={{ 
+            margin: 0, 
+            fontSize: '1.25rem',
+            fontWeight: '600',
+            color: 'var(--heading-color)'
+          }}>
+            Collections
+          </h3>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
             <button
               onClick={() => setShowPomodoro(!showPomodoro)}
+              className="icon-button"
               style={{
-                padding: '4px 8px',
-                background: '#0d6efd',
-                color: 'white',
-                textDecoration: 'none',
-                borderRadius: '4px',
+                padding: '0.5rem',
+                borderRadius: '8px',
+                border: '1px solid var(--primary-border)',
+                backgroundColor: 'var(--primary-bg)',
+                color: 'var(--primary-color)',
                 cursor: 'pointer',
-                border: 'none',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                ':hover': {
+                  backgroundColor: 'var(--primary-hover)'
+                }
               }}
               title="Pomodoro Timer"
             >
@@ -121,188 +139,262 @@ const CollectionsList = () => {
             </button>
             <Link
               to="/addcollections"
+              className="add-button"
               style={{
-                padding: '4px 8px',
-                background: '#4CAF50',
-                color: 'white',
+                padding: '0.5rem 0.75rem',
+                borderRadius: '8px',
+                backgroundColor: 'var(--success-bg)',
+                color: 'var(--success-color)',
                 textDecoration: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'all 0.2s ease',
+                ':hover': {
+                  backgroundColor: 'var(--success-hover)',
+                  transform: 'translateY(-1px)'
+                }
               }}
             >
-              +
+              <i className="fas fa-plus"></i>
             </Link>
           </div>
         </div>
 
-        {/* Pomodoro Timer (Collapsible) */}
+        {/* Pomodoro Timer */}
         {showPomodoro && (
-          <div
-            style={{
-              marginBottom: '1rem',
-              padding: '0.75rem',
-              border: '1px solid #e0e0e0',
-              borderRadius: '8px',
-              background:
-                'linear-gradient(135deg, rgba(125,38,205,0.05) 0%, rgba(125,38,205,0.1) 100%)',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '0.5rem',
-              }}
-            >
-              <h5 style={{ margin: '0', fontSize: '0.9rem', color: '#0d6efd' }}>
+          <div className="pomodoro-container" style={{
+            marginBottom: '1.5rem',
+            padding: '1rem',
+            borderRadius: '12px',
+            backgroundColor: 'var(--card-bg)',
+            border: '1px solid var(--card-border)',
+            boxShadow: '0 2px 12px var(--shadow-color)'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '0.75rem'
+            }}>
+              <h5 style={{ 
+                margin: 0, 
+                fontSize: '0.9rem',
+                fontWeight: '500',
+                color: 'var(--primary-color)'
+              }}>
                 <i className="fas fa-clock me-1"></i> Focus Timer
               </h5>
               <button
                 onClick={() => setShowPomodoro(false)}
                 style={{
-                  background: 'none',
+                  background: 'var(--icon-bg)',
                   border: 'none',
-                  color: '#666',
+                  borderRadius: '6px',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  padding: 0,
+                  transition: 'all 0.2s ease',
+                  ':hover': {
+                    backgroundColor: 'var(--icon-hover)'
+                  }
                 }}
               >
-                <i className="fas fa-times"></i>
+                <i className="fas fa-times" style={{ fontSize: '0.8rem' }}></i>
               </button>
             </div>
             <PomodoroTimer />
           </div>
         )}
 
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-        {collections.map((collection) => (
-    <li
-      key={collection.id}
-      style={{
-        padding: '8px',
-        cursor: 'pointer',
-        borderRadius: '6px',
-        backgroundColor:
-          selectedCollection?.id === collection.id
-            ? 'rgba(125, 38, 205, 0.1)'
-            : 'transparent',
-        border:
-          selectedCollection?.id === collection.id
-            ? '1px solid #0d6efd'
-            : 'none',
-        position: 'relative',
-      }}
-    >
-      <div onClick={() => handleCollectionClick(collection)}>
-        <strong>{collection.title}</strong>
-        {collection.description && (
-          <p
-            style={{
-              margin: '4px 0 0',
-              fontSize: '0.9em',
-              color: '#666',
-            }}
-          >
-            {collection.description}
-          </p>
-        )}
-      </div>
-      
-      {/* Replace delete button with this menu */}
-      <div style={{
-        position: 'absolute',
-        right: '8px',
-        top: '8px',
-        zIndex: 1
-      }}>
-        <button
-          className="collection-menu"
-          onClick={(e) => {
-            e.stopPropagation();
-            setActiveMenuId(activeMenuId === collection.id ? null : collection.id);
-          }}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#666',
-            cursor: 'pointer',
-            padding: '2px 5px',
-            fontSize: '1.2em',
-          }}
-        >
-          <i className="fas fa-ellipsis-v"></i>
-        </button>
+        {/* Collections List */}
+        <ul className="collections-list" style={{ 
+          listStyle: 'none', 
+          padding: 0, 
+          margin: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem'
+        }}>
+          {collections.map((collection) => (
+            <li
+              key={collection.id}
+              className="collection-item"
+              style={{
+                padding: '0.75rem 1rem',
+                borderRadius: '8px',
+                backgroundColor: selectedCollection?.id === collection.id 
+                  ? 'var(--active-bg)' 
+                  : 'transparent',
+                border: selectedCollection?.id === collection.id
+                  ? '1px solid var(--active-border)'
+                  : '1px solid transparent',
+                transition: 'all 0.2s ease',
+                position: 'relative',
+                ':hover': {
+                  backgroundColor: 'var(--hover-bg)',
+                  borderColor: 'var(--hover-border)'
+                }
+              }}
+            >
+              <div 
+                onClick={() => handleCollectionClick(collection)} 
+                style={{ 
+                  cursor: 'pointer', 
+                  paddingRight: '2rem',
+                  overflow: 'hidden'
+                }}
+              >
+                <div style={{ 
+                  fontSize: '0.95rem', 
+                  fontWeight: '500', 
+                  marginBottom: '0.25rem',
+                  color: 'var(--text-color)'
+                }}>
+                  {collection.title}
+                </div>
+                {collection.description && (
+                  <div style={{ 
+                    fontSize: '0.85rem', 
+                    color: 'var(--text-secondary)',
+                    lineHeight: '1.4',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden'
+                  }}>
+                    {collection.description}
+                  </div>
+                )}
+              </div>
+              
+              {/* Collection Menu */}
+              <div style={{ 
+                position: 'absolute', 
+                right: '0.75rem', 
+                top: '0.75rem'
+              }}>
+                <button
+                  className="collection-menu"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveMenuId(activeMenuId === collection.id ? null : collection.id);
+                  }}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    borderRadius: '6px',
+                    width: '28px',
+                    height: '28px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    ':hover': {
+                      backgroundColor: 'var(--icon-bg)'
+                    }
+                  }}
+                >
+                  <i className="fas fa-ellipsis-v" style={{ fontSize: '0.9rem' }}></i>
+                </button>
 
-        {activeMenuId === collection.id && (
-          <div
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: '100%',
-              backgroundColor: 'white',
-              borderRadius: '4px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-              minWidth: '120px',
-              zIndex: 100
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => navigate(`/editcollection/${collection.id}`)}
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                textAlign: 'left',
-                ':hover': {
-                  backgroundColor: '#f5f5f5'
-                }
-              }}
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => handleDeleteCollection(collection.id)}
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                textAlign: 'left',
-                color: '#ff4444',
-                ':hover': {
-                  backgroundColor: '#ffecec'
-                }
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        )}
-      </div>
-    </li>
-  ))}
+                {activeMenuId === collection.id && (
+                  <div
+                    className="dropdown-menu"
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                      top: '100%',
+                      backgroundColor: 'var(--dropdown-bg)',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px var(--shadow-color)',
+                      minWidth: '140px',
+                      padding: '0.5rem',
+                      zIndex: 100,
+                      border: '1px solid var(--dropdown-border)',
+                      animation: 'fadeIn 0.2s ease-out'
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={() => navigate(`/editcollection/${collection.id}`)}
+                      className="dropdown-item"
+                      style={{
+                        width: '100%',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '4px',
+                        border: 'none',
+                        background: 'none',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        fontSize: '0.875rem',
+                        color: 'var(--text-color)',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        ':hover': {
+                          backgroundColor: 'var(--dropdown-hover)'
+                        }
+                      }}
+                    >
+                      <i className="fas fa-edit"></i> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCollection(collection.id)}
+                      className="dropdown-item danger"
+                      style={{
+                        width: '100%',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '4px',
+                        border: 'none',
+                        background: 'none',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        fontSize: '0.875rem',
+                        color: 'var(--danger-color)',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        ':hover': {
+                          backgroundColor: 'var(--danger-bg)'
+                        }
+                      }}
+                    >
+                      <i className="fas fa-trash"></i> Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
 
-      {/* Content Area */}
-      <div style={{ flex: 1, padding: '1rem' }}>
+      {/* Main Content Area */}
+      <div className="main-content" style={{ 
+        flex: 1, 
+        padding: '2rem',
+        overflowY: 'auto',
+        backgroundColor: 'var(--content-bg)'
+      }}>
         <Outlet />
 
         {!window.location.pathname.includes('/new') &&
           (selectedCollection ? (
-            <div>
-              {/* Clickable Breadcrumb Tracker */}
+            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              {/* Breadcrumb Navigation */}
               <div
+                className="breadcrumb"
                 style={{
-                  marginBottom: '1rem',
+                  marginBottom: '2rem',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '0.5rem',
+                  fontSize: '0.95rem'
                 }}
               >
                 <button
@@ -314,18 +406,29 @@ const CollectionsList = () => {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#0d6efd',
+                    color: 'var(--primary-color)',
                     cursor: 'pointer',
-                    padding: 0,
-                    textDecoration: 'underline',
+                    padding: '0.5rem',
+                    borderRadius: '6px',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                    ':hover': {
+                      backgroundColor: 'var(--primary-bg)'
+                    }
                   }}
                 >
-                  Collections
+                  <i className="fas fa-folder"></i> Collections
                 </button>
 
                 {selectedCollection && (
                   <>
-                    <span>&gt;</span>
+                    <i className="fas fa-chevron-right" style={{ 
+                      fontSize: '0.7rem', 
+                      opacity: 0.6,
+                      color: 'var(--text-secondary)'
+                    }}></i>
                     <button
                       onClick={() => {
                         setSelectedTask(null);
@@ -334,10 +437,17 @@ const CollectionsList = () => {
                       style={{
                         background: 'none',
                         border: 'none',
-                        color: '#0d6efd',
+                        color: 'var(--primary-color)',
                         cursor: 'pointer',
-                        padding: 0,
-                        textDecoration: 'underline',
+                        padding: '0.5rem',
+                        borderRadius: '6px',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        ':hover': {
+                          backgroundColor: 'var(--primary-bg)'
+                        }
                       }}
                     >
                       {selectedCollection.title}
@@ -347,102 +457,166 @@ const CollectionsList = () => {
 
                 {selectedTask && (
                   <>
-                    <span>&gt;</span>
-                    <span style={{ color: '#0d6efd' }}>
-                      {selectedTask.title}
+                    <i className="fas fa-chevron-right" style={{ 
+                      fontSize: '0.7rem', 
+                      opacity: 0.6,
+                      color: 'var(--text-secondary)'
+                    }}></i>
+                    <span style={{ 
+                      color: 'var(--primary-color)',
+                      padding: '0.5rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem'
+                    }}>
+                      <i className="fas fa-tasks"></i> {selectedTask.title}
                     </span>
                   </>
                 )}
 
                 {showSharePage && (
                   <>
-                    <span>&gt;</span>
-                    <span style={{ color: '#0d6efd' }}>Share Settings</span>
+                    <i className="fas fa-chevron-right" style={{ 
+                      fontSize: '0.7rem', 
+                      opacity: 0.6,
+                      color: 'var(--text-secondary)'
+                    }}></i>
+                    <span style={{ 
+                      color: 'var(--primary-color)',
+                      padding: '0.5rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem'
+                    }}>
+                      <i className="fas fa-share-alt"></i> Share Settings
+                    </span>
                   </>
                 )}
               </div>
 
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <div>
+              {/* Collection Content */}
+              <div>
                 {!showSharePage && !selectedTask && (
-                    <>
-                  <h2>{selectedCollection.title}</h2>
-
-                  {selectedCollection.description && (
-                    <p
-                      style={{
-                        marginTop: '4px',
-                        color: '#555',
-                        fontStyle: 'italic',
-                      }}
-                    >
-                      {selectedCollection.description}
-                    </p>
-                  )}
-                  
-                      <p style={{ marginTop: '4px', color: '#777' }}>
-                        Created:{' '}
-                        {new Date(
-                          selectedCollection.created_at
-                        ).toLocaleString()}
-                      </p>
+                  <div style={{ marginBottom: '2rem' }}>
+                    <div style={{ 
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: '1.5rem',
+                      gap: '1rem'
+                    }}>
+                      <div>
+                        <h1 style={{ 
+                          fontSize: '1.75rem',
+                          fontWeight: '600',
+                          marginBottom: '0.5rem',
+                          color: 'var(--heading-color)'
+                        }}>
+                          {selectedCollection.title}
+                        </h1>
+                        {selectedCollection.description && (
+                          <p style={{ 
+                            color: 'var(--text-secondary)',
+                            fontSize: '0.95rem',
+                            lineHeight: '1.5'
+                          }}>
+                            {selectedCollection.description}
+                          </p>
+                        )}
+                        <p style={{ 
+                          marginTop: '0.5rem',
+                          color: 'var(--text-tertiary)',
+                          fontSize: '0.85rem'
+                        }}>
+                          Created: {new Date(selectedCollection.created_at).toLocaleString()}
+                        </p>
+                      </div>
                       <button
                         onClick={() => setShowSharePage(true)}
                         style={{
-                          background: '#0d6efd',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          padding: '0.5rem 1rem',
+                          background: 'var(--primary-bg)',
+                          color: 'var(--primary-color)',
+                          border: '1px solid var(--primary-border)',
+                          borderRadius: '8px',
+                          padding: '0.75rem 1.25rem',
                           cursor: 'pointer',
-                          height: 'fit-content',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          flexShrink: 0,
+                          ':hover': {
+                            background: 'var(--primary-hover)',
+                            transform: 'translateY(-1px)'
+                          }
                         }}
                       >
-                        Share Collection
+                        <i className="fas fa-share"></i> Share Collection
                       </button>
-                    </>
-                  )}
-                </div>
-                {!selectedTask && !showSharePage && (
-                  <TaskManager
+                    </div>
+                    <TaskManager
+                      key={selectedCollection.id}
+                      collectionId={selectedCollection.id}
+                      onTaskSelect={setSelectedTask}
+                      permission={'edit'}
+                    />
+                  </div>
+                )}
+
+                {showSharePage && (
+                  <div style={{ 
+                    backgroundColor: 'var(--card-bg)',
+                    borderRadius: '12px',
+                    padding: '2rem',
+                    border: '1px solid var(--card-border)',
+                    boxShadow: '0 4px 12px var(--shadow-color)'
+                  }}>
+                    <SharePageComponent
+                      pageId={selectedCollection.id}
+                      onClose={() => setShowSharePage(false)}
+                    />
+                  </div>
+                )}
+
+                {selectedTask && !showSharePage && (
+                  <TaskView
                     key={selectedCollection.id}
-                    collectionId={selectedCollection.id}
-                    onTaskSelect={setSelectedTask}
+                    taskId={selectedTask.id}
+                    onClose={() => setSelectedTask(null)}
                     permission={'edit'}
                   />
                 )}
               </div>
-              {showSharePage && (
-                <div style={{ marginTop: '2rem' }}>
-                  <SharePageComponent
-                    pageId={selectedCollection.id}
-                    onClose={() => setShowSharePage(false)}
-                  />
-                </div>
-              )}
-              {selectedTask && !showSharePage ? (
-                <TaskView
-                  key={selectedCollection.id}
-                  taskId={selectedTask.id}
-                  onClose={() => setSelectedTask(null)}
-                  permission={'edit'}
-                />
-              ) : (
-                <></>
-              )}
             </div>
           ) : (
-            <p>Select a collection to view its tasks.</p>
+            <div className="empty-state" style={{ 
+              display: 'flex', 
+              height: '100%',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              color: 'var(--text-secondary)'
+            }}>
+              <i className="fas fa-folder-open" style={{
+                fontSize: '3rem',
+                marginBottom: '1rem',
+                opacity: 0.3
+              }}></i>
+              <h3 style={{ 
+                margin: '0.5rem 0',
+                fontWeight: '500',
+                color: 'var(--text-color)'
+              }}>
+                No Collection Selected
+              </h3>
+              <p style={{ margin: 0 }}>
+                Select a collection from the sidebar to view its tasks
+              </p>
+            </div>
           ))}
       </div>
     </div>
   );
 };
-
 export default CollectionsList;
