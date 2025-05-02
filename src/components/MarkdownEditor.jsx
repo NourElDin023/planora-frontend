@@ -17,11 +17,11 @@ const MarkdownEditor = ({ onSave }) => {
   };
 
   return (
-    <div className="d-flex justify-content-center min-vh-100 bg-light p-4" style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)' }}>
+    <div className="d-flex justify-content-center min-vh-100 p-4">
       <div className="w-100" style={{ maxWidth: '800px' }}>
         {/* Beautiful Purple Card Form */}
         <div className="card border-0 shadow-lg mb-5">
-          <div className="card-header bg-gradient-primary text-white py-3" style={{ background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)' }}>
+          <div className="card-header bg-gradient-primary text-white py-3" style={{ background: 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)' }}>
             <h2 className="h4 mb-0 text-center">
               <i className="fas fa-edit me-2"></i>
               Create New Note
@@ -39,7 +39,7 @@ const MarkdownEditor = ({ onSave }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Give your note a title..."
-                style={{ borderColor: '#6a11cb' }}
+                style={{ borderColor: '#0d6efd' }}
               />
             </div>
 
@@ -53,7 +53,7 @@ const MarkdownEditor = ({ onSave }) => {
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write your note here (Markdown supported)..."
                 rows={8}
-                style={{ borderColor: '#6a11cb', minHeight: '200px' }}
+                style={{ borderColor: '#0d6efd', minHeight: '200px' }}
               />
             </div>
 
@@ -61,7 +61,7 @@ const MarkdownEditor = ({ onSave }) => {
             <button
               onClick={handleSave}
               className="btn btn-primary btn-lg w-100 mb-3 fw-bold py-3 text-white"
-              style={{ background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)', border: 'none' }}
+              style={{ background: 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)', border: 'none' }}
             >
               <i className="fas fa-save me-2"></i>
               Save Note

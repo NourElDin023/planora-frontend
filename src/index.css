@@ -1,15 +1,14 @@
-/* @import '~@fortawesome/fontawesome-free/css/all.min.css'; */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom purple color */
-.text-purple {
-  color: #6a11cb;
+/* Custom blue color */
+.text-blue {
+  color: #007bff;
 }
 
-.border-purple {
-  border-color: #6a11cb !important;
+.border-blue {
+  border-color: #007bff !important;
 }
 
 /* Better markdown rendering */
@@ -25,7 +24,7 @@
 .prose h1,
 .prose h2,
 .prose h3 {
-  color: #6a11cb;
+  color: #0056b3;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -36,38 +35,125 @@
   margin-bottom: 1rem;
 }
 
+/* Light Mode */
 body.light {
+  background-color: #f9f9f9;
+  color: #212529;
+  --quote-bg: #e6f2ff;
+  --quote-text: #003366;
+  --quote-border: #cce5ff;
+  --header-bg: #f0f8ff;
+  --text-color: #2c3e50;
+  --text-muted: #7f8c8d;
+  --card-bg: #ffffff;
+  --icon-color: #007bff;
+  --button-bg: #007bff;
+  --button-hover-bg: #0056b3;
+  --button-text: #ffffff;
+  --cta-bg: #eaf4ff;
+  --cta-button-bg: #007bff;
+  --cta-button-hover-bg: #0056b3;
+}
+
+body.light .card {
   background-color: #ffffff;
   color: #212529;
+  border: 1px solid #dee2e6;
 }
 
+body.light .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #ffffff;
+}
+
+body.light .btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* Dark Mode */
 body.dark {
-  background-color: #121212;
-  color: #f8f9fa;
-}
-
-/* Apply to form elements */
-body.dark input,
-body.dark textarea,
-body.dark select {
-  background-color: #1e1e1e;
-  color: #f8f9fa;
-  border: 1px solid #555;
-}
-
-body.dark .form-control:focus {
-  background-color: #1e1e1e;
-  color: #f8f9fa;
-  border-color: #6a11cb;
-  box-shadow: 0 0 0 0.25rem rgba(106, 17, 203, 0.25);
-}
-
-body.dark .btn-primary {
-  background-color: #6a11cb;
-  border-color: #6a11cb;
+  background-color: #1b1f24;
+  color: #eaeaea;
+  --quote-bg: #2a3b4d;
+  --quote-text: #cce6ff;
+  --quote-border: #345d7e;
+  --header-bg: #2a3b4d;
+  --text-color: #eaeaea;
+  --text-muted: #aaa;
+  --card-bg: #2c3e50;
+  --icon-color: #66b2ff;
+  --button-bg: #007bff;
+  --button-hover-bg: #0056b3;
+  --button-text: #ffffff;
+  --cta-bg: #2c3e50;
+  --cta-button-bg: #007bff;
+  --cta-button-hover-bg: #0056b3;
 }
 
 body.dark .card {
-  background-color: #1e1e1e;
-  color: #f8f9fa;
+  background-color: #2c3e50;
+  color: #f5f5f5;
+  border: 1px solid #345d7e;
+}
+
+body.dark .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #ffffff;
+}
+
+body.dark .btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+body.dark input,
+body.dark textarea,
+body.dark select {
+  background-color: #2c3e50;
+  color: #f5f5f5;
+  border: 1px solid #345d7e;
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #aaa;
+}
+
+body.dark .form-control:focus {
+  background-color: #2c3e50;
+  color: #f5f5f5;
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+body.dark .navbar {
+  background-color: #2c3e50;
+  border-bottom: 1px solid #345d7e;
+}
+
+body.dark .navbar a {
+  color: #eaeaea;
+}
+
+body.dark .navbar a:hover {
+  color: #007bff;
+}
+
+body.dark .text-muted {
+  color: #aaa !important;
+}
+
+body.dark .border {
+  border-color: #345d7e !important;
+}
+
+body.dark .bg-light {
+  background-color: #2c3e50 !important;
+}
+
+body.dark .text-blue {
+  color: #007bff !important;
 }

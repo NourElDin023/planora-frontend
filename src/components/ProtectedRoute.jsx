@@ -1,8 +1,9 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
+  const location = useLocation();
 
   // Show loading state while checking authentication
   if (loading) {
@@ -20,6 +21,8 @@ const ProtectedRoute = ({ children }) => {
 
   // Redirect to login if not authenticated
   if (!currentUser) {
+    // Save the current location to localStorage before redirecting
+    localStorage.setItem('lifetracker_redirectPath', location.pathname + location.search);
     return <Navigate to="/login" />;
   }
 

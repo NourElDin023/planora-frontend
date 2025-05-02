@@ -17,6 +17,17 @@ const CollectionsList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const cachedCollections = localStorage.getItem('collections');
+    if (cachedCollections) {
+      setCollections(JSON.parse(cachedCollections));
+    }
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem('collections', JSON.stringify(collections));
+  }, [collections]);
+
+  useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest('.collection-menu')) {
         setActiveMenuId(null);
@@ -97,7 +108,7 @@ const CollectionsList = () => {
               onClick={() => setShowPomodoro(!showPomodoro)}
               style={{
                 padding: '4px 8px',
-                background: '#7D26CD',
+                background: '#0d6efd',
                 color: 'white',
                 textDecoration: 'none',
                 borderRadius: '4px',
@@ -143,7 +154,7 @@ const CollectionsList = () => {
                 marginBottom: '0.5rem',
               }}
             >
-              <h5 style={{ margin: '0', fontSize: '0.9rem', color: '#7D26CD' }}>
+              <h5 style={{ margin: '0', fontSize: '0.9rem', color: '#0d6efd' }}>
                 <i className="fas fa-clock me-1"></i> Focus Timer
               </h5>
               <button
@@ -178,7 +189,7 @@ const CollectionsList = () => {
             : 'transparent',
         border:
           selectedCollection?.id === collection.id
-            ? '1px solid #7D26CD'
+            ? '1px solid #0d6efd'
             : 'none',
         position: 'relative',
       }}
@@ -303,7 +314,7 @@ const CollectionsList = () => {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#7D26CD',
+                    color: '#0d6efd',
                     cursor: 'pointer',
                     padding: 0,
                     textDecoration: 'underline',
@@ -323,7 +334,7 @@ const CollectionsList = () => {
                       style={{
                         background: 'none',
                         border: 'none',
-                        color: '#7D26CD',
+                        color: '#0d6efd',
                         cursor: 'pointer',
                         padding: 0,
                         textDecoration: 'underline',
@@ -337,7 +348,7 @@ const CollectionsList = () => {
                 {selectedTask && (
                   <>
                     <span>&gt;</span>
-                    <span style={{ color: '#7D26CD' }}>
+                    <span style={{ color: '#0d6efd' }}>
                       {selectedTask.title}
                     </span>
                   </>
@@ -346,7 +357,7 @@ const CollectionsList = () => {
                 {showSharePage && (
                   <>
                     <span>&gt;</span>
-                    <span style={{ color: '#7D26CD' }}>Share Settings</span>
+                    <span style={{ color: '#0d6efd' }}>Share Settings</span>
                   </>
                 )}
               </div>
@@ -384,7 +395,7 @@ const CollectionsList = () => {
                       <button
                         onClick={() => setShowSharePage(true)}
                         style={{
-                          background: '#7D26CD',
+                          background: '#0d6efd',
                           color: 'white',
                           border: 'none',
                           borderRadius: '4px',

@@ -41,12 +41,11 @@ const AddCollection = () => {
 
   return (
     <div className="container-fluid py-4" style={{
-      background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
       minHeight: '100vh',
     }}>
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="fw-bold" style={{ color: '#6a11cb' }}>
+          <h2 className="fw-bold" style={{ color: '#0d6efd' }}>
             <i className={`fas ${id ? 'fa-edit' : 'fa-folder-plus'} me-2`}></i>
             {id ? 'Edit Collection' : 'Create New Collection'}
           </h2>
