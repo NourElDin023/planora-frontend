@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axiosInstance from '../utils/axios';
 
@@ -10,6 +10,8 @@ const VerifyEmail = () => {
   const [error, setError] = useState('');
   const [isResending, setIsResending] = useState(false);
   const [resendMessage, setResendMessage] = useState('');
+  // Add a ref to track if verification has been attempted
+  const verificationAttempted = useRef(false);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,6 +26,14 @@ const VerifyEmail = () => {
         setError('Verification token is missing.');
         return;
       }
+      
+      // Skip if verification was already attempted to prevent duplicate requests
+      if (verificationAttempted.current) {
+        return;
+      }
+      
+      // Mark that verification has been attempted
+      verificationAttempted.current = true;
       
       try {
         const response = await axiosInstance.get(`users/verify-email/?token=${token}`);
