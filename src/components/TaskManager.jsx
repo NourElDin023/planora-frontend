@@ -164,7 +164,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
       <div className="container">
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="h2 fw-bold" style={{ color: '#6a11cb' }}>
+          <h1 className="h2 fw-bold" style={{ color: '#0d6efd' }}>
             <i className="fas fa-tasks me-2"></i>
             Collection Tasks{' '}
             {tasks.length > 0 && (
@@ -330,7 +330,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
             <div className="card-body">
               <i
                 className="fas fa-clipboard-check fa-4x mb-3"
-                style={{ color: '#6a11cb' }}
+                style={{ color: '#0d6efd' }}
               ></i>
               <h3 className="text-muted">No tasks yet</h3>
 
@@ -385,7 +385,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
                             ? 'text-decoration-line-through text-muted'
                             : ''
                         }`}
-                        style={{ color: task.completed ? '' : '#6a11cb' }}
+                        style={{ color: task.completed ? '' : '#0d6efd' }}
                       >
                         {task.title}
                       </h3>

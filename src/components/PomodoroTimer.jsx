@@ -144,7 +144,7 @@ const PomodoroTimer = () => {
     >
       <h3
         className="text-center fw-bold"
-        style={{ color: '#6a11cb', marginBottom: '1rem' }}
+        style={{ color: '#0d6efd', marginBottom: '1rem' }}
       >
         <i className="fas fa-clock me-2"></i>
         Pomodoro Timer
@@ -171,7 +171,7 @@ const PomodoroTimer = () => {
             background: `conic-gradient(
             from 0deg,
             #f0f0f0 0% ${100 - getProgressPercentage()}%, 
-            #6a11cb ${100 - getProgressPercentage()}% 100%
+            #0d6efd ${100 - getProgressPercentage()}% 100%
           )`,
           }}
         ></div>
@@ -188,7 +188,7 @@ const PomodoroTimer = () => {
             alignItems: 'center',
             fontSize: '2.5rem',
             fontWeight: 'bold',
-            color: '#6a11cb',
+            color: '#0d6efd',
           }}
         >
           {formatTime(timeLeft)}
@@ -215,7 +215,7 @@ const PomodoroTimer = () => {
           style={{
             borderRadius: '20px',
             maxWidth: '150px',
-            borderColor: '#6a11cb',
+            borderColor: '#0d6efd',
           }}
           disabled={isActive}
         />
@@ -224,7 +224,7 @@ const PomodoroTimer = () => {
           className="btn btn-primary"
           style={{
             borderRadius: '20px',
-            background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+            background: 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)',
             border: 'none',
           }}
           disabled={!customMinutes || isActive}
@@ -257,10 +257,10 @@ const PomodoroTimer = () => {
               padding: '0.4rem 1rem',
               background:
                 selectedTime === option.value
-                  ? 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)'
+                  ? 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)'
                   : 'white',
-              borderColor: '#6a11cb',
-              color: selectedTime === option.value ? 'white' : '#6a11cb',
+              borderColor: '#0d6efd',
+              color: selectedTime === option.value ? 'white' : '#0d6efd',
             }}
             disabled={isActive}
           >
@@ -284,7 +284,7 @@ const PomodoroTimer = () => {
           style={{
             background: isActive
               ? '#e74c3c'
-              : 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+              : 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)',
             color: 'white',
             borderRadius: '50%',
             width: '60px',

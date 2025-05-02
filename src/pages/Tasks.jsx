@@ -36,6 +36,17 @@ const Tasks = () => {
   };
 
   useEffect(() => {
+    const cachedTasks = localStorage.getItem('tasks');
+    if (cachedTasks) {
+      setTasks(JSON.parse(cachedTasks));
+    }
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  useEffect(() => {
     fetchTasks();
   }, []);
 
@@ -150,7 +161,7 @@ const Tasks = () => {
       <div className="container">
         {/* Page Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="h2 fw-bold" style={{ color: '#6a11cb' }}>
+          <h1 className="h2 fw-bold" style={{ color: '#0d6efd' }}>
             <i className="fas fa-tasks me-2"></i>
             Tasks
             {tasks.length > 0 && (
@@ -338,7 +349,7 @@ const Tasks = () => {
             <div className="card-body">
               <i
                 className="fas fa-clipboard-check fa-4x mb-3"
-                style={{ color: '#6a11cb' }}
+                style={{ color: '#0d6efd' }}
               ></i>
               <h3 className="text-muted">No tasks yet</h3>
               <p className="lead">
@@ -388,7 +399,7 @@ const Tasks = () => {
                             ? 'text-decoration-line-through text-muted'
                             : ''
                         }`}
-                        style={{ color: task.completed ? '' : '#6a11cb' }}
+                        style={{ color: task.completed ? '' : '#0d6efd' }}
                       >
                         {task.title}
                       </h3>
