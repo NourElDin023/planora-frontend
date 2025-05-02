@@ -1,13 +1,44 @@
 import { FaHeartbeat, FaBook, FaRunning, FaTasks, FaChartLine, FaMoneyBillWave } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const features = [
-    { icon: <FaHeartbeat />, title: 'Health Tracker', desc: 'Monitor your vital stats & wellness' },
-    { icon: <FaBook />, title: 'Journal', desc: 'Record daily thoughts & experiences' },
-    { icon: <FaRunning />, title: 'Fitness Log', desc: 'Track workouts & physical activities' },
-    { icon: <FaTasks />, title: 'Task Manager', desc: 'Organize daily tasks & goals' },
-    { icon: <FaChartLine />, title: 'Habit Builder', desc: 'Build and track positive habits' },
-    { icon: <FaMoneyBillWave />, title: 'Finance Tracker', desc: 'Manage expenses & budgeting' },
+    { 
+      icon: <FaHeartbeat />, 
+      title: 'Health Tracker', 
+      desc: 'Monitor your vital stats & wellness',
+      collectionName: 'Health Tracker'
+    },
+    { 
+      icon: <FaBook />, 
+      title: 'Journal', 
+      desc: 'Record daily thoughts & experiences',
+      collectionName: 'Journal'
+    },
+    { 
+      icon: <FaRunning />, 
+      title: 'Fitness Log', 
+      desc: 'Track workouts & physical activities',
+      collectionName: 'Fitness Log'
+    },
+    { 
+      icon: <FaTasks />, 
+      title: 'Task Manager', 
+      desc: 'Organize daily tasks & goals',
+      collectionName: 'Task Manager'
+    },
+    { 
+      icon: <FaChartLine />, 
+      title: 'Habit Builder', 
+      desc: 'Build and track positive habits',
+      collectionName: 'Habit Builder'
+    },
+    { 
+      icon: <FaMoneyBillWave />, 
+      title: 'Finance Tracker', 
+      desc: 'Manage expenses & budgeting',
+      collectionName: 'Finance Tracker'
+    },
   ];
 
   return (
@@ -27,7 +58,12 @@ const Home = () => {
             <div style={styles.icon}>{feature.icon}</div>
             <h3 style={styles.cardTitle}>{feature.title}</h3>
             <p style={styles.cardDesc}>{feature.desc}</p>
-            <button style={styles.cardButton}>Explore</button>
+            <Link 
+              to={`/viewcollections?collection=${encodeURIComponent(feature.collectionName)}`}
+              style={styles.cardButton}
+            >
+              Explore
+            </Link>
           </div>
         ))}
       </div>
@@ -35,7 +71,16 @@ const Home = () => {
       <div style={styles.ctaSection}>
         <h2 style={styles.ctaTitle}>Start Your Journey Today</h2>
         <p style={styles.ctaText}>Take control of your life one day at a time</p>
-        <button style={styles.ctaButton}>Get Started</button>
+        <Link 
+          to="/viewcollections"
+          style={{ 
+            ...styles.ctaButton,
+            textDecoration: 'none',
+            display: 'inline-block'
+          }}
+        >
+          Get Started
+        </Link>
       </div>
     </div>
   );
@@ -88,6 +133,9 @@ const styles = {
     padding: '25px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.3s ease',
+    ':hover': {
+      transform: 'translateY(-5px)'
+    }
   },
   icon: {
     fontSize: '2.5rem',
@@ -97,10 +145,12 @@ const styles = {
   cardTitle: {
     color: 'var(--text-color)',
     marginBottom: '10px',
+    fontSize: '1.25rem'
   },
   cardDesc: {
     color: 'var(--text-muted)',
     minHeight: '60px',
+    marginBottom: '15px'
   },
   cardButton: {
     backgroundColor: 'var(--button-bg)',
@@ -112,6 +162,14 @@ const styles = {
     fontSize: '1rem',
     marginTop: '15px',
     width: '100%',
+    display: 'block',
+    textAlign: 'center',
+    textDecoration: 'none',
+    transition: 'all 0.2s ease',
+    ':hover': {
+      backgroundColor: 'var(--button-hover)',
+      transform: 'translateY(-2px)'
+    }
   },
   ctaSection: {
     textAlign: 'center',
@@ -128,6 +186,7 @@ const styles = {
   ctaText: {
     color: 'var(--text-muted)',
     marginBottom: '25px',
+    fontSize: '1.1rem'
   },
   ctaButton: {
     backgroundColor: 'var(--cta-button-bg)',
@@ -137,6 +196,12 @@ const styles = {
     borderRadius: '25px',
     border: 'none',
     cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    ':hover': {
+      backgroundColor: 'var(--cta-button-hover)',
+      transform: 'translateY(-3px)',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+    }
   },
 };
 
