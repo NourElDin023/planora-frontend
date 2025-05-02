@@ -17,7 +17,7 @@ const MarkdownEditor = ({ onSave }) => {
   };
 
   return (
-    <div className="d-flex justify-content-center min-vh-100 bg-light p-4" style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)' }}>
+    <div className="d-flex justify-content-center min-vh-100 p-4">
       <div className="w-100" style={{ maxWidth: '800px' }}>
         {/* Beautiful Purple Card Form */}
         <div className="card border-0 shadow-lg mb-5">

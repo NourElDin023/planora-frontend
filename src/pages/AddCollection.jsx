@@ -41,7 +41,6 @@ const AddCollection = () => {
 
   return (
     <div className="container-fluid py-4" style={{
-      background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
       minHeight: '100vh',
     }}>
       <div className="container">
