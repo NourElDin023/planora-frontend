@@ -18,6 +18,7 @@ const PublicSharedPage = () => {
       try {
         const res = await axios.get(`collections/token/${token}/`);
         setCollection(res.data);
+        console.log('Collection fetched:', res.data);
       } catch (err) {
         console.error('Error fetching collection', err);
         navigate('/not-found');
@@ -48,105 +49,221 @@ const PublicSharedPage = () => {
   };
 
   if (!collection) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        fontSize: '1.25rem',
+        color: 'var(--text-secondary)',
+        backgroundColor: 'var(--bg-primary)'
+      }}>
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <div style={{ marginBottom: '1rem' }}>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: 'var(--bg-primary)',
+      padding: '2rem',
+      color: 'var(--text-primary)'
+    }}>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto'
+      }}>
+        {/* Back Button */}
         <button
           onClick={() => navigate('/')}
           style={{
-            background: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            marginBottom: '2rem',
+            background: '#7D26CD',
+            color: 'white',
             border: 'none',
-            color: '#7D26CD',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '8px',
             cursor: 'pointer',
-            textDecoration: 'underline',
+            fontWeight: '500',
+            transition: 'all 0.2s ease',
+            boxShadow: '0 2px 5px var(--shadow-color)'
           }}
+          onMouseOver={e => e.currentTarget.style.opacity = '0.9'}
+          onMouseOut={e => e.currentTarget.style.opacity = '1'}
         >
           ← Back to Home
         </button>
-      </div>
 
-      {/* Content Area */}
-      <div style={{ flex: 1, padding: '1rem' }}>
-        <Outlet />
-        {collection ? (
-          <div>
-            <div
-              style={{
+        {/* Main Content */}
+        <div style={{
+          backgroundColor: 'var(--card-bg)',
+          borderRadius: '12px',
+          padding: '2rem',
+          boxShadow: '0 4px 12px var(--shadow-color)',
+          border: '1px solid var(--border-color)'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            marginBottom: '2rem'
+          }}>
+            {/* Collection Info */}
+            <div style={{ flex: 1 }}>
+              <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: '1rem',
-              }}
-            >
-              <div   style={{
-                
-                marginRight: '1rem',
+                gap: '1rem',
+                marginBottom: '1rem'
               }}>
-                <h2 style={{ margin: 0 }}>{collection.title}</h2>
-                {collection.description && (
-                  <p
-                    style={{
-                      marginTop: '4px',
-                      color: '#555',
-                      fontStyle: 'italic',
-                    }}
-                  >
-                    {collection.description}
-                  </p>
-                )}
-                <p style={{ marginTop: '4px', color: '#777' }}>
-                  Shared with: {collection.shareable_permission} access
+                <h2 style={{
+                  margin: 0,
+                  fontSize: '1.75rem',
+                  fontWeight: '600',
+                  color: 'var(--text-primary)'
+                }}>
+                  {collection.title}
+                </h2>
+                <span style={{
+                  padding: '0.25rem 0.75rem',
+                  fontSize: '0.75rem',
+                  fontWeight: '600',
+                  borderRadius: '999px',
+                  background: 'var(--badge-bg)',
+                  color: 'var(--badge-text)'
+                }}>
+                  {collection.shareable_permission} access
+                </span>
+              </div>
+              
+              {collection.description && (
+                <p style={{
+                  marginTop: '0.5rem',
+                  color: 'var(--text-secondary)',
+                  lineHeight: '1.5'
+                }}>
+                  {collection.description}
                 </p>
-                <div style={{ marginTop: '1rem' }}>
-                  {!isAdded ? (
-                    <button
-                      onClick={handleAddToShared}
-                      disabled={loading}
-                      style={{
-                        backgroundColor: '#7D26CD',
-                        color: 'white',
-                        border: 'none',
-                        padding: '8px 16px',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {loading ? 'Adding...' : 'Add to My Shared Collections'}
-                    </button>
-                  ) : (
-                    <p style={{ color: 'green' }}>
-                      ✓ Added to your shared collections!
-                    </p>
-                  )}
-                  {error && <p style={{ color: 'red' }}>{error}</p>}
+              )}
+              
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                fontSize: '0.875rem',
+                color: 'var(--text-tertiary)',
+                margin: '1rem 0'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>Owner: {collection.owner}</span>
                 </div>
               </div>
-              {!selectedTask && (
+              
+              <div style={{ marginTop: '1.5rem' }}>
+                {!isAdded ? (
+                  <button
+                    onClick={handleAddToShared}
+                    disabled={loading}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontWeight: '500',
+                      transition: 'all 0.2s ease',
+                      backgroundColor: loading ? 'var(--button-disabled)' : '#7D26CD',
+                      color: 'white',
+                      border: 'none',
+                      boxShadow: '0 2px 5px var(--shadow-color)'
+                    }}
+                    onMouseOver={e => !loading && (e.currentTarget.style.opacity = '0.9')}
+                    onMouseOut={e => !loading && (e.currentTarget.style.opacity = '1')}
+                  >
+                    {loading ? (
+                      <>
+                        <span style={{
+                          display: 'inline-block',
+                          width: '1rem',
+                          height: '1rem',
+                          border: '2px solid rgba(255,255,255,0.3)',
+                          borderTopColor: 'white',
+                          borderRadius: '50%',
+                          animation: 'spin 1s linear infinite'
+                        }}></span>
+                        Adding...
+                      </>
+                    ) : (
+                      'Add to My Shared Collections'
+                    )}
+                  </button>
+                ) : (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    color: 'var(--success)',
+                    fontWeight: '500'
+                  }}>
+                    ✓ Added to your shared collections!
+                  </div>
+                )}
+                
+                {error && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    color: 'var(--error)',
+                    marginTop: '0.5rem'
+                  }}>
+                    {error}
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Task Manager */}
+            {!selectedTask && (
+              <div style={{ width: '100%' }}>
                 <TaskManager
                   collectionId={collection.id}
                   permission={collection.shareable_permission}
                   onTaskSelect={setSelectedTask}
                 />
-              )}
-            </div>
+              </div>
+            )}
+          </div>
 
-            {selectedTask ? (
+          {/* Task View */}
+          {selectedTask && (
+            <div style={{
+              marginTop: '2rem',
+              borderTop: '1px solid var(--border-color)',
+              paddingTop: '1.5rem'
+            }}>
               <TaskView
                 taskId={selectedTask.id}
                 permission={collection.shareable_permission}
                 onClose={() => setSelectedTask(null)}
               />
-            ) : (
-              <></>
-            )}
-          </div>
-        ) : (
-          <p>Select a shared collection to view its tasks.</p>
-        )}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Simple spinner animation */}
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
