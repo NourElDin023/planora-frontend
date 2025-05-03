@@ -86,7 +86,7 @@ const PomodoroSection = ({ showPomodoro, setShowPomodoro }) => {
             Stay focused and productive with timed work sessions
           </p>
         </div>
-        <PomodoroTimer />
+        <PomodoroTimer onClose={() => setShowPomodoro(false)} />
       </div>
     </div>
   );
