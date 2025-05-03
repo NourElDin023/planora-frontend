@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
-const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
+const TaskManager = ({
+  collectionId,
+  permission,
+  onTaskSelect,
+  setShowSharePage,
+}) => {
   // State management
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +16,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
   const [searchFilters, setSearchFilters] = useState({
     title: true,
     details: true,
-    category: true
+    category: true,
   });
   const [showFilters, setShowFilters] = useState(false);
 
@@ -176,18 +181,27 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
               </span>
             )}
           </h1>
-          {permission === 'edit' && (
+          <div className="d-flex gap-2">
+            {permission === 'edit' && (
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  resetForm();
+                  setShowForm(true);
+                }}
+              >
+                <i className="fas fa-plus me-1"></i>
+                New Task
+              </button>
+            )}
             <button
-              className="btn btn-primary"
-              onClick={() => {
-                resetForm();
-                setShowForm(true);
-              }}
+              className="btn btn-outline-primary"
+              onClick={() => setShowSharePage(true)}
             >
-              <i className="fas fa-plus me-1"></i>
-              New Task
+              <i className="fas fa-share-alt me-1"></i>
+              Share Collection
             </button>
-          )}
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -214,7 +228,11 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
               </button>
             )}
             <button
-              className={`btn ${showFilters || Object.values(searchFilters).some(v => !v) ? 'btn-primary' : 'btn-outline-secondary'}`}
+              className={`btn ${
+                showFilters || Object.values(searchFilters).some((v) => !v)
+                  ? 'btn-primary'
+                  : 'btn-outline-secondary'
+              }`}
               type="button"
               onClick={() => setShowFilters(!showFilters)}
               title="Search filters"
@@ -222,7 +240,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
               <i class="fa-solid fa-sliders"></i>
             </button>
           </div>
-          
+
           {/* Search Filters - Only show when filters are toggled */}
           {showFilters && (
             <div className="mt-2 d-flex gap-2">
@@ -232,8 +250,11 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
                   type="checkbox"
                   id="titleFilter"
                   checked={searchFilters.title}
-                  onChange={() => 
-                    setSearchFilters(prev => ({...prev, title: !prev.title}))
+                  onChange={() =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      title: !prev.title,
+                    }))
                   }
                 />
                 <label className="form-check-label" htmlFor="titleFilter">
@@ -246,8 +267,11 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
                   type="checkbox"
                   id="detailsFilter"
                   checked={searchFilters.details}
-                  onChange={() => 
-                    setSearchFilters(prev => ({...prev, details: !prev.details}))
+                  onChange={() =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      details: !prev.details,
+                    }))
                   }
                 />
                 <label className="form-check-label" htmlFor="detailsFilter">
@@ -260,8 +284,11 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
                   type="checkbox"
                   id="categoryFilter"
                   checked={searchFilters.category}
-                  onChange={() => 
-                    setSearchFilters(prev => ({...prev, category: !prev.category}))
+                  onChange={() =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      category: !prev.category,
+                    }))
                   }
                 />
                 <label className="form-check-label" htmlFor="categoryFilter">
@@ -437,14 +464,17 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
         ) : (
           <div className="row row-cols-1 row-cols-md-1 row-cols-xl-2 g-4">
             {tasks
-              .filter(task => {
+              .filter((task) => {
                 if (!searchQuery) return true;
                 const query = searchQuery.toLowerCase();
-                
+
                 return (
-                  (searchFilters.title && task.title?.toLowerCase().includes(query)) ||
-                  (searchFilters.details && task.details?.toLowerCase().includes(query)) ||
-                  (searchFilters.category && task.category?.toLowerCase().includes(query))
+                  (searchFilters.title &&
+                    task.title?.toLowerCase().includes(query)) ||
+                  (searchFilters.details &&
+                    task.details?.toLowerCase().includes(query)) ||
+                  (searchFilters.category &&
+                    task.category?.toLowerCase().includes(query))
                 );
               })
               .map((task) => (
