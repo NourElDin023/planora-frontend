@@ -41,7 +41,7 @@ const Tasks = () => {
       setTasks(JSON.parse(cachedTasks));
     }
   }, []);
-  
+
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
@@ -187,22 +187,8 @@ const Tasks = () => {
 
         {/* Pomodoro Timer (Collapsible) */}
         {showPomodoro && (
-          <div className="card shadow mb-4">
-            <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-              <h5 className="mb-0">
-                <i className="fas fa-clock me-2"></i>
-                Focus Timer
-              </h5>
-              <button
-                className="btn btn-sm btn-light"
-                onClick={() => setShowPomodoro(false)}
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            <div className="card-body">
-              <PomodoroTimer />
-            </div>
+          <div className="card-body">
+            <PomodoroTimer onClose={() => setShowPomodoro(false)} />
           </div>
         )}
 

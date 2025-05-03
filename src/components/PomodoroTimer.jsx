@@ -53,6 +53,15 @@ const PomodoroTimer = ({ onClose }) => {
   const [customMinutes, setCustomMinutes] = useState('');
   const timerRef = useRef(null);
   const audioRef = useRef(null);
+  const modalContentRef = useRef(null);
+
+  // Handle clicking on overlay to close the modal
+  const handleOverlayClick = (e) => {
+    // Only close if the click was directly on the overlay and not on its children
+    if (e.target === e.currentTarget && onClose) {
+      onClose();
+    }
+  };
 
   // Preset time options in minutes
   const timeOptions = [
@@ -175,8 +184,8 @@ const PomodoroTimer = ({ onClose }) => {
   };
 
   return (
-    <div style={styles.modalOverlay}>
-      <div style={styles.modalContent}>
+    <div style={styles.modalOverlay} onClick={handleOverlayClick}>
+      <div style={styles.modalContent} ref={modalContentRef}>
         <button style={styles.closeButton} onClick={onClose}>
           <i className="fas fa-times"></i>
         </button>
