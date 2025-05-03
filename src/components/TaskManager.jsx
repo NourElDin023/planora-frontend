@@ -14,6 +14,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
     details: true,
     category: true
   });
+  const [showFilters, setShowFilters] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -213,53 +214,63 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
                 <i className="fas fa-times"></i>
               </button>
             )}
+            <button
+              className={`btn ${showFilters || Object.values(searchFilters).some(v => !v) ? 'btn-primary' : 'btn-outline-secondary'}`}
+              type="button"
+              onClick={() => setShowFilters(!showFilters)}
+              title="Search filters"
+            >
+              <i class="fa-solid fa-sliders"></i>
+            </button>
           </div>
           
-          {/* Search Filters */}
-          <div className="mt-2 d-flex gap-2">
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="titleFilter"
-                checked={searchFilters.title}
-                onChange={() => 
-                  setSearchFilters(prev => ({...prev, title: !prev.title}))
-                }
-              />
-              <label className="form-check-label" htmlFor="titleFilter">
-                Title
-              </label>
+          {/* Search Filters - Only show when filters are toggled */}
+          {showFilters && (
+            <div className="mt-2 d-flex gap-2">
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="titleFilter"
+                  checked={searchFilters.title}
+                  onChange={() => 
+                    setSearchFilters(prev => ({...prev, title: !prev.title}))
+                  }
+                />
+                <label className="form-check-label" htmlFor="titleFilter">
+                  Title
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="detailsFilter"
+                  checked={searchFilters.details}
+                  onChange={() => 
+                    setSearchFilters(prev => ({...prev, details: !prev.details}))
+                  }
+                />
+                <label className="form-check-label" htmlFor="detailsFilter">
+                  Details
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="categoryFilter"
+                  checked={searchFilters.category}
+                  onChange={() => 
+                    setSearchFilters(prev => ({...prev, category: !prev.category}))
+                  }
+                />
+                <label className="form-check-label" htmlFor="categoryFilter">
+                  Category
+                </label>
+              </div>
             </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="detailsFilter"
-                checked={searchFilters.details}
-                onChange={() => 
-                  setSearchFilters(prev => ({...prev, details: !prev.details}))
-                }
-              />
-              <label className="form-check-label" htmlFor="detailsFilter">
-                Details
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="categoryFilter"
-                checked={searchFilters.category}
-                onChange={() => 
-                  setSearchFilters(prev => ({...prev, category: !prev.category}))
-                }
-              />
-              <label className="form-check-label" htmlFor="categoryFilter">
-                Category
-              </label>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Task Form */}
@@ -425,7 +436,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
             </div>
           </div>
         ) : (
-          <div className="row row-cols-1 row-cols-md-2 g-4">
+          <div className="row row-cols-1 row-cols-md-1 row-cols-xl-2 g-4">
             {tasks
               .filter(task => {
                 if (!searchQuery) return true;
