@@ -42,31 +42,16 @@ const CollectionsSidebar = ({
         <div style={{ display: 'flex', gap: '4px' }}>
           <button
             onClick={() => setShowPomodoro(!showPomodoro)}
-            style={{
-              padding: '4px 8px',
-              background: '#0d6efd',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              border: 'none',
-            }}
+            className='btn btn-outline-primary' 
             title="Pomodoro Timer"
           >
             <i className="fas fa-clock"></i>
           </button>
           <Link
             to="/addcollections"
-            style={{
-              padding: '4px 8px',
-              background: '#4CAF50',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
+            className="btn btn-outline-primary"
           >
-            +
+            <i class="fa-solid fa-plus"></i>
           </Link>
         </div>
       </div>
