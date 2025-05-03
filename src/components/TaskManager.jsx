@@ -179,11 +179,11 @@ const TaskManager = ({
       <div className="container">
         {/* Header */}
         <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center align-items-start mb-4">
-          <h1 className="h2 fw-bold" style={{ color: '#0d6efd' }}>
-            <i className="fas fa-tasks me-2"></i>
+          <h1 className="h2 fs-3 fw-bold" style={{ color: '#0d6efd' }}>
+            <i className="fas fs-3 fa-tasks me-2"></i>
             Collection Tasks{' '}
             {tasks.length > 0 && (
-              <span className="ms-2 badge rounded-pill bg-primary">
+              <span className="ms-2 fs-5 badge rounded-pill bg-primary">
                 {tasks.length}
               </span>
             )}
