@@ -33,8 +33,6 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
         `tasks/?collection=${collectionId}`
       );
       setTasks(response.data);
-      console.log(collectionId);
-      console.log(response.data);
       setError(null);
     } catch (err) {
       console.error('Error fetching tasks:', err);
