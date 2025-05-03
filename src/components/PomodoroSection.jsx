@@ -26,7 +26,7 @@ const PomodoroSection = ({ showPomodoro, setShowPomodoro }) => {
     >
       <div
         style={{
-          background: 'white',
+          background: 'var(--card-bg)',
           borderRadius: '12px',
           padding: '2rem',
           width: '90%',
@@ -49,7 +49,7 @@ const PomodoroSection = ({ showPomodoro, setShowPomodoro }) => {
             style={{
               background: 'none',
               border: 'none',
-              color: '#666',
+              color: 'var(--text-muted)',
               cursor: 'pointer',
               fontSize: '1.5rem',
               padding: '0.5rem',
@@ -62,7 +62,7 @@ const PomodoroSection = ({ showPomodoro, setShowPomodoro }) => {
               transition: 'background-color 0.2s ease',
             }}
             onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = '#f0f0f0')
+              (e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.05)')
             }
             onMouseOut={(e) =>
               (e.currentTarget.style.backgroundColor = 'transparent')
@@ -76,13 +76,13 @@ const PomodoroSection = ({ showPomodoro, setShowPomodoro }) => {
             style={{
               fontSize: '1.75rem',
               fontWeight: '600',
-              color: '#333',
+              color: 'var(--text-color)',
               marginBottom: '0.5rem',
             }}
           >
             Pomodoro Timer
           </h2>
-          <p style={{ color: '#666', margin: 0 }}>
+          <p style={{ color: 'var(--text-muted)', margin: 0 }}>
             Stay focused and productive with timed work sessions
           </p>
         </div>

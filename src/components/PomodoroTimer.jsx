@@ -14,7 +14,8 @@ const styles = {
     zIndex: 1000,
   },
   modalContent: {
-    background: 'white',
+    background: 'var(--card-bg)',
+    color: 'var(--text-color)',
     padding: '2rem',
     borderRadius: '12px',
     width: '90%',
@@ -30,7 +31,7 @@ const styles = {
     border: 'none',
     fontSize: '1.5rem',
     cursor: 'pointer',
-    color: '#666',
+    color: 'var(--text-muted)',
     padding: '0.5rem',
     borderRadius: '50%',
     width: '40px',
@@ -40,7 +41,7 @@ const styles = {
     justifyContent: 'center',
     transition: 'background-color 0.2s ease',
     ':hover': {
-      backgroundColor: '#f0f0f0',
+      backgroundColor: 'rgba(0, 0, 0, 0.05)',
     },
   },
 };
@@ -153,6 +154,23 @@ const PomodoroTimer = ({ onClose }) => {
     return (timeLeft / initialTime) * 100;
   };
 
+  // Helper function to generate the conic gradient based on progress
+  const getProgressGradient = () => {
+    if (initialTime === 0) {
+      // Return a slightly lighter background color when no time is set
+      // Check if we're in dark mode and use a lighter shade
+      const isDarkMode = document.body.className.includes('dark');
+      return isDarkMode ? '#3a4a5e' : '#f0f0f0'; // Lighter than card-bg in dark mode
+    }
+    
+    const percentage = getProgressPercentage();
+    return `conic-gradient(
+      from 0deg,
+      var(--card-bg) 0% ${100 - percentage}%, 
+      var(--button-bg) ${100 - percentage}% 100%
+    )`;
+  };
+
   const playAlarm = () => {
     // Create audio element dynamically if not exists
     if (!audioRef.current) {
@@ -194,7 +212,7 @@ const PomodoroTimer = ({ onClose }) => {
           style={{
             textAlign: 'center',
             marginBottom: '2rem',
-            color: '#0d6efd',
+            color: 'var(--button-bg)',
             fontSize: '1.75rem',
             fontWeight: 600,
           }}
@@ -220,11 +238,7 @@ const PomodoroTimer = ({ onClose }) => {
               width: '180px',
               height: '180px',
               borderRadius: '50%',
-              background: `conic-gradient(
-              from 0deg,
-              #f0f0f0 0% ${100 - getProgressPercentage()}%, 
-              #0d6efd ${100 - getProgressPercentage()}% 100%
-            )`,
+              background: getProgressGradient(),
             }}
           ></div>
           <div
@@ -234,13 +248,13 @@ const PomodoroTimer = ({ onClose }) => {
               width: '160px',
               height: '160px',
               borderRadius: '50%',
-              background: 'white',
+              background: 'var(--card-bg)',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               fontSize: '2.5rem',
               fontWeight: 'bold',
-              color: '#0d6efd',
+              color: 'var(--button-bg)',
             }}
           >
             {formatTime(timeLeft)}
@@ -266,7 +280,9 @@ const PomodoroTimer = ({ onClose }) => {
             style={{
               borderRadius: '20px',
               maxWidth: '150px',
-              borderColor: '#0d6efd',
+              borderColor: 'var(--button-bg)',
+              background: 'var(--card-bg)',
+              color: 'var(--text-color)',
             }}
             disabled={isActive}
           />
@@ -275,7 +291,7 @@ const PomodoroTimer = ({ onClose }) => {
             className="btn btn-primary"
             style={{
               borderRadius: '20px',
-              background: 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)',
+              background: 'var(--button-bg)',
               border: 'none',
             }}
             disabled={!customMinutes || isActive}
@@ -308,10 +324,11 @@ const PomodoroTimer = ({ onClose }) => {
                 padding: '0.4rem 1rem',
                 background:
                   selectedTime === option.value
-                    ? 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)'
-                    : 'white',
-                borderColor: '#0d6efd',
-                color: selectedTime === option.value ? 'white' : '#0d6efd',
+                    ? 'var(--button-bg)'
+                    : 'var(--card-bg)',
+                borderColor: 'var(--button-bg)',
+                color:
+                  selectedTime === option.value ? 'white' : 'var(--button-bg)',
               }}
               disabled={isActive}
             >
@@ -333,9 +350,7 @@ const PomodoroTimer = ({ onClose }) => {
             className="btn btn-lg"
             disabled={initialTime === 0}
             style={{
-              background: isActive
-                ? '#e74c3c'
-                : 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)',
+              background: isActive ? '#e74c3c' : 'var(--button-bg)',
               color: 'white',
               borderRadius: '50%',
               width: '60px',
@@ -353,15 +368,15 @@ const PomodoroTimer = ({ onClose }) => {
             className="btn btn-lg"
             disabled={initialTime === 0}
             style={{
-              background: '#f0f0f0',
-              color: '#555',
+              background: 'var(--card-bg)',
+              color: 'var(--text-muted)',
               borderRadius: '50%',
               width: '60px',
               height: '60px',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              border: 'none',
+              border: '1px solid var(--text-muted)',
             }}
           >
             <i className="fas fa-redo-alt"></i>
