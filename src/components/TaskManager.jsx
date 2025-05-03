@@ -184,10 +184,23 @@ const TaskManager = ({
           <div className="d-flex gap-2">
             {permission === 'edit' && (
               <button
-                className="btn btn-primary"
+                className="btn btn-outline-primary"
                 onClick={() => {
                   resetForm();
                   setShowForm(true);
+                }}
+                style={{
+                  transition: 'all 0.2s ease-in-out',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#0d6efd';
+                  e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '';
+                  e.currentTarget.style.color = '';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
                 <i className="fas fa-plus me-1"></i>
@@ -197,6 +210,19 @@ const TaskManager = ({
             <button
               className="btn btn-outline-primary"
               onClick={() => setShowSharePage(true)}
+              style={{
+                transition: 'all 0.2s ease-in-out',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#0d6efd';
+                e.currentTarget.style.color = 'white';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = '';
+                e.currentTarget.style.color = '';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
             >
               <i className="fas fa-share-alt me-1"></i>
               Share Collection
