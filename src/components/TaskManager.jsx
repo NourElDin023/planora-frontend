@@ -488,7 +488,7 @@ const TaskManager = ({
             </div>
           </div>
         ) : (
-          <div className="row row-cols-1 row-cols-md-1 row-cols-xl-2 g-4">
+          <div className="row row-cols-1 row-cols-lg-2 g-4">
             {tasks
               .filter((task) => {
                 if (!searchQuery) return true;
@@ -617,11 +617,7 @@ const TaskManager = ({
 
                     <div className="card-footer bg-transparent text-end">
                       <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}
-                        className="pb-2"
+                        className="d-flex flex-column flex-lg-row justify-content-between gap-2 pb-2"
                       >
                         <small className="text-muted text-start">
                           Owner: <br />

@@ -28,7 +28,7 @@ const CollectionsSidebar = ({
 
   return (
     <div style={{
-      width: '350px',
+      width: '300px',
       borderRight: '1px solid #ccc',
       padding: '1rem',
     }}>
