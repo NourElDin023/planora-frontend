@@ -19,6 +19,8 @@ const TaskManager = ({
     category: true,
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [categories, setCategories] = useState([]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -43,6 +45,11 @@ const TaskManager = ({
         `tasks/?collection=${collectionId}`
       );
       setTasks(response.data);
+
+      // Extract unique categories from tasks
+      const uniqueCategories = [...new Set(response.data.map(task => task.category))].filter(Boolean);
+      setCategories(uniqueCategories);
+
       setError(null);
     } catch (err) {
       console.error('Error fetching tasks:', err);
@@ -171,7 +178,7 @@ const TaskManager = ({
     >
       <div className="container">
         {/* Header */}
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center align-items-start mb-4">
           <h1 className="h2 fw-bold" style={{ color: '#0d6efd' }}>
             <i className="fas fa-tasks me-2"></i>
             Collection Tasks{' '}
@@ -263,8 +270,57 @@ const TaskManager = ({
               onClick={() => setShowFilters(!showFilters)}
               title="Search filters"
             >
-              <i class="fa-solid fa-sliders"></i>
+              <i className="fa-solid fa-sliders"></i>
             </button>
+          </div>
+
+          {/* Category Filter */}
+          <div className="mt-3 d-flex align-items-center gap-2">
+            <div className="ms-auto dropdown">
+              <button 
+                className="btn btn-outline-primary dropdown-toggle" 
+                type="button"
+                id="categoryFilterDropdown" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false"
+              >
+                <i className="fas fa-filter me-1"></i>
+                Filter by Category
+              </button>
+              <ul className="dropdown-menu" aria-labelledby="categoryFilterDropdown">
+                <li>
+                  <button 
+                    className="dropdown-item" 
+                    onClick={() => setCategoryFilter('')}
+                  >
+                    All Categories
+                  </button>
+                </li>
+                {categories.map((category, index) => (
+                  <li key={index}>
+                    <button 
+                      className="dropdown-item" 
+                      onClick={() => setCategoryFilter(category)}
+                    >
+                      {category}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            {categoryFilter && (
+              <div className="d-flex align-items-center badge bg-primary p-2">
+                <span>Category: {categoryFilter}</span>
+                <button 
+                  className="btn btn-sm text-white ms-2 p-0" 
+                  onClick={() => setCategoryFilter('')}
+                  style={{ fontSize: '0.8rem' }}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Search Filters - Only show when filters are toggled */}
@@ -491,6 +547,7 @@ const TaskManager = ({
           <div className="row row-cols-1 row-cols-lg-2 g-4">
             {tasks
               .filter((task) => {
+                // First apply search query filter
                 if (!searchQuery) return true;
                 const query = searchQuery.toLowerCase();
 
@@ -502,6 +559,11 @@ const TaskManager = ({
                   (searchFilters.category &&
                     task.category?.toLowerCase().includes(query))
                 );
+              })
+              .filter((task) => {
+                // Then apply category filter
+                if (!categoryFilter) return true;
+                return task.category === categoryFilter;
               })
               .map((task) => (
                 <div key={task.id} className="col">
