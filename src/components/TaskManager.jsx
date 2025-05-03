@@ -194,7 +194,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
             <input
               type="text"
               className="form-control"
-              placeholder="Search for task title or details"
+              placeholder="Search for task title, details or category"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -376,179 +376,182 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
         ) : (
           <div className="row row-cols-1 row-cols-md-2 g-4">
             {tasks
-              .filter(task => {
+              .filter((task) => {
                 if (!searchQuery) return true;
                 const query = searchQuery.toLowerCase();
                 return (
                   task.title?.toLowerCase().includes(query) ||
-                  task.details?.toLowerCase().includes(query)
+                  task.details?.toLowerCase().includes(query) ||
+                  task.category?.toLowerCase().includes(query)
                 );
               })
               .map((task) => (
-              <div key={task.id} className="col">
-                <div
-                  className={`card h-100 shadow-sm ${
-                    task.completed ? 'bg-light' : ''
-                  }`}
-                >
+                <div key={task.id} className="col">
                   <div
-                    className="card-header py-3 d-flex justify-content-between align-items-center"
-                    style={{
-                      background: task.completed
-                        ? 'linear-gradient(135deg, rgba(106,17,203,0.05) 0%, rgba(37,117,252,0.05) 100%)'
-                        : 'linear-gradient(135deg, rgba(106,17,203,0.1) 0%, rgba(37,117,252,0.1) 100%)',
-                    }}
+                    className={`card h-100 shadow-sm ${
+                      task.completed ? 'bg-light' : ''
+                    }`}
                   >
-                    <div className="d-flex align-items-center">
-                      {task.task_icon && (
-                        <img
-                          src={task.task_icon}
-                          alt="Task Icon"
-                          className="me-2 rounded-circle"
-                          style={{
-                            width: '32px',
-                            height: '32px',
-                            objectFit: 'cover',
-                          }}
-                        />
-                      )}
-                      <h3
-                        className={`h5 mb-0 fw-bold ${
-                          task.completed
-                            ? 'text-decoration-line-through text-muted'
-                            : ''
-                        }`}
-                        style={{ color: task.completed ? '' : '#0d6efd' }}
-                      >
-                        {task.title}
-                      </h3>
-                    </div>
-                    {permission === 'edit' && (
-                      <div className="d-none d-md-flex">
-                        <button
-                          onClick={() => {
-                            setFormData({ ...task, task_icon: null });
-                            setEditingTask(task);
-                            setShowForm(true);
-                          }}
-                          className="btn btn-sm btn-outline-primary me-1"
-                          title="Edit task"
+                    <div
+                      className="card-header py-3 d-flex justify-content-between align-items-center"
+                      style={{
+                        background: task.completed
+                          ? 'linear-gradient(135deg, rgba(106,17,203,0.05) 0%, rgba(37,117,252,0.05) 100%)'
+                          : 'linear-gradient(135deg, rgba(106,17,203,0.1) 0%, rgba(37,117,252,0.1) 100%)',
+                      }}
+                    >
+                      <div className="d-flex align-items-center">
+                        {task.task_icon && (
+                          <img
+                            src={task.task_icon}
+                            alt="Task Icon"
+                            className="me-2 rounded-circle"
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              objectFit: 'cover',
+                            }}
+                          />
+                        )}
+                        <h3
+                          className={`h5 mb-0 fw-bold ${
+                            task.completed
+                              ? 'text-decoration-line-through text-muted'
+                              : ''
+                          }`}
+                          style={{ color: task.completed ? '' : '#0d6efd' }}
                         >
-                          <i className="fas fa-edit"></i>
-                        </button>
-                        <button
-                          onClick={() => handleDeleteTask(task.id)}
-                          className="btn btn-sm btn-outline-danger"
-                          title="Delete task"
-                        >
-                          <i className="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="card-body">
-                    <div className={task.completed ? 'text-muted' : ''}>
-                      {task.details && <p>{task.details}</p>}
-                      <div className="d-flex flex-wrap gap-2 mb-3">
-                        <span className="badge bg-primary">
-                          <i className="fas fa-tag me-1"></i>
-                          {task.category}
-                        </span>
-                        <span className="badge bg-info">
-                          <i className="far fa-calendar me-1"></i>
-                          {new Date(task.due_date).toLocaleDateString()}
-                        </span>
-                        <span className="badge bg-warning text-dark">
-                          <i className="far fa-clock me-1"></i>
-                          {task.due_time}
-                        </span>
+                          {task.title}
+                        </h3>
                       </div>
                       {permission === 'edit' && (
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={task.completed}
-                            onChange={() => handleCompleteToggle(task)}
-                            id={`complete-${task.id}`}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`complete-${task.id}`}
+                        <div className="d-none d-md-flex">
+                          <button
+                            onClick={() => {
+                              setFormData({ ...task, task_icon: null });
+                              setEditingTask(task);
+                              setShowForm(true);
+                            }}
+                            className="btn btn-sm btn-outline-primary me-1"
+                            title="Edit task"
                           >
-                            Mark as {task.completed ? 'incomplete' : 'complete'}
-                          </label>
-                        </div>
-                      )}
-                      {permission === 'view' && (
-                        <div className="form-check">
-                          <label
-                            className="form-check-label"
-                            htmlFor={`complete-${task.id}`}
+                            <i className="fas fa-edit"></i>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteTask(task.id)}
+                            className="btn btn-sm btn-outline-danger"
+                            title="Delete task"
                           >
-                            Marked as{' '}
-                            {task.completed ? 'incomplete' : 'complete'}
-                          </label>
+                            <i className="fas fa-trash"></i>
+                          </button>
                         </div>
                       )}
                     </div>
-                  </div>
 
-                  <div className="card-footer bg-transparent text-end">
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <small className="text-muted text-start">
-                        Owner: <br />
-                        {task.owner}
-                      </small>
-                      <small className="text-muted text-start">
-                        Created: <br />{' '}
-                        {new Date(task.created_at).toLocaleString()}
-                      </small>
+                    <div className="card-body">
+                      <div className={task.completed ? 'text-muted' : ''}>
+                        {task.details && <p>{task.details}</p>}
+                        <div className="d-flex flex-wrap gap-2 mb-3">
+                          <span className="badge bg-primary">
+                            <i className="fas fa-tag me-1"></i>
+                            {task.category}
+                          </span>
+                          <span className="badge bg-info">
+                            <i className="far fa-calendar me-1"></i>
+                            {new Date(task.due_date).toLocaleDateString()}
+                          </span>
+                          <span className="badge bg-warning text-dark">
+                            <i className="far fa-clock me-1"></i>
+                            {task.due_time}
+                          </span>
+                        </div>
+                        {permission === 'edit' && (
+                          <div className="form-check">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              checked={task.completed}
+                              onChange={() => handleCompleteToggle(task)}
+                              id={`complete-${task.id}`}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor={`complete-${task.id}`}
+                            >
+                              Mark as{' '}
+                              {task.completed ? 'incomplete' : 'complete'}
+                            </label>
+                          </div>
+                        )}
+                        {permission === 'view' && (
+                          <div className="form-check">
+                            <label
+                              className="form-check-label"
+                              htmlFor={`complete-${task.id}`}
+                            >
+                              Marked as{' '}
+                              {task.completed ? 'incomplete' : 'complete'}
+                            </label>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleTaskClick(task);
-                      }}
-                      style={{
-                        background: '#7D26CD',
-                        color: 'white',
-                        border: '1px solid #7D26CD',
-                        borderRadius: '4px',
-                        padding: '6px 12px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease-in-out',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        ':hover': {
-                          background: '#6a1fb5',
-                          borderColor: '#6a1fb5',
-                          transform: 'translateY(-1px)',
-                        },
-                        ':active': {
-                          transform: 'translateY(0)',
-                        },
-                      }}
-                      title="View full task details"
-                      aria-label={`View details for ${task.title}`}
-                    >
-                      <i
-                        className="fas fa-search-plus"
-                        style={{ fontSize: '0.9rem' }}
-                      ></i>
-                      <span>View Details</span>
-                    </button>
+
+                    <div className="card-footer bg-transparent text-end">
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}
+                        className="pb-2"
+                      >
+                        <small className="text-muted text-start">
+                          Owner: <br />
+                          {task.owner}
+                        </small>
+                        <small className="text-muted text-start">
+                          Created: <br />{' '}
+                          {new Date(task.created_at).toLocaleString()}
+                        </small>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleTaskClick(task);
+                        }}
+                        style={{
+                          background: '#7D26CD',
+                          color: 'white',
+                          border: '1px solid #7D26CD',
+                          borderRadius: '4px',
+                          padding: '6px 12px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease-in-out',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          ':hover': {
+                            background: '#6a1fb5',
+                            borderColor: '#6a1fb5',
+                            transform: 'translateY(-1px)',
+                          },
+                          ':active': {
+                            transform: 'translateY(0)',
+                          },
+                        }}
+                        title="View full task details"
+                        aria-label={`View details for ${task.title}`}
+                      >
+                        <i
+                          className="fas fa-search-plus"
+                          style={{ fontSize: '0.9rem' }}
+                        ></i>
+                        <span>View Details</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </div>
