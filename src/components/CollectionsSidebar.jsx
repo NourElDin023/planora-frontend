@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CollectionsMenu from './CollectionsMenu';
 import PomodoroSection from './PomodoroSection';
@@ -14,6 +14,18 @@ const CollectionsSidebar = ({
   navigate,
   handleDeleteCollection
 }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Filter collections based on search query
+  const filteredCollections = collections.filter(collection => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      collection.title?.toLowerCase().includes(query) ||
+      collection.description?.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div style={{
       width: '350px',
@@ -61,8 +73,22 @@ const CollectionsSidebar = ({
 
       <PomodoroSection showPomodoro={showPomodoro} setShowPomodoro={setShowPomodoro} />
 
+      <input
+        type="text"
+        placeholder="Search collections..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        style={{
+          width: '100%',
+          padding: '8px',
+          marginBottom: '1rem',
+          borderRadius: '4px',
+          border: '1px solid #ccc',
+        }}
+      />
+
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {collections.map((collection) => (
+        {filteredCollections.map((collection) => (
           <li
             key={collection.id}
             style={{
