@@ -9,6 +9,11 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchFilters, setSearchFilters] = useState({
+    title: true,
+    details: true,
+    category: true
+  });
 
   const [formData, setFormData] = useState({
     title: '',
@@ -209,6 +214,52 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
               </button>
             )}
           </div>
+          
+          {/* Search Filters */}
+          <div className="mt-2 d-flex gap-2">
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="titleFilter"
+                checked={searchFilters.title}
+                onChange={() => 
+                  setSearchFilters(prev => ({...prev, title: !prev.title}))
+                }
+              />
+              <label className="form-check-label" htmlFor="titleFilter">
+                Title
+              </label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="detailsFilter"
+                checked={searchFilters.details}
+                onChange={() => 
+                  setSearchFilters(prev => ({...prev, details: !prev.details}))
+                }
+              />
+              <label className="form-check-label" htmlFor="detailsFilter">
+                Details
+              </label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="categoryFilter"
+                checked={searchFilters.category}
+                onChange={() => 
+                  setSearchFilters(prev => ({...prev, category: !prev.category}))
+                }
+              />
+              <label className="form-check-label" htmlFor="categoryFilter">
+                Category
+              </label>
+            </div>
+          </div>
         </div>
 
         {/* Task Form */}
@@ -376,13 +427,14 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
         ) : (
           <div className="row row-cols-1 row-cols-md-2 g-4">
             {tasks
-              .filter((task) => {
+              .filter(task => {
                 if (!searchQuery) return true;
                 const query = searchQuery.toLowerCase();
+                
                 return (
-                  task.title?.toLowerCase().includes(query) ||
-                  task.details?.toLowerCase().includes(query) ||
-                  task.category?.toLowerCase().includes(query)
+                  (searchFilters.title && task.title?.toLowerCase().includes(query)) ||
+                  (searchFilters.details && task.details?.toLowerCase().includes(query)) ||
+                  (searchFilters.category && task.category?.toLowerCase().includes(query))
                 );
               })
               .map((task) => (
