@@ -12,20 +12,24 @@ const CollectionsSidebar = ({
   activeMenuId,
   setActiveMenuId,
   navigate,
-  handleDeleteCollection
+  handleDeleteCollection,
 }) => {
   return (
-    <div style={{
-      width: '350px',
-      borderRight: '1px solid #ccc',
-      padding: '1rem',
-    }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '1rem',
-      }}>
+    <div
+      style={{
+        width: '350px',
+        borderRight: '1px solid #ccc',
+        padding: '1rem',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1rem',
+        }}
+      >
         <h3 style={{ margin: 0 }}>Collections</h3>
         <div style={{ display: 'flex', gap: '4px' }}>
           <button
@@ -52,6 +56,7 @@ const CollectionsSidebar = ({
               textDecoration: 'none',
               borderRadius: '4px',
               cursor: 'pointer',
+              border: 'none',
             }}
           >
             +
@@ -59,7 +64,10 @@ const CollectionsSidebar = ({
         </div>
       </div>
 
-      <PomodoroSection showPomodoro={showPomodoro} setShowPomodoro={setShowPomodoro} />
+      <PomodoroSection
+        showPomodoro={showPomodoro}
+        setShowPomodoro={setShowPomodoro}
+      />
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {collections.map((collection) => (
@@ -69,30 +77,34 @@ const CollectionsSidebar = ({
               padding: '8px',
               cursor: 'pointer',
               borderRadius: '6px',
-              backgroundColor: selectedCollection?.id === collection.id
-                ? 'rgba(125, 38, 205, 0.1)'
-                : 'transparent',
-              border: selectedCollection?.id === collection.id
-                ? '1px solid #0d6efd'
-                : 'none',
+              backgroundColor:
+                selectedCollection?.id === collection.id
+                  ? 'rgba(125, 38, 205, 0.1)'
+                  : 'transparent',
+              border:
+                selectedCollection?.id === collection.id
+                  ? '1px solid #0d6efd'
+                  : 'none',
               position: 'relative',
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}
           >
             <div onClick={() => handleCollectionClick(collection)}>
               <strong>{collection.title}</strong>
               {collection.description && (
-                <p style={{
-                  margin: '4px 0 0',
-                  fontSize: '0.9em',
-                  color: '#666',
-                }}>
+                <p
+                  style={{
+                    margin: '4px 0 0',
+                    fontSize: '0.9em',
+                    color: '#666',
+                  }}
+                >
                   {collection.description}
                 </p>
               )}
             </div>
-            
-            <CollectionsMenu 
+
+            <CollectionsMenu
               collection={collection}
               activeMenuId={activeMenuId}
               setActiveMenuId={setActiveMenuId}

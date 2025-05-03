@@ -1,6 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const PomodoroTimer = () => {
+const styles = {
+  modalOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  modalContent: {
+    background: 'white',
+    padding: '2rem',
+    borderRadius: '12px',
+    width: '90%',
+    maxWidth: '500px',
+    position: 'relative',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: '1rem',
+    right: '1rem',
+    background: 'none',
+    border: 'none',
+    fontSize: '1.5rem',
+    cursor: 'pointer',
+    color: '#666',
+    padding: '0.5rem',
+    borderRadius: '50%',
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'background-color 0.2s ease',
+    ':hover': {
+      backgroundColor: '#f0f0f0',
+    },
+  },
+};
+
+const PomodoroTimer = ({ onClose }) => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [selectedTime, setSelectedTime] = useState(0);
@@ -130,191 +175,189 @@ const PomodoroTimer = () => {
   };
 
   return (
-    <div
-      className="pomodoro-container"
-      style={{
-        background:
-          'linear-gradient(135deg, rgba(106,17,203,0.1) 0%, rgba(37,117,252,0.1) 100%)',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        maxWidth: '400px',
-        margin: '0 auto',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <h3
-        className="text-center fw-bold"
-        style={{ color: '#0d6efd', marginBottom: '1rem' }}
-      >
-        <i className="fas fa-clock me-2"></i>
-        Pomodoro Timer
-      </h3>
+    <div style={styles.modalOverlay}>
+      <div style={styles.modalContent}>
+        <button style={styles.closeButton} onClick={onClose}>
+          <i className="fas fa-times"></i>
+        </button>
 
-      <div
-        className="timer-display"
-        style={{
-          position: 'relative',
-          height: '200px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <div
-          className="progress-circle"
+        <h2
           style={{
-            position: 'absolute',
-            width: '180px',
-            height: '180px',
-            borderRadius: '50%',
-            background: `conic-gradient(
-            from 0deg,
-            #f0f0f0 0% ${100 - getProgressPercentage()}%, 
-            #0d6efd ${100 - getProgressPercentage()}% 100%
-          )`,
+            textAlign: 'center',
+            marginBottom: '2rem',
+            color: '#0d6efd',
+            fontSize: '1.75rem',
+            fontWeight: 600,
           }}
-        ></div>
+        >
+          Focus Timer
+        </h2>
+
         <div
-          className="inner-circle"
+          className="timer-display"
           style={{
-            position: 'absolute',
-            width: '160px',
-            height: '160px',
-            borderRadius: '50%',
-            background: 'white',
+            position: 'relative',
+            height: '200px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            fontSize: '2.5rem',
-            fontWeight: 'bold',
-            color: '#0d6efd',
+            marginBottom: '1.5rem',
           }}
         >
-          {formatTime(timeLeft)}
+          <div
+            className="progress-circle"
+            style={{
+              position: 'absolute',
+              width: '180px',
+              height: '180px',
+              borderRadius: '50%',
+              background: `conic-gradient(
+              from 0deg,
+              #f0f0f0 0% ${100 - getProgressPercentage()}%, 
+              #0d6efd ${100 - getProgressPercentage()}% 100%
+            )`,
+            }}
+          ></div>
+          <div
+            className="inner-circle"
+            style={{
+              position: 'absolute',
+              width: '160px',
+              height: '160px',
+              borderRadius: '50%',
+              background: 'white',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              color: '#0d6efd',
+            }}
+          >
+            {formatTime(timeLeft)}
+          </div>
         </div>
-      </div>
 
-      {/* Custom time input */}
-      <form
-        onSubmit={handleCustomTimeSubmit}
-        className="mb-3"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '0.5rem',
-          marginBottom: '1rem',
-        }}
-      >
-        <input
-          type="text"
-          value={customMinutes}
-          onChange={handleCustomTimeChange}
-          placeholder="Minutes"
-          className="form-control"
+        <form
+          onSubmit={handleCustomTimeSubmit}
+          className="mb-3"
           style={{
-            borderRadius: '20px',
-            maxWidth: '150px',
-            borderColor: '#0d6efd',
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            marginBottom: '1rem',
           }}
-          disabled={isActive}
-        />
-        <button
-          type="submit"
-          className="btn btn-primary"
-          style={{
-            borderRadius: '20px',
-            background: 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)',
-            border: 'none',
-          }}
-          disabled={!customMinutes || isActive}
         >
-          Set
-        </button>
-      </form>
-
-      <div
-        className="preset-times"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '0.5rem',
-          marginBottom: '1.5rem',
-          flexWrap: 'wrap',
-        }}
-      >
-        {timeOptions.map((option) => (
-          <button
-            key={option.value}
-            onClick={() => selectTime(option.value)}
-            className={`btn ${
-              selectedTime === option.value
-                ? 'btn-primary'
-                : 'btn-outline-primary'
-            }`}
+          <input
+            type="text"
+            value={customMinutes}
+            onChange={handleCustomTimeChange}
+            placeholder="Minutes"
+            className="form-control"
             style={{
               borderRadius: '20px',
-              padding: '0.4rem 1rem',
-              background:
-                selectedTime === option.value
-                  ? 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)'
-                  : 'white',
+              maxWidth: '150px',
               borderColor: '#0d6efd',
-              color: selectedTime === option.value ? 'white' : '#0d6efd',
             }}
             disabled={isActive}
+          />
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{
+              borderRadius: '20px',
+              background: 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)',
+              border: 'none',
+            }}
+            disabled={!customMinutes || isActive}
           >
-            {option.label}
+            Set
           </button>
-        ))}
-      </div>
+        </form>
 
-      <div
-        className="controls"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '1rem',
-        }}
-      >
-        <button
-          onClick={toggleTimer}
-          className="btn btn-lg"
-          disabled={initialTime === 0}
+        <div
+          className="preset-times"
           style={{
-            background: isActive
-              ? '#e74c3c'
-              : 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)',
-            color: 'white',
-            borderRadius: '50%',
-            width: '60px',
-            height: '60px',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center',
-            border: 'none',
+            gap: '0.5rem',
+            marginBottom: '1.5rem',
+            flexWrap: 'wrap',
           }}
         >
-          <i className={`fas fa-${isActive ? 'pause' : 'play'}`}></i>
-        </button>
-        <button
-          onClick={resetTimer}
-          className="btn btn-lg"
-          disabled={initialTime === 0}
+          {timeOptions.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => selectTime(option.value)}
+              className={`btn ${
+                selectedTime === option.value
+                  ? 'btn-primary'
+                  : 'btn-outline-primary'
+              }`}
+              style={{
+                borderRadius: '20px',
+                padding: '0.4rem 1rem',
+                background:
+                  selectedTime === option.value
+                    ? 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)'
+                    : 'white',
+                borderColor: '#0d6efd',
+                color: selectedTime === option.value ? 'white' : '#0d6efd',
+              }}
+              disabled={isActive}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
+        <div
+          className="controls"
           style={{
-            background: '#f0f0f0',
-            color: '#555',
-            borderRadius: '50%',
-            width: '60px',
-            height: '60px',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center',
-            border: 'none',
+            gap: '1rem',
           }}
         >
-          <i className="fas fa-redo-alt"></i>
-        </button>
+          <button
+            onClick={toggleTimer}
+            className="btn btn-lg"
+            disabled={initialTime === 0}
+            style={{
+              background: isActive
+                ? '#e74c3c'
+                : 'linear-gradient(135deg, #0d6efd 0%, #2575fc 100%)',
+              color: 'white',
+              borderRadius: '50%',
+              width: '60px',
+              height: '60px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              border: 'none',
+            }}
+          >
+            <i className={`fas fa-${isActive ? 'pause' : 'play'}`}></i>
+          </button>
+          <button
+            onClick={resetTimer}
+            className="btn btn-lg"
+            disabled={initialTime === 0}
+            style={{
+              background: '#f0f0f0',
+              color: '#555',
+              borderRadius: '50%',
+              width: '60px',
+              height: '60px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              border: 'none',
+            }}
+          >
+            <i className="fas fa-redo-alt"></i>
+          </button>
+        </div>
       </div>
     </div>
   );
