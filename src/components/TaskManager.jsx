@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
-import TaskView from './TaskView';
 const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
   // State management
   const [tasks, setTasks] = useState([]);
