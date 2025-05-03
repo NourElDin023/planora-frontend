@@ -274,55 +274,6 @@ const TaskManager = ({
             </button>
           </div>
 
-          {/* Category Filter */}
-          <div className="mt-3 d-flex align-items-center gap-2">
-            <div className="ms-auto dropdown">
-              <button 
-                className="btn btn-outline-primary dropdown-toggle" 
-                type="button"
-                id="categoryFilterDropdown" 
-                data-bs-toggle="dropdown" 
-                aria-expanded="false"
-              >
-                <i className="fas fa-filter me-1"></i>
-                Filter by Category
-              </button>
-              <ul className="dropdown-menu" aria-labelledby="categoryFilterDropdown">
-                <li>
-                  <button 
-                    className="dropdown-item" 
-                    onClick={() => setCategoryFilter('')}
-                  >
-                    All Categories
-                  </button>
-                </li>
-                {categories.map((category, index) => (
-                  <li key={index}>
-                    <button 
-                      className="dropdown-item" 
-                      onClick={() => setCategoryFilter(category)}
-                    >
-                      {category}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            {categoryFilter && (
-              <div className="d-flex align-items-center badge bg-primary p-2">
-                <span>Category: {categoryFilter}</span>
-                <button 
-                  className="btn btn-sm text-white ms-2 p-0" 
-                  onClick={() => setCategoryFilter('')}
-                  style={{ fontSize: '0.8rem' }}
-                >
-                  <i className="fas fa-times"></i>
-                </button>
-              </div>
-            )}
-          </div>
-
           {/* Search Filters - Only show when filters are toggled */}
           {showFilters && (
             <div className="mt-2 d-flex gap-2">
@@ -379,6 +330,55 @@ const TaskManager = ({
               </div>
             </div>
           )}
+
+          {/* Category Filter */}
+          <div className="mt-3 d-flex align-items-center gap-2">
+            <div className="ms-auto dropdown">
+              <button 
+                className="btn btn-outline-primary dropdown-toggle" 
+                type="button"
+                id="categoryFilterDropdown" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false"
+              >
+                <i className="fas fa-filter me-1"></i>
+                Filter by Category
+              </button>
+              <ul className="dropdown-menu" aria-labelledby="categoryFilterDropdown">
+                <li>
+                  <button 
+                    className="dropdown-item" 
+                    onClick={() => setCategoryFilter('')}
+                  >
+                    All Categories
+                  </button>
+                </li>
+                {categories.map((category, index) => (
+                  <li key={index}>
+                    <button 
+                      className="dropdown-item" 
+                      onClick={() => setCategoryFilter(category)}
+                    >
+                      {category}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            {categoryFilter && (
+              <div className="d-flex align-items-center badge bg-primary p-2">
+                <span>Category: {categoryFilter}</span>
+                <button 
+                  className="btn btn-sm text-white ms-2 p-0" 
+                  onClick={() => setCategoryFilter('')}
+                  style={{ fontSize: '0.8rem' }}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Task Form */}
