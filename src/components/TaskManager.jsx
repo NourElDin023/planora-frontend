@@ -8,7 +8,7 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
-  const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [formData, setFormData] = useState({
     title: '',
@@ -185,6 +185,32 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
           )}
         </div>
 
+        {/* Search Bar */}
+        <div className="mb-4">
+          <div className="input-group">
+            <span className="input-group-text">
+              <i className="fas fa-search"></i>
+            </span>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search for task title or details"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => setSearchQuery('')}
+                title="Clear search"
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Task Form */}
         {showForm && (
           <div className="card shadow mb-4">
@@ -349,7 +375,16 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
           </div>
         ) : (
           <div className="row row-cols-1 row-cols-md-2 g-4">
-            {tasks.map((task) => (
+            {tasks
+              .filter(task => {
+                if (!searchQuery) return true;
+                const query = searchQuery.toLowerCase();
+                return (
+                  task.title?.toLowerCase().includes(query) ||
+                  task.details?.toLowerCase().includes(query)
+                );
+              })
+              .map((task) => (
               <div key={task.id} className="col">
                 <div
                   className={`card h-100 shadow-sm ${
@@ -467,9 +502,13 @@ const TaskManager = ({ collectionId, permission, onTaskSelect }) => {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <small className="text-muted">Owner: {task.owner}</small>
-                      <small className="text-muted">
-                        Created: {new Date(task.created_at).toLocaleString()}
+                      <small className="text-muted text-start">
+                        Owner: <br />
+                        {task.owner}
+                      </small>
+                      <small className="text-muted text-start">
+                        Created: <br />{' '}
+                        {new Date(task.created_at).toLocaleString()}
                       </small>
                     </div>
                     <button
