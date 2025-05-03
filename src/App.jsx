@@ -1,5 +1,6 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -19,11 +20,17 @@ import CollectionsList from './pages/CollectionsList';
 import Profile from './pages/Profile'; // Import the new Profile component
 import SharedCollectionList from './pages/SharedCollectionList';
 import PublicSharedPage from './pages/PublicSharedPage';
+import CalendarPage from './pages/Calendar';
+import ChatWidget from './components/chatwidget';
+
 function App() {
+  // const location = useLocation();
+  // const allowedRoutes = ['/notes', '/viewcollections']; // pages where chat appears
+
   return (
     <AuthProvider>
-      <Router>
         <Navbar />
+        { <ChatWidget />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -107,10 +114,7 @@ function App() {
             path="/calendar"
             element={
               <ProtectedRoute>
-                <div className="container mt-4">
-                  <h1>Calendar</h1>
-                  <p>Your calendar will appear here.</p>
-                </div>
+                <CalendarPage />
               </ProtectedRoute>
             }
           />
@@ -122,7 +126,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/* Catch-all route for 404 */}
           <Route
             path="*"
             element={
@@ -133,7 +136,6 @@ function App() {
             }
           />
         </Routes>
-      </Router>
     </AuthProvider>
   );
 }
