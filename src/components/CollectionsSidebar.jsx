@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CollectionsMenu from './CollectionsMenu';
 import PomodoroSection from './PomodoroSection';
@@ -14,63 +14,66 @@ const CollectionsSidebar = ({
   navigate,
   handleDeleteCollection,
 }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Filter collections based on search query
+  const filteredCollections = collections.filter(collection => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      collection.title?.toLowerCase().includes(query) ||
+      collection.description?.toLowerCase().includes(query)
+    );
+  });
+
   return (
-    <div
-      style={{
-        width: '350px',
-        borderRight: '1px solid #ccc',
-        padding: '1rem',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1rem',
-        }}
-      >
+    <div style={{
+      width: '300px',
+      borderRight: '1px solid #ccc',
+      padding: '1rem',
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '1rem',
+      }}>
         <h3 style={{ margin: 0 }}>Collections</h3>
         <div style={{ display: 'flex', gap: '4px' }}>
           <button
             onClick={() => setShowPomodoro(!showPomodoro)}
-            style={{
-              padding: '4px 8px',
-              background: '#0d6efd',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              border: 'none',
-            }}
+            className='btn btn-outline-primary' 
             title="Pomodoro Timer"
           >
             <i className="fas fa-clock"></i>
           </button>
           <Link
             to="/addcollections"
-            style={{
-              padding: '4px 8px',
-              background: '#4CAF50',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              border: 'none',
-            }}
+            className="btn btn-outline-primary"
           >
-            +
+            <i className="fa-solid fa-plus"></i>
           </Link>
         </div>
       </div>
 
-      <PomodoroSection
-        showPomodoro={showPomodoro}
-        setShowPomodoro={setShowPomodoro}
+      <PomodoroSection showPomodoro={showPomodoro} setShowPomodoro={setShowPomodoro} />
+
+      <input
+        type="text"
+        placeholder="Search collections..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        style={{
+          width: '100%',
+          padding: '8px',
+          marginBottom: '1rem',
+          borderRadius: '4px',
+          border: '1px solid #ccc',
+        }}
       />
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {collections.map((collection) => (
+        {filteredCollections.map((collection) => (
           <li
             key={collection.id}
             style={{

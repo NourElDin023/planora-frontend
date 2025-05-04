@@ -2,84 +2,90 @@ import React, { useState } from 'react';
 import axios from '../utils/axios';
 
 const AddNoteForm = ({ taskId, onSuccess, onCancel }) => {
-  const [newNote, setNewNote] = useState({ title: '', content: '' });
+  const [noteTitle, setNoteTitle] = useState('');
+  const [noteContent, setNoteContent] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!noteTitle.trim()) {
+      setError('Please add a title for your note');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setError('');
+    
     try {
-      await axios.post('notes/', { ...newNote, task: taskId });
+      await axios.post('notes/', {
+        task: taskId,
+        title: noteTitle,
+        content: noteContent
+      });
+      
       onSuccess();
-      setNewNote({ title: '', content: '' });
     } catch (err) {
-      setError('Failed to create note');
+      console.error('Error adding note:', err);
+      setError('Failed to add note. Please try again.');
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div style={{ margin: '2rem 0' }}>
-      <h4 style={{ color: '#7D26CD' }}>Add New Note</h4>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <input
-            type="text"
-            placeholder="Note title"
-            value={newNote.title}
-            onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              marginBottom: '0.5rem'
-            }}
-            required
-          />
-          <textarea
-            placeholder="Note content"
-            value={newNote.content}
-            onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              minHeight: '100px'
-            }}
-            required
-          />
-        </div>
-        {error && <p style={{ color: '#ff4444' }}>{error}</p>}
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button
-            type="submit"
-            style={{
-              background: '#7D26CD',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              padding: '0.5rem 1rem',
-              cursor: 'pointer'
-            }}
-          >
-            Save Note
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            style={{
-              background: '#ddd',
-              color: '#333',
-              border: 'none',
-              borderRadius: '4px',
-              padding: '0.5rem 1rem',
-              cursor: 'pointer'
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+    <div className="card mb-4">
+      <div className="card-body">
+        <h4 className="card-title text-primary mb-3">Add Note</h4>
+        
+        {error && <div className="alert alert-danger mb-3">{error}</div>}
+        
+        <form onSubmit={handleSubmit}>
+          <div className="form-group mb-3">
+            <label htmlFor="noteTitle" className="form-label">Title</label>
+            <input
+              type="text"
+              id="noteTitle"
+              className="form-control"
+              value={noteTitle}
+              onChange={(e) => setNoteTitle(e.target.value)}
+              placeholder="Enter note title"
+              disabled={isSubmitting}
+            />
+          </div>
+          
+          <div className="form-group mb-4">
+            <label htmlFor="noteContent" className="form-label">Content</label>
+            <textarea
+              id="noteContent"
+              className="form-control"
+              value={noteContent}
+              onChange={(e) => setNoteContent(e.target.value)}
+              placeholder="Enter note content"
+              rows={4}
+              disabled={isSubmitting}
+            />
+          </div>
+          
+          <div className="d-flex gap-2 justify-content-end">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={onCancel}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Adding...' : 'Add Note'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

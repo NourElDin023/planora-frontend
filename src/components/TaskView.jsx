@@ -3,7 +3,7 @@ import axios from '../utils/axios';
 import NotesView from './NotesView';
 import AddNoteForm from './AddNoteForm';
 
-const TaskView = ({ taskId,permission , onClose }) => {
+const TaskView = ({ taskId, permission, onClose }) => {
   const [task, setTask] = useState(null);
   const [showAddNote, setShowAddNote] = useState(false);
   const [refreshNotes, setRefreshNotes] = useState(0);
@@ -36,108 +36,92 @@ const TaskView = ({ taskId,permission , onClose }) => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div style={{ padding: '1rem', maxWidth: '800px', margin: '0 auto' }}>
+    <div>
       <button
+        className='btn btn-outline-primary mb-3'
         onClick={onClose}
-        style={{
-          marginBottom: '1rem',
-          padding: '0.5rem 1rem',
-          background: '#7D26CD',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}
       >
-        &larr; Back to Collection
+        <i className="bi bi-arrow-left"></i> Back to Collection
       </button>
 
-      <div
-        style={{
-          background: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>{task.title}</h2>
-        <div style={{ marginBottom: '1rem' }}>
+      <div className="bg-white p-4 rounded shadow">
+        <h2 className="mt-0">{task.title}</h2>
+        <div className="mb-3">
           <strong>Owner:</strong>{' '}
-          <span style={{ color: '#7D26CD' }}>
+          <span className="text-purple">
             {task.owner}
           </span>
         </div>
-        <div style={{ marginBottom: '1rem' }}>
+        <div className="mb-3">
           <strong>Status:</strong>{' '}
           <span
-            style={{
-              color: task.completed ? '#4CAF50' : '#ff9800',
-              fontWeight: 'bold',
-            }}
+            className={`fw-bold ${task.completed ? 'text-success' : 'text-warning'}`}
           >
             {task.completed ? 'Completed' : 'Pending'}
           </span>
         </div>
 
         {task.description && (
-          <div style={{ marginBottom: '1rem' }}>
+          <div className="mb-3">
             <strong>Description:</strong>
-            <p style={{ whiteSpace: 'pre-wrap', margin: '0.5rem 0 0' }}>
+            <p className="mt-2" style={{ whiteSpace: 'pre-wrap' }}>
               {task.description}
             </p>
           </div>
         )}
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
-          }}
-        >
-          {task.due_date && (
-            <div>
-              <strong>Due Date:</strong>
-              <p style={{ margin: '0.5rem 0 0' }}>
-                {new Date(task.due_date).toLocaleDateString()}
-                {task.due_time &&
-                  ` at ${new Date(task.due_time).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}`}
-              </p>
+        <div className="card mb-4">
+          <div className="card-body">
+            <h4 className="card-title h5 mb-3">Task Details</h4>
+            <div className="row">
+              {task.due_date && (
+                <div className="col-md-4 mb-3">
+                  <div className="d-flex align-items-center mb-1">
+                    <i className="bi bi-calendar-event me-2 text-primary"></i>
+                    <span className="fw-semibold">Due Date</span>
+                  </div>
+                  <div className="ps-4">
+                    {new Date(task.due_date).toLocaleDateString()}
+                    {task.due_time && (
+                      <span className="text-secondary">
+                        {` at ${new Date(task.due_time).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}`}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="col-md-4 mb-3">
+                <div className="d-flex align-items-center mb-1">
+                  <i className="bi bi-flag me-2 text-primary"></i>
+                  <span className="fw-semibold">Priority</span>
+                </div>
+                <div className="ps-4">
+                  {task.priority || 'Normal'}
+                </div>
+              </div>
+
+              <div className="col-md-4 mb-3">
+                <div className="d-flex align-items-center mb-1">
+                  <i className="bi bi-clock-history me-2 text-primary"></i>
+                  <span className="fw-semibold">Created</span>
+                </div>
+                <div className="ps-4">
+                  {new Date(task.created_at).toLocaleString()}
+                </div>
+              </div>
             </div>
-          )}
-
-          <div>
-            <strong>Priority:</strong>
-            <p style={{ margin: '0.5rem 0 0' }}>{task.priority || 'Normal'}</p>
-          </div>
-
-          <div>
-            <strong>Created:</strong>
-            <p style={{ margin: '0.5rem 0 0' }}>
-              {new Date(task.created_at).toLocaleString()}
-            </p>
           </div>
         </div>
 
-        <div style={{ marginTop: '2rem' }}>
-          {(!showAddNote && permission ==="edit")&& (
+        <div className="mt-5">
+          {(!showAddNote && permission === "edit") && (
             <button
               onClick={() => setShowAddNote(true)}
-              style={{
-                background: '#7D26CD',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s',
-                ':hover': {
-                  backgroundColor: '#6a1fb5'
-                }
-              }}
+              className="btn btn-outline-primary"
             >
               + Add Note
             </button>

@@ -11,8 +11,7 @@ const CollectionsMenu = ({
     <div style={{
       position: 'absolute',
       right: '8px',
-      top: '8px',
-      zIndex: 1
+      top: '4px',
     }}>
       <button
         className="collection-menu"

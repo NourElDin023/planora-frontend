@@ -4,7 +4,6 @@ import TaskManager from './TaskManager';
 import TaskView from './TaskView';
 import SharePageComponent from './SharePageComponent';
 import Breadcrumb from './Breadcrumb';
-import CollectionHeader from './CollectionHeader';
 
 const MainContentArea = ({
   selectedCollection,
@@ -13,7 +12,7 @@ const MainContentArea = ({
   setSelectedCollection,
   setSelectedTask,
   setShowSharePage,
-  onTaskSelect
+  onTaskSelect,
 }) => {
   return (
     <div style={{ flex: 1, padding: '1rem' }}>
@@ -31,27 +30,15 @@ const MainContentArea = ({
               setShowSharePage={setShowSharePage}
             />
 
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-              <CollectionHeader
-                selectedCollection={selectedCollection}
-                showSharePage={showSharePage}
+            {!selectedTask && !showSharePage && (
+              <TaskManager
+                key={selectedCollection.id}
+                collectionId={selectedCollection.id}
+                onTaskSelect={onTaskSelect}
+                permission={'edit'}
                 setShowSharePage={setShowSharePage}
-                selectedTask={selectedTask}
               />
-              
-              {!selectedTask && !showSharePage && (
-                <TaskManager
-                  key={selectedCollection.id}
-                  collectionId={selectedCollection.id}
-                  onTaskSelect={onTaskSelect}
-                  permission={'edit'}
-                />
-              )}
-            </div>
+            )}
 
             {showSharePage && (
               <div style={{ marginTop: '2rem' }}>
