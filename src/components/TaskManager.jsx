@@ -21,6 +21,7 @@ const TaskManager = ({
   const [showFilters, setShowFilters] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [categories, setCategories] = useState([]);
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -111,11 +112,11 @@ const TaskManager = ({
   };
 
   const handleDeleteTask = async (taskId) => {
-    if (!window.confirm('Are you sure you want to delete this task?')) return;
     try {
       await axiosInstance.delete(`tasks/${taskId}/`);
       // Ensure we're filtering by the correct ID
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
+      setTaskToDelete(null);
     } catch (err) {
       console.error('Error deleting task:', err);
       alert(err.response?.data?.message || 'Failed to delete task');
@@ -392,7 +393,10 @@ const TaskManager = ({
 
                   <div className="col-12 col-md-6">
                     <div className="form-group">
-                      <label htmlFor="due_date" className="form-label d-flex align-items-center">
+                      <label
+                        htmlFor="due_date"
+                        className="form-label d-flex align-items-center"
+                      >
                         <i className="bi bi-calendar-date me-2 text-primary"></i>
                         Due Date*
                       </label>
@@ -411,7 +415,10 @@ const TaskManager = ({
 
                   <div className="col-12 col-md-6">
                     <div className="form-group">
-                      <label htmlFor="due_time" className="form-label d-flex align-items-center">
+                      <label
+                        htmlFor="due_time"
+                        className="form-label d-flex align-items-center"
+                      >
                         <i className="bi bi-clock me-2 text-primary"></i>
                         Due Time*
                       </label>
@@ -429,7 +436,10 @@ const TaskManager = ({
 
                   <div className="col-12 col-md-6">
                     <div className="form-group">
-                      <label htmlFor="category" className="form-label d-flex align-items-center">
+                      <label
+                        htmlFor="category"
+                        className="form-label d-flex align-items-center"
+                      >
                         <i className="bi bi-tag me-2 text-primary"></i>
                         Category*
                       </label>
@@ -453,13 +463,18 @@ const TaskManager = ({
                           </datalist>
                         )}
                       </div>
-                      <small className="text-muted">Type a new category or choose from existing ones</small>
+                      <small className="text-muted">
+                        Type a new category or choose from existing ones
+                      </small>
                     </div>
                   </div>
 
                   <div className="col-12 col-md-6">
                     <div className="form-group">
-                      <label htmlFor="task_icon" className="form-label d-flex align-items-center">
+                      <label
+                        htmlFor="task_icon"
+                        className="form-label d-flex align-items-center"
+                      >
                         <i className="bi bi-image me-2 text-primary"></i>
                         Task Icon (Optional)
                       </label>
@@ -471,13 +486,18 @@ const TaskManager = ({
                         onChange={handleInputChange}
                         accept="image/*"
                       />
-                      <small className="text-muted">Recommended size: 64x64 pixels</small>
+                      <small className="text-muted">
+                        Recommended size: 64x64 pixels
+                      </small>
                     </div>
                   </div>
 
                   <div className="col-12">
                     <div className="form-group">
-                      <label htmlFor="details" className="form-label d-flex align-items-center">
+                      <label
+                        htmlFor="details"
+                        className="form-label d-flex align-items-center"
+                      >
                         <i className="bi bi-card-text me-2 text-primary"></i>
                         Details (Optional)
                       </label>
@@ -502,7 +522,10 @@ const TaskManager = ({
                       <i className="bi bi-x-circle me-1"></i>
                       Cancel
                     </button>
-                    <button type="submit" className="btn btn-outline-primary d-flex align-items-center">
+                    <button
+                      type="submit"
+                      className="btn btn-outline-primary d-flex align-items-center"
+                    >
                       <i className="bi bi-check-circle me-1"></i>
                       {editingTask ? 'Update Task' : 'Add Task'}
                     </button>
@@ -624,7 +647,7 @@ const TaskManager = ({
                             <i className="bi bi-pencil-square"></i>
                           </button>
                           <button
-                            onClick={() => handleDeleteTask(task.id)}
+                            onClick={() => setTaskToDelete(task)}
                             className="btn btn-sm btn-outline-danger"
                             title="Delete task"
                           >
@@ -699,6 +722,33 @@ const TaskManager = ({
                   </div>
                 </div>
               ))}
+          </div>
+        )}
+
+        {/* Simple Delete Confirmation Modal */}
+        {taskToDelete && (
+          <div
+            className="position-fixed top-0 start-0 end-0 bottom-0 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center"
+            style={{ zIndex: 1000 }}
+          >
+            <div className="bg-white p-4 rounded shadow text-center">
+              <p>Are you sure you want to delete this task?</p>
+              <p className="text-primary fw-bold">{taskToDelete.title}</p>
+              <div className="d-flex gap-3 justify-content-center mt-4">
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleDeleteTask(taskToDelete.id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setTaskToDelete(null)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

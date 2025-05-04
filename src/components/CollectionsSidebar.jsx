@@ -13,6 +13,7 @@ const CollectionsSidebar = ({
   navigate,
   handleDeleteCollection,
   sidebarVisible,
+  setCollectionToDelete,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -124,6 +125,7 @@ const CollectionsSidebar = ({
               setActiveMenuId={setActiveMenuId}
               navigate={navigate}
               handleDeleteCollection={handleDeleteCollection}
+              setCollectionToDelete={setCollectionToDelete}
             />
           </li>
         ))}

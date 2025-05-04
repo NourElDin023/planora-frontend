@@ -12,7 +12,8 @@ const CollectionsList = () => {
   const [showSharePage, setShowSharePage] = useState(false);
   const [showPomodoro, setShowPomodoro] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState(null);
-  const [sidebarVisible, setSidebarVisible] = useState(true); // New state for sidebar visibility
+  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [collectionToDelete, setCollectionToDelete] = useState(null);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -66,14 +67,6 @@ const CollectionsList = () => {
   };
 
   const handleDeleteCollection = async (collectionId) => {
-    if (
-      !window.confirm(
-        'Are you sure you want to delete this collection and all its tasks?'
-      )
-    ) {
-      return;
-    }
-
     try {
       await axios.delete(`collections/${collectionId}/`);
       setCollections(collections.filter((c) => c.id !== collectionId));
@@ -81,6 +74,8 @@ const CollectionsList = () => {
       if (selectedCollection?.id === collectionId) {
         setSelectedCollection(null);
       }
+
+      setCollectionToDelete(null);
     } catch (err) {
       alert('Failed to delete collection');
     }
@@ -109,6 +104,7 @@ const CollectionsList = () => {
         navigate={navigate}
         handleDeleteCollection={handleDeleteCollection}
         sidebarVisible={sidebarVisible}
+        setCollectionToDelete={setCollectionToDelete}
       />
 
       <MainContentArea
@@ -123,11 +119,39 @@ const CollectionsList = () => {
         setSidebarVisible={setSidebarVisible}
       />
 
-      {/* Moved PomodoroSection here, outside of the sidebar */}
       <PomodoroSection
         showPomodoro={showPomodoro}
         setShowPomodoro={setShowPomodoro}
       />
+
+      {collectionToDelete && (
+        <div
+          className="position-fixed top-0 start-0 end-0 bottom-0 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center"
+          style={{ zIndex: 1000 }}
+        >
+          <div className="bg-white p-4 rounded shadow text-center">
+            <p>Are you sure you want to delete this collection?</p>
+            <p className="text-primary fw-bold">{collectionToDelete.title}</p>
+            <p className="text-danger small">
+              This will delete all tasks within this collection.
+            </p>
+            <div className="d-flex gap-3 justify-content-center mt-4">
+              <button
+                className="btn btn-danger"
+                onClick={() => handleDeleteCollection(collectionToDelete.id)}
+              >
+                Delete
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setCollectionToDelete(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

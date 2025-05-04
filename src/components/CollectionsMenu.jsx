@@ -5,19 +5,24 @@ const CollectionsMenu = ({
   activeMenuId,
   setActiveMenuId,
   navigate,
-  handleDeleteCollection
+  handleDeleteCollection,
+  setCollectionToDelete,
 }) => {
   return (
-    <div style={{
-      position: 'absolute',
-      right: '8px',
-      top: '4px',
-    }}>
+    <div
+      style={{
+        position: 'absolute',
+        right: '8px',
+        top: '4px',
+      }}
+    >
       <button
         className="collection-menu"
         onClick={(e) => {
           e.stopPropagation();
-          setActiveMenuId(activeMenuId === collection.id ? null : collection.id);
+          setActiveMenuId(
+            activeMenuId === collection.id ? null : collection.id
+          );
         }}
         style={{
           background: 'transparent',
@@ -41,7 +46,7 @@ const CollectionsMenu = ({
             borderRadius: '4px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
             minWidth: '120px',
-            zIndex: 100
+            zIndex: 100,
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -55,14 +60,17 @@ const CollectionsMenu = ({
               cursor: 'pointer',
               textAlign: 'left',
               ':hover': {
-                backgroundColor: '#f5f5f5'
-              }
+                backgroundColor: '#f5f5f5',
+              },
             }}
           >
             Edit
           </button>
           <button
-            onClick={() => handleDeleteCollection(collection.id)}
+            onClick={() => {
+              setCollectionToDelete(collection);
+              setActiveMenuId(null); // Close the menu
+            }}
             style={{
               width: '100%',
               padding: '8px 12px',
@@ -72,8 +80,8 @@ const CollectionsMenu = ({
               textAlign: 'left',
               color: '#ff4444',
               ':hover': {
-                backgroundColor: '#ffecec'
-              }
+                backgroundColor: '#ffecec',
+              },
             }}
           >
             Delete
