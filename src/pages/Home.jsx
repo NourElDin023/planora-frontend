@@ -45,7 +45,7 @@ const Home = () => {
     <div style={styles.container}>
       <header style={styles.header}>
         <div style={styles.headerContent}>
-          <h1 style={styles.title}>Welcome to Life Tracker</h1>
+          <h1 style={styles.title}>Welcome to Planora</h1>
           <p style={styles.subtitle}>Your All-in-One Personal Development Companion</p>
           <div style={styles.ctaContainer}>
             <Link 

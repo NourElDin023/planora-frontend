@@ -61,7 +61,7 @@ const Navbar = () => {
               height="30"
               className="me-2"
             />
-            Life Tracker
+            Planora
           </Link>
         )}
 
@@ -76,7 +76,7 @@ const Navbar = () => {
               height="30"
               className="me-2"
             />
-            Life Tracker
+            Planora
           </Link>
         )}
 

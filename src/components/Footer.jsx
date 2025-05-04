@@ -7,7 +7,7 @@ const Footer = () => {
       <div style={styles.footerContainer}>
         <div style={styles.footerColumns}>
           <div style={styles.footerColumn}>
-            <h3 style={styles.columnTitle}>Life Tracker</h3>
+            <h3 style={styles.columnTitle}>Planora</h3>
             <p style={styles.columnText}>
               Your all-in-one personal development companion to help you track, manage, and improve every aspect of your life.
             </p>
@@ -74,7 +74,7 @@ const Footer = () => {
         
         <div style={styles.footerBottom}>
           <p style={styles.copyright}>
-            &copy; {new Date().getFullYear()} Life Tracker. All rights reserved.
+            &copy; {new Date().getFullYear()} Planora. All rights reserved.
           </p>
         </div>
       </div>

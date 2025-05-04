@@ -102,7 +102,7 @@ const Register = () => {
                       style={{ maxHeight: '80px' }} 
                     />
                     <h2 className="fw-bold">Create Your Account</h2>
-                    <p className="text-muted">Join Life Tracker to organize your life</p>
+                    <p className="text-muted">Join Planora to organize your life</p>
                   </div>
                   
                   {formError && (

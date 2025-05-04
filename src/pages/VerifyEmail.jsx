@@ -106,7 +106,7 @@ const VerifyEmail = () => {
             </div>
             <h2 className="mb-4">Email Verification Successful!</h2>
             <p className="lead mb-4">
-              Congratulations, {username}! Your email has been verified and your Life Tracker account is now active.
+              Congratulations, {username}! Your email has been verified and your Planora account is now active.
             </p>
             <div className="d-grid gap-2 col-md-8 mx-auto">
               <Link to="/login" className="btn btn-primary btn-lg">

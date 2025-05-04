@@ -120,7 +120,7 @@ const Login = () => {
                     style={{ maxHeight: '80px' }} 
                   />
                   <h2 className="fw-bold">Welcome Back</h2>
-                  <p className="text-muted">Sign in to your Life Tracker account</p>
+                  <p className="text-muted">Sign in to your Planora account</p>
                 </div>
                 
                 {formError && !verificationEmail && (
