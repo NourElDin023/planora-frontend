@@ -47,7 +47,7 @@ const Breadcrumb = ({
 
       {selectedCollection && (
         <>
-          <span>&gt;</span>
+          <span>/</span>
           <button
             onClick={() => {
               setSelectedTask(null);
@@ -69,14 +69,14 @@ const Breadcrumb = ({
 
       {selectedTask && (
         <>
-          <span>&gt;</span>
+          <span>/</span>
           <span style={{ color: '#0d6efd' }}>{selectedTask.title}</span>
         </>
       )}
 
       {showSharePage && (
         <>
-          <span>&gt;</span>
+          <span>/</span>
           <span style={{ color: '#0d6efd' }}>Share Settings</span>
         </>
       )}
