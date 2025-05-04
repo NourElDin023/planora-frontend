@@ -72,7 +72,7 @@ const NotificationIcon = () => {
   return (
     <div className="notification-icon">
       <button onClick={handleIconClick}>
-      <i class="fa-solid fa-bell"></i> {unreadCount > 0 && <span>{unreadCount}</span>}
+      <i class="bi bi-bell-fill"></i> {unreadCount > 0 && <span>{unreadCount}</span>}
       </button>
 
       {showPopup && (
