@@ -114,13 +114,13 @@ const Login = () => {
               <div className="card-body p-5">
                 <div className="text-center mb-4">
                   <img 
-                    src="/src/assets/Life-Tracker-logo-Blue.png" 
-                    alt="Life Tracker Logo" 
+                    src="/src/assets/planora-logo-blue.png" 
+                    alt="Planora Logo" 
                     className="img-fluid mb-3" 
                     style={{ maxHeight: '80px' }} 
                   />
                   <h2 className="fw-bold">Welcome Back</h2>
-                  <p className="text-muted">Sign in to your Life Tracker account</p>
+                  <p className="text-muted">Sign in to your Planora account</p>
                 </div>
                 
                 {formError && !verificationEmail && (

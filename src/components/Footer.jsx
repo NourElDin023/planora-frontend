@@ -7,7 +7,7 @@ const Footer = () => {
       <div style={styles.footerContainer}>
         <div style={styles.footerColumns}>
           <div style={styles.footerColumn}>
-            <h3 style={styles.columnTitle}>Life Tracker</h3>
+            <h3 style={styles.columnTitle}>Planora</h3>
             <p style={styles.columnText}>
               Your all-in-one personal development companion to help you track, manage, and improve every aspect of your life.
             </p>
@@ -61,12 +61,12 @@ const Footer = () => {
               <a href="https://linkedin.com" style={styles.socialLink} aria-label="LinkedIn">
                 <FaLinkedin style={styles.socialIcon} />
               </a>
-              <a href="mailto:contact@lifetracker.com" style={styles.socialLink} aria-label="Email">
+              <a href="mailto:contact@planora.com" style={styles.socialLink} aria-label="Email">
                 <FaEnvelope style={styles.socialIcon} />
               </a>
             </div>
             <p style={styles.contactText}>
-              contact@lifetracker.com<br />
+              contact@planora.com<br />
               +1 (555) 123-4567
             </p>
           </div>
@@ -74,7 +74,7 @@ const Footer = () => {
         
         <div style={styles.footerBottom}>
           <p style={styles.copyright}>
-            &copy; {new Date().getFullYear()} Life Tracker. All rights reserved.
+            &copy; {new Date().getFullYear()} Planora. All rights reserved.
           </p>
         </div>
       </div>

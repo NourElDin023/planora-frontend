@@ -96,13 +96,13 @@ const Register = () => {
                 <div className="card-body p-5">
                   <div className="text-center mb-4">
                     <img 
-                      src="/src/assets/Life-Tracker-logo-Blue.png" 
-                      alt="Life Tracker Logo" 
+                      src="/src/assets/planora-logo-blue.png" 
+                      alt="Planora Logo" 
                       className="img-fluid mb-3" 
                       style={{ maxHeight: '80px' }} 
                     />
                     <h2 className="fw-bold">Create Your Account</h2>
-                    <p className="text-muted">Join Life Tracker to organize your life</p>
+                    <p className="text-muted">Join Planora to organize your life</p>
                   </div>
                   
                   {formError && (
