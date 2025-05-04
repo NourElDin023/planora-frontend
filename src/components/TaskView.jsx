@@ -70,31 +70,50 @@ const TaskView = ({ taskId, permission, onClose }) => {
           </div>
         )}
 
-        <div className="row row-cols-1 row-cols-md-3 g-3">
-          {task.due_date && (
-            <div className="col">
-              <strong>Due Date:</strong>
-              <p className="mt-2 mb-0">
-                {new Date(task.due_date).toLocaleDateString()}
-                {task.due_time &&
-                  ` at ${new Date(task.due_time).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}`}
-              </p>
+        <div className="card mb-4">
+          <div className="card-body">
+            <h4 className="card-title h5 mb-3">Task Details</h4>
+            <div className="row">
+              {task.due_date && (
+                <div className="col-md-4 mb-3">
+                  <div className="d-flex align-items-center mb-1">
+                    <i className="bi bi-calendar-event me-2 text-primary"></i>
+                    <span className="fw-semibold">Due Date</span>
+                  </div>
+                  <div className="ps-4">
+                    {new Date(task.due_date).toLocaleDateString()}
+                    {task.due_time && (
+                      <span className="text-secondary">
+                        {` at ${new Date(task.due_time).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}`}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="col-md-4 mb-3">
+                <div className="d-flex align-items-center mb-1">
+                  <i className="bi bi-flag me-2 text-primary"></i>
+                  <span className="fw-semibold">Priority</span>
+                </div>
+                <div className="ps-4">
+                  {task.priority || 'Normal'}
+                </div>
+              </div>
+
+              <div className="col-md-4 mb-3">
+                <div className="d-flex align-items-center mb-1">
+                  <i className="bi bi-clock-history me-2 text-primary"></i>
+                  <span className="fw-semibold">Created</span>
+                </div>
+                <div className="ps-4">
+                  {new Date(task.created_at).toLocaleString()}
+                </div>
+              </div>
             </div>
-          )}
-
-          <div className="col">
-            <strong>Priority:</strong>
-            <p className="mt-2 mb-0">{task.priority || 'Normal'}</p>
-          </div>
-
-          <div className="col">
-            <strong>Created:</strong>
-            <p className="mt-2 mb-0">
-              {new Date(task.created_at).toLocaleString()}
-            </p>
           </div>
         </div>
 
