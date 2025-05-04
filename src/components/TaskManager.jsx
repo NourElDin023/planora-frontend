@@ -362,119 +362,148 @@ const TaskManager = ({
         {/* Task Form */}
         {showForm && (
           <div className="card shadow mb-4">
-            <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div className="card-header text-primary d-flex justify-content-between align-items-center">
               <h5 className="mb-0">
                 <i className="fas fa-edit me-2"></i>
                 {editingTask ? 'Edit Task' : 'Add New Task'}
               </h5>
-              <button
-                className="btn btn-sm btn-light"
-                onClick={() => setShowForm(false)}
-              >
-                <i className="fas fa-times"></i>
-              </button>
             </div>
-            <div className="card-body">
+            <div className="card-body p-4">
               <form onSubmit={handleFormSubmit}>
-                <div className="row g-3">
+                <div className="row g-4">
                   <div className="col-12">
-                    <label htmlFor="title" className="form-label">
-                      Title*
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="title"
-                      name="title"
-                      value={formData.title}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <div className="form-floating">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="title"
+                        name="title"
+                        placeholder="Enter task title"
+                        value={formData.title}
+                        onChange={handleInputChange}
+                        required
+                      />
+                      <label htmlFor="title">
+                        <i className="bi bi-type me-2 text-primary"></i>
+                        Task Title*
+                      </label>
+                    </div>
                   </div>
 
                   <div className="col-12 col-md-6">
-                    <label htmlFor="due_date" className="form-label">
-                      Due Date*
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="due_date"
-                      name="due_date"
-                      value={formData.due_date}
-                      onChange={handleInputChange}
-                      min={today}
-                      required
-                    />
+                    <div className="form-group">
+                      <label htmlFor="due_date" className="form-label d-flex align-items-center">
+                        <i className="bi bi-calendar-date me-2 text-primary"></i>
+                        Due Date*
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="due_date"
+                        name="due_date"
+                        value={formData.due_date}
+                        onChange={handleInputChange}
+                        min={today}
+                        required
+                      />
+                    </div>
                   </div>
 
                   <div className="col-12 col-md-6">
-                    <label htmlFor="due_time" className="form-label">
-                      Due Time*
-                    </label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      id="due_time"
-                      name="due_time"
-                      value={formData.due_time}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <div className="form-group">
+                      <label htmlFor="due_time" className="form-label d-flex align-items-center">
+                        <i className="bi bi-clock me-2 text-primary"></i>
+                        Due Time*
+                      </label>
+                      <input
+                        type="time"
+                        className="form-control"
+                        id="due_time"
+                        name="due_time"
+                        value={formData.due_time}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
                   </div>
 
                   <div className="col-12 col-md-6">
-                    <label htmlFor="category" className="form-label">
-                      Category*
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="category"
-                      name="category"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <div className="form-group">
+                      <label htmlFor="category" className="form-label d-flex align-items-center">
+                        <i className="bi bi-tag me-2 text-primary"></i>
+                        Category*
+                      </label>
+                      <div className="input-group">
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="category"
+                          name="category"
+                          value={formData.category}
+                          onChange={handleInputChange}
+                          placeholder="Enter category"
+                          list="categoryOptions"
+                          required
+                        />
+                        {categories.length > 0 && (
+                          <datalist id="categoryOptions">
+                            {categories.map((cat, idx) => (
+                              <option key={idx} value={cat} />
+                            ))}
+                          </datalist>
+                        )}
+                      </div>
+                      <small className="text-muted">Type a new category or choose from existing ones</small>
+                    </div>
                   </div>
 
                   <div className="col-12 col-md-6">
-                    <label htmlFor="task_icon" className="form-label">
-                      Task Icon (Optional)
-                    </label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="task_icon"
-                      name="task_icon"
-                      onChange={handleInputChange}
-                      accept="image/*"
-                    />
+                    <div className="form-group">
+                      <label htmlFor="task_icon" className="form-label d-flex align-items-center">
+                        <i className="bi bi-image me-2 text-primary"></i>
+                        Task Icon (Optional)
+                      </label>
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="task_icon"
+                        name="task_icon"
+                        onChange={handleInputChange}
+                        accept="image/*"
+                      />
+                      <small className="text-muted">Recommended size: 64x64 pixels</small>
+                    </div>
                   </div>
 
                   <div className="col-12">
-                    <label htmlFor="details" className="form-label">
-                      Details (Optional)
-                    </label>
-                    <textarea
-                      className="form-control"
-                      id="details"
-                      name="details"
-                      rows="3"
-                      value={formData.details}
-                      onChange={handleInputChange}
-                    ></textarea>
+                    <div className="form-group">
+                      <label htmlFor="details" className="form-label d-flex align-items-center">
+                        <i className="bi bi-card-text me-2 text-primary"></i>
+                        Details (Optional)
+                      </label>
+                      <textarea
+                        className="form-control"
+                        id="details"
+                        name="details"
+                        rows="4"
+                        value={formData.details}
+                        onChange={handleInputChange}
+                        placeholder="Enter task details..."
+                      ></textarea>
+                    </div>
                   </div>
 
-                  <div className="col-12 d-flex justify-content-end gap-2 mt-4">
+                  <div className="col-12 border-top pt-4 mt-2 d-flex justify-content-end gap-3">
                     <button
                       type="button"
-                      className="btn btn-outline-secondary"
+                      className="btn btn-outline-secondary d-flex align-items-center"
                       onClick={() => setShowForm(false)}
                     >
+                      <i className="bi bi-x-circle me-1"></i>
                       Cancel
                     </button>
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn btn-outline-primary d-flex align-items-center">
+                      <i className="bi bi-check-circle me-1"></i>
                       {editingTask ? 'Update Task' : 'Add Task'}
                     </button>
                   </div>
