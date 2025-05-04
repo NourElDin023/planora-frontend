@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CollectionsMenu from './CollectionsMenu';
-import PomodoroSection from './PomodoroSection';
 
 const CollectionsSidebar = ({
   collections,
@@ -13,11 +12,12 @@ const CollectionsSidebar = ({
   setActiveMenuId,
   navigate,
   handleDeleteCollection,
+  sidebarVisible,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // Filter collections based on search query
-  const filteredCollections = collections.filter(collection => {
+  const filteredCollections = collections.filter((collection) => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     return (
@@ -27,36 +27,40 @@ const CollectionsSidebar = ({
   });
 
   return (
-    <div style={{
-      width: '300px',
-      borderRight: '1px solid #ccc',
-      padding: '1rem',
-    }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '1rem',
-      }}>
+    <div
+      style={{
+        width: sidebarVisible ? '310px' : '0px',
+        borderRight: '1px solid #ccc',
+        padding: sidebarVisible ? '1rem' : '0',
+        overflow: 'hidden',
+        transition: 'all 0.3s ease-in-out',
+        opacity: sidebarVisible ? '1' : '0',
+        transform: sidebarVisible ? 'translateX(0)' : 'translateX(-20px)',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1rem',
+          minWidth: '280px',
+        }}
+      >
         <h3 style={{ margin: 0 }}>Collections</h3>
         <div style={{ display: 'flex', gap: '4px' }}>
           <button
             onClick={() => setShowPomodoro(!showPomodoro)}
-            className='btn btn-outline-primary' 
+            className="btn btn-outline-primary"
             title="Pomodoro Timer"
           >
             <i className="fas fa-clock"></i>
           </button>
-          <Link
-            to="/addcollections"
-            className="btn btn-outline-primary"
-          >
+          <Link to="/addcollections" className="btn btn-outline-primary">
             <i className="fa-solid fa-plus"></i>
           </Link>
         </div>
       </div>
-
-      <PomodoroSection showPomodoro={showPomodoro} setShowPomodoro={setShowPomodoro} />
 
       <input
         type="text"
@@ -69,10 +73,17 @@ const CollectionsSidebar = ({
           marginBottom: '1rem',
           borderRadius: '4px',
           border: '1px solid #ccc',
+          minWidth: '280px',
         }}
       />
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <ul
+        style={{
+          listStyle: 'none',
+          padding: 0,
+          minWidth: '280px',
+        }}
+      >
         {filteredCollections.map((collection) => (
           <li
             key={collection.id}

@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from '../utils/axios';
 import MainContentArea from '../components/MainContentArea';
 import CollectionsSidebar from '../components/CollectionsSidebar';
+import PomodoroSection from '../components/PomodoroSection';
+
 const CollectionsList = () => {
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedCollection] = useState(null);
@@ -10,6 +12,7 @@ const CollectionsList = () => {
   const [showSharePage, setShowSharePage] = useState(false);
   const [showPomodoro, setShowPomodoro] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState(null);
+  const [sidebarVisible, setSidebarVisible] = useState(true); // New state for sidebar visibility
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -19,7 +22,7 @@ const CollectionsList = () => {
       setCollections(JSON.parse(cachedCollections));
     }
   }, []);
-  
+
   useEffect(() => {
     localStorage.setItem('collections', JSON.stringify(collections));
   }, [collections]);
@@ -39,7 +42,7 @@ const CollectionsList = () => {
     const collectionName = searchParams.get('collection');
     if (collectionName && collections.length > 0) {
       const foundCollection = collections.find(
-        c => c.title.toLowerCase() === collectionName.toLowerCase()
+        (c) => c.title.toLowerCase() === collectionName.toLowerCase()
       );
       if (foundCollection) {
         handleCollectionClick(foundCollection);
@@ -63,7 +66,11 @@ const CollectionsList = () => {
   };
 
   const handleDeleteCollection = async (collectionId) => {
-    if (!window.confirm('Are you sure you want to delete this collection and all its tasks?')) {
+    if (
+      !window.confirm(
+        'Are you sure you want to delete this collection and all its tasks?'
+      )
+    ) {
       return;
     }
 
@@ -101,6 +108,7 @@ const CollectionsList = () => {
         setActiveMenuId={setActiveMenuId}
         navigate={navigate}
         handleDeleteCollection={handleDeleteCollection}
+        sidebarVisible={sidebarVisible}
       />
 
       <MainContentArea
@@ -111,6 +119,14 @@ const CollectionsList = () => {
         setSelectedTask={setSelectedTask}
         setShowSharePage={setShowSharePage}
         onTaskSelect={setSelectedTask}
+        sidebarVisible={sidebarVisible}
+        setSidebarVisible={setSidebarVisible}
+      />
+
+      {/* Moved PomodoroSection here, outside of the sidebar */}
+      <PomodoroSection
+        showPomodoro={showPomodoro}
+        setShowPomodoro={setShowPomodoro}
       />
     </div>
   );

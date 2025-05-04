@@ -13,6 +13,8 @@ const MainContentArea = ({
   setSelectedTask,
   setShowSharePage,
   onTaskSelect,
+  sidebarVisible,
+  setSidebarVisible,
 }) => {
   return (
     <div style={{ flex: 1, padding: '1rem' }}>
@@ -28,6 +30,8 @@ const MainContentArea = ({
               setSelectedCollection={setSelectedCollection}
               setSelectedTask={setSelectedTask}
               setShowSharePage={setShowSharePage}
+              sidebarVisible={sidebarVisible}
+              setSidebarVisible={setSidebarVisible}
             />
 
             {!selectedTask && !showSharePage && (
@@ -59,7 +63,19 @@ const MainContentArea = ({
             )}
           </div>
         ) : (
-          <p>Select a collection to view its tasks.</p>
+          <div>
+            <Breadcrumb
+              selectedCollection={selectedCollection}
+              selectedTask={selectedTask}
+              showSharePage={showSharePage}
+              setSelectedCollection={setSelectedCollection}
+              setSelectedTask={setSelectedTask}
+              setShowSharePage={setShowSharePage}
+              sidebarVisible={sidebarVisible}
+              setSidebarVisible={setSidebarVisible}
+            />
+            <p>Select a collection to view its tasks.</p>
+          </div>
         ))}
     </div>
   );

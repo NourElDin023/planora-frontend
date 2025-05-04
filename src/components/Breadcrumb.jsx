@@ -6,15 +6,27 @@ const Breadcrumb = ({
   showSharePage,
   setSelectedCollection,
   setSelectedTask,
-  setShowSharePage
+  setShowSharePage,
+  sidebarVisible,
+  setSidebarVisible,
 }) => {
   return (
-    <div style={{
-      marginBottom: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-    }}>
+    <div className="d-flex align-items-center gap-2">
+      <button
+        onClick={() => setSidebarVisible(!sidebarVisible)}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: '#0d6efd',
+          cursor: 'pointer',
+          padding: '0 10px 0 0',
+          fontSize: '1.2rem',
+        }}
+        title={sidebarVisible ? 'Hide sidebar' : 'Show sidebar'}
+      >
+        <i className={sidebarVisible ? 'fas fa-times' : 'fas fa-bars'}></i>
+      </button>
+
       <button
         onClick={() => {
           setSelectedCollection(null);
@@ -58,9 +70,7 @@ const Breadcrumb = ({
       {selectedTask && (
         <>
           <span>&gt;</span>
-          <span style={{ color: '#0d6efd' }}>
-            {selectedTask.title}
-          </span>
+          <span style={{ color: '#0d6efd' }}>{selectedTask.title}</span>
         </>
       )}
 
