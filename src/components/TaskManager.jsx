@@ -47,7 +47,9 @@ const TaskManager = ({
       setTasks(response.data);
 
       // Extract unique categories from tasks
-      const uniqueCategories = [...new Set(response.data.map(task => task.category))].filter(Boolean);
+      const uniqueCategories = [
+        ...new Set(response.data.map((task) => task.category)),
+      ].filter(Boolean);
       setCategories(uniqueCategories);
 
       setError(null);
@@ -179,7 +181,7 @@ const TaskManager = ({
       <div className="container">
         {/* Header */}
         <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center align-items-start mb-4">
-          <h1 className="h2 fs-3 fw-bold" style={{ color: '#0d6efd' }}>
+          <h1 className="h2 fs-3 fw-bold text-primary">
             <i className="fas fs-3 fa-tasks me-2"></i>
             Collection Tasks{' '}
             {tasks.length > 0 && (
@@ -196,19 +198,6 @@ const TaskManager = ({
                   resetForm();
                   setShowForm(true);
                 }}
-                style={{
-                  transition: 'all 0.2s ease-in-out',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = '#0d6efd';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = '';
-                  e.currentTarget.style.color = '';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
               >
                 <i className="fas fa-plus me-1"></i>
                 New Task
@@ -217,19 +206,6 @@ const TaskManager = ({
             <button
               className="btn btn-outline-primary"
               onClick={() => setShowSharePage(true)}
-              style={{
-                transition: 'all 0.2s ease-in-out',
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = '#0d6efd';
-                e.currentTarget.style.color = 'white';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = '';
-                e.currentTarget.style.color = '';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
             >
               <i className="fas fa-share-alt me-1"></i>
               Share Collection
@@ -333,11 +309,11 @@ const TaskManager = ({
 
           {/* Category Filter */}
           <div className="mt-3 d-flex align-items-center gap-2">
-          {categoryFilter && (
+            {categoryFilter && (
               <div className="d-flex align-items-center badge bg-primary p-2">
                 <span>Category: {categoryFilter}</span>
-                <button 
-                  className="btn btn-sm text-white ms-2 p-0" 
+                <button
+                  className="btn btn-sm text-white ms-2 p-0"
                   onClick={() => setCategoryFilter('')}
                   style={{ fontSize: '0.8rem' }}
                 >
@@ -346,20 +322,23 @@ const TaskManager = ({
               </div>
             )}
             <div className="ms-auto dropdown">
-              <button 
-                className="btn btn-outline-primary dropdown-toggle" 
+              <button
+                className="btn btn-outline-primary dropdown-toggle"
                 type="button"
-                id="categoryFilterDropdown" 
-                data-bs-toggle="dropdown" 
+                id="categoryFilterDropdown"
+                data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 <i className="bi bi-filter me-1"></i>
                 Filter by Category
               </button>
-              <ul className="dropdown-menu" aria-labelledby="categoryFilterDropdown">
+              <ul
+                className="dropdown-menu"
+                aria-labelledby="categoryFilterDropdown"
+              >
                 <li>
-                  <button 
-                    className="dropdown-item" 
+                  <button
+                    className="dropdown-item"
                     onClick={() => setCategoryFilter('')}
                   >
                     All Categories
@@ -367,8 +346,8 @@ const TaskManager = ({
                 </li>
                 {categories.map((category, index) => (
                   <li key={index}>
-                    <button 
-                      className="dropdown-item" 
+                    <button
+                      className="dropdown-item"
                       onClick={() => setCategoryFilter(category)}
                     >
                       {category}
@@ -571,20 +550,13 @@ const TaskManager = ({
                       task.completed ? 'bg-light' : ''
                     }`}
                   >
-                    <div
-                      className="card-header py-3 d-flex justify-content-between align-items-center"
-                      style={{
-                        background: task.completed
-                          ? 'linear-gradient(135deg, rgba(106,17,203,0.05) 0%, rgba(37,117,252,0.05) 100%)'
-                          : 'linear-gradient(135deg, rgba(106,17,203,0.1) 0%, rgba(37,117,252,0.1) 100%)',
-                      }}
-                    >
+                    <div className="card-header py-3 d-flex justify-content-between align-items-center">
                       <div className="d-flex align-items-center">
                         {task.task_icon && (
                           <img
                             src={task.task_icon}
                             alt="Task Icon"
-                            className="me-2 rounded-circle"
+                            className="me-2 rounded-circle border border-1"
                             style={{
                               width: '32px',
                               height: '32px',
@@ -598,7 +570,13 @@ const TaskManager = ({
                               ? 'text-decoration-line-through text-muted'
                               : ''
                           }`}
-                          style={{ color: task.completed ? '' : '#0d6efd' }}
+                          style={{
+                            color: task.completed ? '' : '#0d6efd',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => handleTaskClick(task)}
+                          title="Click to view task details"
+                          aria-label={`View details for ${task.title}`}
                         >
                           {task.title}
                         </h3>
@@ -631,8 +609,8 @@ const TaskManager = ({
                       <div className={task.completed ? 'text-muted' : ''}>
                         {task.details && <p>{task.details}</p>}
                         <div className="d-flex flex-wrap gap-2 mb-3">
-                          <span 
-                            className="badge bg-primary" 
+                          <span
+                            className="badge bg-primary"
                             style={{ cursor: 'pointer' }}
                             onClick={() => setCategoryFilter(task.category)}
                             title={`Filter by ${task.category}`}
@@ -682,52 +660,12 @@ const TaskManager = ({
                     </div>
 
                     <div className="card-footer bg-transparent text-end">
-                      <div
-                        className="d-flex flex-column flex-lg-row justify-content-between gap-2 pb-2"
-                      >
+                      <div className="d-flex flex-column flex-lg-row justify-content-between gap-2 pb-2">
+                        <small className="text-muted text-start">Owner:</small>
                         <small className="text-muted text-start">
-                          Owner: <br />
                           {task.owner}
                         </small>
-                        <small className="text-muted text-start">
-                          Created: <br />{' '}
-                          {new Date(task.created_at).toLocaleString()}
-                        </small>
                       </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleTaskClick(task);
-                        }}
-                        style={{
-                          background: '#7D26CD',
-                          color: 'white',
-                          border: '1px solid #7D26CD',
-                          borderRadius: '4px',
-                          padding: '6px 12px',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease-in-out',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          ':hover': {
-                            background: '#6a1fb5',
-                            borderColor: '#6a1fb5',
-                            transform: 'translateY(-1px)',
-                          },
-                          ':active': {
-                            transform: 'translateY(0)',
-                          },
-                        }}
-                        title="View full task details"
-                        aria-label={`View details for ${task.title}`}
-                      >
-                        <i
-                          className="bi bi-zoom-in"
-                          style={{ fontSize: '0.9rem' }}
-                        ></i>
-                        <span>View Details</span>
-                      </button>
                     </div>
                   </div>
                 </div>
