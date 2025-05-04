@@ -56,8 +56,8 @@ const Navbar = () => {
             to="/"
           >
             <img
-              src="/src/assets/Life-Tracker-logo.png"
-              alt="Life Tracker Logo"
+              src="/src/assets/planora-logo-white.png"
+              alt="Planora Logo"
               height="30"
               className="me-2"
             />
@@ -71,8 +71,8 @@ const Navbar = () => {
             to="/viewcollections"
           >
             <img
-              src="/src/assets/Life-Tracker-logo.png"
-              alt="Life Tracker Logo"
+              src="/src/assets/planora-logo-white.png"
+              alt="Planora Logo"
               height="30"
               className="me-2"
             />
