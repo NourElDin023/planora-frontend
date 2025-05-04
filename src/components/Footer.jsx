@@ -61,12 +61,12 @@ const Footer = () => {
               <a href="https://linkedin.com" style={styles.socialLink} aria-label="LinkedIn">
                 <FaLinkedin style={styles.socialIcon} />
               </a>
-              <a href="mailto:contact@lifetracker.com" style={styles.socialLink} aria-label="Email">
+              <a href="mailto:contact@planora.com" style={styles.socialLink} aria-label="Email">
                 <FaEnvelope style={styles.socialIcon} />
               </a>
             </div>
             <p style={styles.contactText}>
-              contact@lifetracker.com<br />
+              contact@planora.com<br />
               +1 (555) 123-4567
             </p>
           </div>
