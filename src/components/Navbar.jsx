@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggleButton from './ThemeToggle';
@@ -7,6 +7,40 @@ import NotificationIcon from './NotificationIcon'; // Adjust the import path as 
 const Navbar = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  // Listen for theme changes in localStorage
+  useEffect(() => {
+    const updateTheme = () => {
+      setTheme(localStorage.getItem('theme') || 'light');
+    };
+
+    // Initial setup
+    updateTheme();
+
+    // Listen for storage events (when localStorage changes)
+    window.addEventListener('storage', updateTheme);
+    
+    // Create a MutationObserver to watch for body class changes
+    // This helps when the theme is changed within the same tab
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          const bodyTheme = document.body.className;
+          if (bodyTheme && (bodyTheme === 'light' || bodyTheme === 'dark')) {
+            setTheme(bodyTheme);
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.body, { attributes: true });
+    
+    return () => {
+      window.removeEventListener('storage', updateTheme);
+      observer.disconnect();
+    };
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -14,7 +48,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <nav className={`navbar navbar-expand-lg navbar-dark ${theme === 'dark' ? 'bg-dark' : 'bg-primary'} sticky-top`}>
       <div className="container">
         {!currentUser && (
           <Link
@@ -105,7 +139,7 @@ const Navbar = () => {
                   >
                     Welcome, {currentUser.username}
                   </a>
-                  <ul className="dropdown-menu dropdown-menu-end">
+                  <ul className={`dropdown-menu dropdown-menu-end ${theme === 'dark' ? 'bg-dark' : ''}`}>
                     <li>
                       <Link className="dropdown-item" to="/profile">
                         My Profile
@@ -120,7 +154,7 @@ const Navbar = () => {
                       <hr className="dropdown-divider" />
                     </li>
                     <li>
-                      <button className="dropdown-item" onClick={handleLogout}>
+                      <button className="dropdown-item text-danger" onClick={handleLogout}>
                         Logout
                       </button>
                     </li>
