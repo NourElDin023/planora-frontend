@@ -631,16 +631,21 @@ const TaskManager = ({
                       <div className={task.completed ? 'text-muted' : ''}>
                         {task.details && <p>{task.details}</p>}
                         <div className="d-flex flex-wrap gap-2 mb-3">
-                          <span className="badge bg-primary">
-                            <i class="bi bi-tag-fill me-1"></i>
+                          <span 
+                            className="badge bg-primary" 
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => setCategoryFilter(task.category)}
+                            title={`Filter by ${task.category}`}
+                          >
+                            <i className="bi bi-tag-fill me-1"></i>
                             {task.category}
                           </span>
                           <span className="badge bg-info">
-                          <i class="bi bi-calendar me-1"></i>
+                          <i className="bi bi-calendar me-1"></i>
                             {new Date(task.due_date).toLocaleDateString()}
                           </span>
                           <span className="badge bg-warning text-dark">
-                          <i class="bi bi-clock me-1"></i>
+                          <i className="bi bi-clock me-1"></i>
                             {task.due_time}
                           </span>
                         </div>
