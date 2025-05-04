@@ -51,7 +51,7 @@ const CollectionsSidebar = ({
             to="/addcollections"
             className="btn btn-outline-primary"
           >
-            <i class="fa-solid fa-plus"></i>
+            <i className="fa-solid fa-plus"></i>
           </Link>
         </div>
       </div>

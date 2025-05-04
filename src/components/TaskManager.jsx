@@ -353,7 +353,7 @@ const TaskManager = ({
                 data-bs-toggle="dropdown" 
                 aria-expanded="false"
               >
-                <i class="bi bi-filter me-1"></i>
+                <i className="bi bi-filter me-1"></i>
                 Filter by Category
               </button>
               <ul className="dropdown-menu" aria-labelledby="categoryFilterDropdown">
@@ -614,14 +614,14 @@ const TaskManager = ({
                             className="btn btn-sm btn-outline-primary me-1"
                             title="Edit task"
                           >
-                            <i class="bi bi-pencil-square"></i>
+                            <i className="bi bi-pencil-square"></i>
                           </button>
                           <button
                             onClick={() => handleDeleteTask(task.id)}
                             className="btn btn-sm btn-outline-danger"
                             title="Delete task"
                           >
-                            <i class="bi bi-trash3-fill"></i>
+                            <i className="bi bi-trash3-fill"></i>
                           </button>
                         </div>
                       )}
@@ -641,11 +641,11 @@ const TaskManager = ({
                             {task.category}
                           </span>
                           <span className="badge bg-info">
-                          <i className="bi bi-calendar me-1"></i>
+                            <i className="bi bi-calendar me-1"></i>
                             {new Date(task.due_date).toLocaleDateString()}
                           </span>
                           <span className="badge bg-warning text-dark">
-                          <i className="bi bi-clock me-1"></i>
+                            <i className="bi bi-clock me-1"></i>
                             {task.due_time}
                           </span>
                         </div>
