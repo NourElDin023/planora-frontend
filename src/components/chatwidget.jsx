@@ -5,7 +5,7 @@ export default function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
-    const [showSuggestions, setShowSuggestions] = useState(true); // State to control suggestions visibility
+    const [showSuggestions, setShowSuggestions] = useState(true);
 
     const extractPageData = () => {
         const titles = Array.from(document.querySelectorAll('h1, h2')).map(el => el.innerText);
@@ -24,13 +24,21 @@ export default function ChatWidget() {
         if (!message.trim()) return;
 
         const pageData = extractPageData();
+        const userMessage = message.toLowerCase();
 
         try {
+            let apiMessage = `User: ${message}`;
+
+            // If the user asks for page data or task suggestions, include the page data
+            if (userMessage.includes("page") || userMessage.includes("task")) {
+                apiMessage = `Here's what is on the page:\n${pageData}\n\nUser: ${message}`;
+            }
+
             const response = await fetch("http://localhost:8000/api/chat/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    message: `Here's what is on the page:\n${pageData}\n\nUser: ${message}`,
+                    message: apiMessage,
                 }),
             });
 
@@ -203,7 +211,7 @@ export default function ChatWidget() {
                         border: 'none',
                         boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
                         cursor: 'pointer',
-                        fontSize: 20
+                        fontSize: 22
                     }}
                 >
                     💬

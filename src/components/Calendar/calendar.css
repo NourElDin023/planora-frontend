@@ -1,0 +1,372 @@
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: white;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: white;
+  border-bottom: 1px solid #dadce0;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* .calendar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+} */
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.calendar-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.calendar-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.calendar-sidebar {
+  border-right: 1px solid #dadce0;
+  padding: 1rem;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.calendar-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.calendar-grid {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Time grid */
+.time-grid {
+  position: relative;
+  height: 1440px; /* 24 hours * 60px per hour */
+}
+
+.time-column {
+  position: relative;
+  width: 60px;
+  border-right: 1px solid #dadce0;
+}
+
+.time-marker {
+  position: absolute;
+  width: 100%;
+  text-align: right;
+  padding-right: 0.5rem;
+  font-size: 0.75rem;
+  color: #70757a;
+}
+
+.hour-line {
+  position: absolute;
+  width: 100%;
+  border-top: 1px solid #dadce0;
+}
+
+/* Day grid */
+.day-column {
+  position: relative;
+  flex: 1;
+  border-right: 1px solid #dadce0;
+}
+
+.day-header {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.day-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 auto;
+  border-radius: 50%;
+  font-weight: 500;
+}
+
+.current-day {
+  background-color: #1967d2;
+  color: white;
+}
+
+/* Month view */
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.month-day-names {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #70757a;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid #dadce0;
+}
+
+.month-day {
+  min-height: 110px;
+  padding: 0.25rem;
+  border-right: 1px solid #dadce0;
+  border-bottom: 1px solid #dadce0;
+  position: relative;
+  cursor: pointer;
+}
+.month-day:hover{
+  background-color: #70757a64;
+}
+.month-day-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.month-event {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.125rem;
+  color: white;
+  cursor: pointer;
+}
+
+/* Event */
+.calendar-event {
+  position: absolute;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  color: white;
+}
+
+.event-title {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-location {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Current time indicator */
+.current-time {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.current-time-text {
+  width: 60px;
+  padding-right: 0.5rem;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #ea4335;
+}
+
+.current-time-line {
+  flex: 1;
+  height: 2px;
+  background-color: #ea4335;
+}
+
+/* Mini calendar */
+.mini-calendar {
+  width: 100%;
+  max-width: 250px;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.mini-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.mini-calendar-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.mini-calendar-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.mini-calendar-button {
+  padding: 0.25rem;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.mini-calendar-button:hover {
+  background-color: #f1f3f4;
+}
+
+.mini-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.2rem;
+}
+
+.mini-calendar-day-name {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #70757a;
+  font-weight: 500;
+}
+
+.mini-calendar-day {
+  height: 1.75rem;
+  width: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border-radius: 50%; */
+  font-size: 0.75rem;
+  cursor: pointer;
+  border: none;
+  background-color: #70757a00;
+}
+
+.mini-calendar-day:hover {
+  background-color: #70757a8c;
+}
+
+.mini-calendar-day-today {
+  background-color: #1966d2ee;
+  color: white;
+}
+
+.mini-calendar-day-selected {
+  background-color: #d2e3fc;
+  color: #1967d2;
+}
+
+.mini-calendar-day-other-month {
+  color: #70757a;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .calendar-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem;
+  }
+  
+  .calendar-title {
+    font-size: 1rem;
+    min-width: auto;
+  }
+  
+  .calendar-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .month-grid {
+    grid-template-columns: repeat(7, minmax(40px, 1fr));
+  }
+  
+  .month-day {
+    min-height: 80px;
+    padding: 0.125rem;
+  }
+  
+  .month-day-names {
+    font-size: 0.625rem;
+  }
+  
+  .month-event {
+    font-size: 0.625rem;
+    padding: 0.0625rem 0.125rem;
+  }
+  
+  /* For week and day views on mobile */
+  .time-column {
+    width: 40px;
+  }
+  
+  .time-marker {
+    font-size: 0.625rem;
+    padding-right: 0.25rem;
+  }
+  
+  .current-time-text {
+    width: 40px;
+    font-size: 0.625rem;
+  }
+}
+
+/* Handle smaller screens with abbreviated day names */
+@media (max-width: 480px) {
+  .month-day-names div {
+    font-size: 0.625rem;
+  }
+  
+  .month-grid {
+    grid-template-columns: repeat(7, minmax(32px, 1fr));
+  }
+  
+  .month-day {
+    min-height: 60px;
+  }
+  
+  .month-day-number {
+    height: 1.25rem;
+    width: 1.25rem;
+    font-size: 0.75rem;
+  }
+}
