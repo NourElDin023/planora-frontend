@@ -333,6 +333,18 @@ const TaskManager = ({
 
           {/* Category Filter */}
           <div className="mt-3 d-flex align-items-center gap-2">
+          {categoryFilter && (
+              <div className="d-flex align-items-center badge bg-primary p-2">
+                <span>Category: {categoryFilter}</span>
+                <button 
+                  className="btn btn-sm text-white ms-2 p-0" 
+                  onClick={() => setCategoryFilter('')}
+                  style={{ fontSize: '0.8rem' }}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+            )}
             <div className="ms-auto dropdown">
               <button 
                 className="btn btn-outline-primary dropdown-toggle" 
@@ -341,7 +353,7 @@ const TaskManager = ({
                 data-bs-toggle="dropdown" 
                 aria-expanded="false"
               >
-                <i className="fas fa-filter me-1"></i>
+                <i class="bi bi-filter me-1"></i>
                 Filter by Category
               </button>
               <ul className="dropdown-menu" aria-labelledby="categoryFilterDropdown">
@@ -365,19 +377,6 @@ const TaskManager = ({
                 ))}
               </ul>
             </div>
-            
-            {categoryFilter && (
-              <div className="d-flex align-items-center badge bg-primary p-2">
-                <span>Category: {categoryFilter}</span>
-                <button 
-                  className="btn btn-sm text-white ms-2 p-0" 
-                  onClick={() => setCategoryFilter('')}
-                  style={{ fontSize: '0.8rem' }}
-                >
-                  <i className="fas fa-times"></i>
-                </button>
-              </div>
-            )}
           </div>
         </div>
 
@@ -615,14 +614,14 @@ const TaskManager = ({
                             className="btn btn-sm btn-outline-primary me-1"
                             title="Edit task"
                           >
-                            <i className="fas fa-edit"></i>
+                            <i class="bi bi-pencil-square"></i>
                           </button>
                           <button
                             onClick={() => handleDeleteTask(task.id)}
                             className="btn btn-sm btn-outline-danger"
                             title="Delete task"
                           >
-                            <i className="fas fa-trash"></i>
+                            <i class="bi bi-trash3-fill"></i>
                           </button>
                         </div>
                       )}
@@ -633,15 +632,15 @@ const TaskManager = ({
                         {task.details && <p>{task.details}</p>}
                         <div className="d-flex flex-wrap gap-2 mb-3">
                           <span className="badge bg-primary">
-                            <i className="fas fa-tag me-1"></i>
+                            <i class="bi bi-tag-fill me-1"></i>
                             {task.category}
                           </span>
                           <span className="badge bg-info">
-                            <i className="far fa-calendar me-1"></i>
+                          <i class="bi bi-calendar me-1"></i>
                             {new Date(task.due_date).toLocaleDateString()}
                           </span>
                           <span className="badge bg-warning text-dark">
-                            <i className="far fa-clock me-1"></i>
+                          <i class="bi bi-clock me-1"></i>
                             {task.due_time}
                           </span>
                         </div>
@@ -719,7 +718,7 @@ const TaskManager = ({
                         aria-label={`View details for ${task.title}`}
                       >
                         <i
-                          className="fas fa-search-plus"
+                          className="bi bi-zoom-in"
                           style={{ fontSize: '0.9rem' }}
                         ></i>
                         <span>View Details</span>
