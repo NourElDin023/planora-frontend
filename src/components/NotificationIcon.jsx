@@ -72,13 +72,13 @@ const NotificationIcon = () => {
   return (
     <div className="notification-icon">
       <button onClick={handleIconClick}>
-        🔔 {unreadCount > 0 && <span>{unreadCount}</span>}
+      <i class="fa-solid fa-bell"></i> {unreadCount > 0 && <span>{unreadCount}</span>}
       </button>
 
       {showPopup && (
         <div className="popup">
           {popupMessage.message}
-          <button onClick={() => setShowPopup(false)}>×</button>
+          <button onClick={() => setShowPopup(false)}><i class="fa-solid fa-x"></i></button>
         </div>
       )}
     </div>
