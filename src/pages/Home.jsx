@@ -13,7 +13,7 @@ const Home = () => {
       icon: <FaBook />, 
       title: 'Journal', 
       desc: 'Record daily thoughts & experiences',
-      collectionName: 'Journal'
+      collectionName: 'journal'
     },
     { 
       icon: <FaRunning />, 
@@ -74,7 +74,7 @@ const Home = () => {
           {features.map((feature, index) => (
             <Link 
               key={index} 
-              to={`/viewcollections/${feature.collectionName.replace(/\s+/g, '-').toLowerCase()}`}
+              to={`/viewcollections/?collection=${feature.collectionName}`}
               style={{ textDecoration: 'none' }}
             >
               <div style={styles.card}>
