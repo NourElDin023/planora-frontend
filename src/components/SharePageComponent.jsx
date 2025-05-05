@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
+import { toast, ToastContainer } from 'react-toastify';
 
 const SharePageComponent = ({ pageId, onClose  }) => {
   const [usernames, setUsernames] = useState([]);
@@ -54,7 +55,9 @@ const SharePageComponent = ({ pageId, onClose  }) => {
         shareable_permission: permission,
       });
       await axios.post(`/collections/${pageId}/unshare-all/`);
-      alert('Page is now private.');
+      toast.success('Page is now private.');
+
+      //alert('Page is now private.');
       setMode('private');
       setLinkSettings({ is_link_shareable: false });
       setSelectedUsernames([]);
@@ -78,7 +81,9 @@ const SharePageComponent = ({ pageId, onClose  }) => {
       });
       setLinkSettings(res.data);
       setMode('link');
-      alert("Link sharing enabled!");
+      toast.success('Link sharing enabled!');
+      
+      //alert("Link sharing enabled!");
     } catch (err) {
       console.error("Error generating shareable link:", err);
     }
@@ -95,7 +100,9 @@ const SharePageComponent = ({ pageId, onClose  }) => {
         usernames: selectedUsernames,
         permission: permission,
       });
-      alert("Page shared with: " + res.data.shared_with.join(", "));
+      toast.success("Page shared with: " + res.data.shared_with.join(", "));
+
+      //alert();
       setMode('user');
     } catch (err) {
       console.error("Error sharing page:", err);
@@ -117,6 +124,7 @@ const SharePageComponent = ({ pageId, onClose  }) => {
 
   return (
     <div className="card mt-4 mx-auto" style={{ maxWidth: '600px' }}>
+      <ToastContainer />
     {/* Add header with back button */}
     <div className="card-header d-flex justify-content-between align-items-center">
       <h5 className="mb-0">Share Settings</h5>
