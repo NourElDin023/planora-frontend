@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../utils/axios';
+import ReactMarkdown from 'react-markdown';
 
 const NotesView = ({ taskId, permission, refreshDependency }) => {
   const [notes, setNotes] = useState([]);
@@ -73,7 +74,7 @@ const NotesView = ({ taskId, permission, refreshDependency }) => {
             <div key={note.id} className="card">
               <div className="card-body">
                 <h4 className="card-title text-primary fs-5 mb-2">{note.title}</h4>
-                <p className="card-text mb-3" style={{ whiteSpace: 'pre-wrap' }}>{note.content}</p>
+                <p className="card-text mb-3" style={{ whiteSpace: 'pre-wrap' }}><ReactMarkdown>{note.content}</ReactMarkdown></p>
                 <div className="d-flex justify-content-between align-items-center text-muted small">
                   <div className="d-flex flex-column gap-1">
                     <span className="small">
