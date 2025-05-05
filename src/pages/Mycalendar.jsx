@@ -1,4 +1,4 @@
-import { Calendar } from "../components/calendar/Calendar";
+import { Calendar } from "../components/Calendar/calendar";
 import { CalendarProvider } from "../context/CalendarContext";
 import { EventProvider } from "../context/EventContext";
 

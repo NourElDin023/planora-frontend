@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useEvents } from "../../context/EventContext";
-import { MiniCalendar } from "../calendar/MiniCalendar";
+import { MiniCalendar } from "../Calendar/miniCalendar";
 import axios from "../../utils/axios";
 
 export const CalendarSidebar = () => {

@@ -4,9 +4,9 @@ import { CalendarHeader } from "./calendarHeader";
 import { CalendarSidebar }  from "./calendarsidebar";
 import { WeekView } from "./WeekView";
 import { MonthView } from "./MonthView";
-import { DayView } from "./DayView";
+import { DayView } from "./dayView";
 import { useIsMobile } from "../../assets/use-mobile";
-import "./Calendar.css";
+import "./calendar.css";
 
 export const Calendar = () => {
   const { view } = useCalendar();
