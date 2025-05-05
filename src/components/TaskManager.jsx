@@ -6,6 +6,7 @@ const TaskManager = ({
   permission,
   onTaskSelect,
   setShowSharePage,
+  isSharedCollections
 }) => {
   // State management
   const [tasks, setTasks] = useState([]);
@@ -229,6 +230,11 @@ const TaskManager = ({
           {tasks.length > 0 && (
             <span className="badge bg-secondary ms-2">{tasks.length}</span>
           )}
+            {isSharedCollections && (
+              <span className="ms-2 fs-5 badge rounded-pill bg-secondary">
+                Shared with {permission} access
+              </span>
+            )}
         </h2>
         <div className="d-flex gap-2">
           {permission === 'edit' && (
@@ -243,13 +249,16 @@ const TaskManager = ({
               New Task
             </button>
           )}
-          <button
-            className="btn btn-outline-primary d-flex align-items-center"
-            onClick={() => setShowSharePage(true)}
-          >
-            <i className="bi bi-share me-1"></i>
-            Share Collection
-          </button>
+            {!isSharedCollections && (
+              <button
+              className="btn btn-outline-primary d-flex align-items-center"
+              onClick={() => setShowSharePage(true)}
+            >
+              <i className="bi bi-share me-1"></i>
+              Share Collection
+            </button>
+              )}
+          
         </div>
       </div>
 

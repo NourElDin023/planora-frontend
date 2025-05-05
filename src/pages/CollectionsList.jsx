@@ -105,6 +105,7 @@ const CollectionsList = () => {
         handleDeleteCollection={handleDeleteCollection}
         sidebarVisible={sidebarVisible}
         setCollectionToDelete={setCollectionToDelete}
+        isSharedCollections={false}
       />
 
       <MainContentArea
@@ -117,6 +118,8 @@ const CollectionsList = () => {
         onTaskSelect={setSelectedTask}
         sidebarVisible={sidebarVisible}
         setSidebarVisible={setSidebarVisible}
+        isSharedCollections={false}
+        permission={"edit"}
       />
 
       <PomodoroSection

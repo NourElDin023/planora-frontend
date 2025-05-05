@@ -15,6 +15,8 @@ const MainContentArea = ({
   onTaskSelect,
   sidebarVisible,
   setSidebarVisible,
+  isSharedCollections,
+  permission,
 }) => {
   return (
     <div style={{ flex: 1, padding: '1rem' }}>
@@ -39,8 +41,9 @@ const MainContentArea = ({
                 key={selectedCollection.id}
                 collectionId={selectedCollection.id}
                 onTaskSelect={onTaskSelect}
-                permission={'edit'}
+                permission={permission}
                 setShowSharePage={setShowSharePage}
+                isSharedCollections={isSharedCollections}
               />
             )}
 
@@ -58,7 +61,7 @@ const MainContentArea = ({
                 key={selectedCollection.id}
                 taskId={selectedTask.id}
                 onClose={() => setSelectedTask(null)}
-                permission={'edit'}
+                permission={permission}
               />
             )}
           </div>

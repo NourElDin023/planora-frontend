@@ -14,6 +14,7 @@ const CollectionsSidebar = ({
   handleDeleteCollection,
   sidebarVisible,
   setCollectionToDelete,
+  isSharedCollections
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -57,9 +58,12 @@ const CollectionsSidebar = ({
           >
             <i className="fas fa-clock"></i>
           </button>
-          <Link to="/addcollections" className="btn btn-outline-primary">
-            <i className="fa-solid fa-plus"></i>
-          </Link>
+          {!isSharedCollections && (
+                <Link to="/addcollections" className="btn btn-outline-primary">
+                <i className="fa-solid fa-plus"></i>
+              </Link>
+          )}
+       
         </div>
       </div>
 
@@ -118,6 +122,7 @@ const CollectionsSidebar = ({
                 </p>
               )}
             </div>
+            {!isSharedCollections && (
 
             <CollectionsMenu
               collection={collection}
@@ -127,6 +132,7 @@ const CollectionsSidebar = ({
               handleDeleteCollection={handleDeleteCollection}
               setCollectionToDelete={setCollectionToDelete}
             />
+            )}
           </li>
         ))}
       </ul>
