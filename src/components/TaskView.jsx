@@ -44,7 +44,7 @@ const TaskView = ({ taskId, permission, onClose }) => {
         <i className="bi bi-arrow-left"></i> Back to Collection
       </button>
 
-      <div className="bg-white p-4 rounded shadow">
+      <div className="p-4 rounded shadow" style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-color)' }}>
         <h2 className="mt-0">{task.title}</h2>
         <div className="mb-3">
           <strong>Owner:</strong>{' '}

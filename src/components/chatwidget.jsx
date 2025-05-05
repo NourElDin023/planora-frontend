@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
 export default function ChatWidget() {
@@ -6,6 +6,39 @@ export default function ChatWidget() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [showSuggestions, setShowSuggestions] = useState(true);
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+    // Listen for theme changes
+    useEffect(() => {
+        const updateTheme = () => {
+            setTheme(localStorage.getItem('theme') || 'light');
+        };
+
+        // Initial setup
+        updateTheme();
+
+        // Listen for storage events (when localStorage changes)
+        window.addEventListener('storage', updateTheme);
+        
+        // Create a MutationObserver to watch for body class changes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    const bodyTheme = document.body.className;
+                    if (bodyTheme && (bodyTheme === 'light' || bodyTheme === 'dark')) {
+                        setTheme(bodyTheme);
+                    }
+                }
+            });
+        });
+        
+        observer.observe(document.body, { attributes: true });
+        
+        return () => {
+            window.removeEventListener('storage', updateTheme);
+            observer.disconnect();
+        };
+    }, []);
 
     const extractPageData = () => {
         const titles = Array.from(document.querySelectorAll('h1, h2')).map(el => el.innerText);
@@ -72,16 +105,18 @@ export default function ChatWidget() {
                 <div style={{
                     width: 360,
                     height: 500,
-                    background: '#f9f9f9',
+                    background: 'var(--card-bg)',
+                    color: 'var(--text-color)',
                     borderRadius: 12,
                     boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
                     display: 'flex',
                     flexDirection: 'column',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    border: '1px solid var(--border-color)'
                 }}>
                     <div style={{
-                        background: '#007bff',
-                        color: '#fff',
+                        background: 'var(--button-bg)',
+                        color: 'var(--button-text)',
                         padding: '12px 16px',
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -97,7 +132,7 @@ export default function ChatWidget() {
                                 }}
                                 style={{
                                     background: 'transparent',
-                                    color: '#fff',
+                                    color: 'var(--button-text)',
                                     border: 'none',
                                     cursor: 'pointer'
                                 }}
@@ -108,7 +143,7 @@ export default function ChatWidget() {
                         </div>
                     </div>
 
-                    <div style={{ flex: 1, padding: 12, overflowY: 'auto', background: '#fff' }}>
+                    <div style={{ flex: 1, padding: 12, overflowY: 'auto', background: 'var(--card-bg)' }}>
                         {messages.map((msg, i) => (
                             <div key={i} style={{
                                 marginBottom: 12,
@@ -116,8 +151,8 @@ export default function ChatWidget() {
                                 justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start'
                             }}>
                                 <div style={{
-                                    background: msg.sender === 'user' ? '#d1e7dd' : '#f0f0f0',
-                                    color: '#333',
+                                    background: msg.sender === 'user' ? 'var(--button-bg)' : theme === 'dark' ? '#3a4a5e' : '#f0f0f0',
+                                    color: msg.sender === 'user' ? 'var(--button-text)' : 'var(--text-color)',
                                     padding: '10px 14px',
                                     borderRadius: '16px',
                                     maxWidth: '75%',
@@ -135,7 +170,7 @@ export default function ChatWidget() {
                         <div style={{
                             marginBottom: 10,
                             padding: '10px',
-                            background: '#f1f1f1',
+                            background: theme === 'dark' ? '#3a4a5e' : '#f1f1f1',
                             borderRadius: '12px',
                             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                             display: 'flex',
@@ -144,7 +179,7 @@ export default function ChatWidget() {
                         }}>
                             <span style={{
                                 fontSize: 14,
-                                color: '#555',
+                                color: 'var(--text-color)',
                                 fontWeight: 'bold'
                             }}>How can I help you?</span>
                             <div style={{
@@ -157,8 +192,8 @@ export default function ChatWidget() {
                                         key={i}
                                         onClick={() => handleSuggestionClick(text)}
                                         style={{
-                                            background: '#007bff',
-                                            color: '#fff',
+                                            background: 'var(--button-bg)',
+                                            color: 'var(--button-text)',
                                             border: 'none',
                                             borderRadius: 20,
                                             padding: '8px 16px',
@@ -166,8 +201,8 @@ export default function ChatWidget() {
                                             fontSize: 11,
                                             transition: 'background-color 0.3s',
                                         }}
-                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#0056b3'}
-                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#007bff'}
+                                        onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--button-hover-bg)'}
+                                        onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--button-bg)'}
                                     >
                                         {text}
                                     </button>
@@ -178,8 +213,8 @@ export default function ChatWidget() {
 
                     <div style={{
                         padding: '10px',
-                        borderTop: '1px solid #ccc',
-                        background: '#f8f8f8'
+                        borderTop: '1px solid var(--border-color)',
+                        background: theme === 'dark' ? '#212529' : '#f8f8f8'
                     }}>
                         <input
                             type="text"
@@ -192,8 +227,10 @@ export default function ChatWidget() {
                                 width: '100%',
                                 padding: '10px 12px',
                                 borderRadius: 20,
-                                border: '1px solid #ddd',
-                                outline: 'none'
+                                border: '1px solid var(--border-color)',
+                                outline: 'none',
+                                background: 'var(--card-bg)',
+                                color: 'var(--text-color)'
                             }}
                             placeholder="Ask me anything..."
                         />
@@ -206,13 +243,15 @@ export default function ChatWidget() {
                         width: 60,
                         height: 60,
                         borderRadius: '50%',
-                        background: '#007bff',
-                        color: '#fff',
+                        background: 'var(--button-bg)',
+                        color: 'var(--button-text)',
                         border: 'none',
                         boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
                         cursor: 'pointer',
                         fontSize: 22
                     }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--button-hover-bg)'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--button-bg)'}
                 >
                     💬
                 </button>
