@@ -24,13 +24,13 @@ import Index from "./pages/Mycalendar";
 import ChatWidget from './components/chatwidget';
 
 function App() {
-  // const location = useLocation();
-  // const allowedRoutes = ['/notes', '/viewcollections']; // pages where chat appears
+  const location = useLocation();
+  const allowedRoutes = ['/notes', '/viewcollections', '/addcollections', '/shared-collections', '/calendar']; // pages where chat appears
 
   return (
     <AuthProvider>
       <Navbar />
-      {<ChatWidget />}
+      {allowedRoutes.includes(location.pathname) && <ChatWidget />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -85,7 +85,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-          // In your App.jsx, update the shared-collections route like this:
         <Route
           path="/shared-collections"
           element={

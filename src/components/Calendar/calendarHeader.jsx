@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useCalendar } from "../../context/CalendarContext";
 import { format } from "date-fns";
-import { EventDialog } from "./EventDialog";
 import { useIsMobile } from "../../assets/use-mobile";
 
 export const CalendarHeader = () => {
   const { currentDate, view, setView, goToToday, goToNext, goToPrev } = useCalendar();
-  const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
   const isMobile = useIsMobile();
 
   const getHeaderTitle = () => {
@@ -23,9 +21,6 @@ export const CalendarHeader = () => {
     <header className="calendar-header">
       <div className="d-flex align-items-center gap-2">
         <div className="calendar-logo">
-          {/* {!isMobile && (
-            // <img src="" alt="Calendar Logo" width="24" height="24" />
-          )} */}
           <h1 className={`${isMobile ? 'h6' : 'h5'} mb-0`}>Planora Calendar</h1>
         </div>
         <div className={`calendar-controls ${isMobile ? 'ms-2' : 'ms-4'}`}>
@@ -63,19 +58,7 @@ export const CalendarHeader = () => {
           <option value="week">Week</option>
           <option value="month">Month</option>
         </select>
-        <button 
-          className="btn btn-primary btn-sm"
-          onClick={() => setIsCreateEventOpen(true)}
-        >
-          <i className="bi bi-plus"></i> {!isMobile && "Create"}
-        </button>
       </div>
-      
-      <EventDialog 
-        isOpen={isCreateEventOpen} 
-        onClose={() => setIsCreateEventOpen(false)} 
-        mode="create"
-      />
     </header>
   );
 };

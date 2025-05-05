@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
 export default function ChatWidget() {
@@ -6,6 +6,21 @@ export default function ChatWidget() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [showSuggestions, setShowSuggestions] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    useEffect(() => {
+        // Listen for dark mode toggle changes
+        const darkModeToggle = document.querySelector('#dark-mode-toggle');
+        const handleDarkModeChange = () => {
+            setIsDarkMode(darkModeToggle?.checked || false);
+        };
+
+        darkModeToggle?.addEventListener('change', handleDarkModeChange);
+
+        return () => {
+            darkModeToggle?.removeEventListener('change', handleDarkModeChange);
+        };
+    }, []);
 
     const extractPageData = () => {
         const titles = Array.from(document.querySelectorAll('h1, h2')).map(el => el.innerText);
@@ -16,7 +31,7 @@ export default function ChatWidget() {
     const suggestions = [
         "Summarize this page",
         "What is this page about?",
-        "Suggest tasks for that page",
+        "Suggest tasks for that collection",
     ];
 
     const sendMessage = async (customInput) => {

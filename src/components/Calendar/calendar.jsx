@@ -1,7 +1,7 @@
 import React from "react";
 import { useCalendar } from "../../context/CalendarContext";
-import { CalendarHeader } from "./CalendarHeader";
-import { CalendarSidebar } from "./calendarsidebar";
+import { CalendarHeader } from "./calendarHeader";
+import { CalendarSidebar }  from "./calendarsidebar";
 import { WeekView } from "./WeekView";
 import { MonthView } from "./MonthView";
 import { DayView } from "./DayView";
