@@ -3,15 +3,17 @@ import { useEvents } from "../../context/EventContext";
 import { format, addHours, setHours, setMinutes } from "date-fns";
 
 export const EventDialog = ({ isOpen, onClose, mode, event }) => {
-  const { addEvent, updateEvent, deleteEvent } = useEvents();
+  const { addEvent, updateEvent, deleteEvent, loading } = useEvents();
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
+  const [details, setDetails] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(addHours(new Date(), 1));
   const [color, setColor] = useState("#039be5");
+  const [completed, setCompleted] = useState(false);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Listen for theme changes
   useEffect(() => {
@@ -45,50 +47,97 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
     };
   }, []);
   
+  // Reset error when dialog opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      setError("");
+    }
+  }, [isOpen]);
+  
   // Initialize form when dialog is opened or event changes
   useEffect(() => {
     if (mode === "edit" && event) {
       setTitle(event.title || "");
-      setDescription(event.description || "");
-      setLocation(event.location || "");
+      setDetails(event.details || "");
       setStartDate(event.start || new Date());
       setEndDate(event.end || addHours(new Date(), 1));
       setColor(event.color || "#039be5");
+      setCompleted(event.completed || false);
     } else {
       setTitle("");
-      setDescription("");
-      setLocation("");
+      setDetails("");
       setStartDate(new Date());
       setEndDate(addHours(new Date(), 1));
       setColor("#039be5");
+      setCompleted(false);
     }
   }, [mode, event, isOpen]);
   
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    const eventData = {
-      title,
-      description,
-      location,
-      start: startDate,
-      end: endDate,
-      color,
-    };
-    
-    if (mode === "create") {
-      addEvent(eventData);
-    } else if (mode === "edit" && event) {
-      updateEvent({ ...eventData, id: event.id });
+  const validateForm = () => {
+    // Validate that end time is not before start time
+    if (endDate < startDate) {
+      setError("End time cannot be before start time");
+      return false;
     }
     
-    onClose();
+    // Validate title is not empty
+    if (!title.trim()) {
+      setError("Title is required");
+      return false;
+    }
+    
+    return true;
   };
   
-  const handleDelete = () => {
-    if (event) {
-      deleteEvent(event.id);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setError("");
+    
+    try {
+      const eventData = {
+        title,
+        details,
+        start: startDate,
+        end: endDate,
+        color,
+        completed,
+      };
+      
+      if (mode === "create") {
+        await addEvent(eventData);
+      } else if (mode === "edit" && event) {
+        await updateEvent({ ...eventData, id: event.id });
+      }
+      
       onClose();
+    } catch (err) {
+      console.error("Error saving event:", err);
+      setError(err.response?.data?.message || 'An error occurred while saving the event');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  const handleDelete = async () => {
+    if (!event) return;
+    
+    setIsSubmitting(true);
+    setError("");
+    
+    try {
+      await deleteEvent(event.id);
+      onClose();
+    } catch (err) {
+      console.error("Error deleting event:", err);
+      setError(err.response?.data?.message || 'An error occurred while deleting the event');
+    } finally {
+      setIsSubmitting(false);
     }
   };
   
@@ -110,14 +159,24 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
             <h5 className="modal-title">
               {mode === "create" ? "Create Event" : "Edit Event"}
             </h5>
-            <button type="button" className="btn-close" onClick={onClose} style={{ 
-              filter: theme === 'dark' ? 'invert(1)' : 'none' 
-            }}></button>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={onClose} 
+              disabled={isSubmitting}
+              style={{ filter: theme === 'dark' ? 'invert(1)' : 'none' }}
+            ></button>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+              
               <div className="mb-3">
-                <label htmlFor="title" className="form-label">Title</label>
+                <label htmlFor="title" className="form-label">Title*</label>
                 <input
                   id="title"
                   className="form-control"
@@ -130,7 +189,7 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
               
               <div className="row mb-3">
                 <div className="col">
-                  <label className="form-label">Start Date</label>
+                  <label className="form-label">Start Date*</label>
                   <input
                     type="date"
                     className="form-control"
@@ -141,11 +200,12 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                       newDate.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
                       setStartDate(newDate);
                     }}
+                    required
                   />
                 </div>
                 
                 <div className="col">
-                  <label className="form-label">End Date</label>
+                  <label className="form-label">End Date*</label>
                   <input
                     type="date"
                     className="form-control"
@@ -156,13 +216,14 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                       newDate.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
                       setEndDate(newDate);
                     }}
+                    required
                   />
                 </div>
               </div>
               
               <div className="row mb-3">
                 <div className="col">
-                  <label className="form-label">Start Time</label>
+                  <label className="form-label">Start Time*</label>
                   <input
                     type="time"
                     className="form-control"
@@ -171,11 +232,12 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                       const [hours, minutes] = e.target.value.split(':').map(Number);
                       setStartDate(setMinutes(setHours(startDate, hours), minutes));
                     }}
+                    required
                   />
                 </div>
                 
                 <div className="col">
-                  <label className="form-label">End Time</label>
+                  <label className="form-label">End Time*</label>
                   <input
                     type="time"
                     className="form-control"
@@ -184,6 +246,7 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                       const [hours, minutes] = e.target.value.split(':').map(Number);
                       setEndDate(setMinutes(setHours(endDate, hours), minutes));
                     }}
+                    required
                   />
                 </div>
               </div>
@@ -203,25 +266,27 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                 </select>
               </div>
               
-              <div className="mb-3">
-                <label htmlFor="location" className="form-label">Location</label>
+              <div className="mb-3 form-check">
                 <input
-                  id="location"
-                  className="form-control"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="Add location"
+                  type="checkbox"
+                  className="form-check-input"
+                  id="completed"
+                  checked={completed}
+                  onChange={(e) => setCompleted(e.target.checked)}
                 />
+                <label className="form-check-label" htmlFor="completed">
+                  Completed
+                </label>
               </div>
               
               <div className="mb-3">
-                <label htmlFor="description" className="form-label">Description</label>
+                <label htmlFor="details" className="form-label">Details</label>
                 <textarea
-                  id="description"
+                  id="details"
                   className="form-control"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Add description"
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                  placeholder="Add details"
                   rows="3"
                 />
               </div>
@@ -233,16 +298,29 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                   type="button" 
                   className="btn btn-danger" 
                   onClick={handleDelete}
+                  disabled={isSubmitting}
                 >
-                  Delete
+                  {isSubmitting ? 'Deleting...' : 'Delete'}
                 </button>
               )}
               <div>
-                <button type="button" className="btn btn-secondary me-2" onClick={onClose}>
+                <button 
+                  type="button" 
+                  className="btn btn-secondary me-2" 
+                  onClick={onClose}
+                  disabled={isSubmitting}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  {mode === "create" ? "Create" : "Save"}
+                <button 
+                  type="submit" 
+                  className="btn btn-primary"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting 
+                    ? (mode === "create" ? 'Creating...' : 'Saving...') 
+                    : (mode === "create" ? 'Create' : 'Save')
+                  }
                 </button>
               </div>
             </div>
