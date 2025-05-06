@@ -61,7 +61,7 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
       setDetails(event.details || "");
       setStartDate(event.start || new Date());
       setEndDate(event.end || addHours(new Date(), 1));
-      setColor(event.color || "#039be5");
+      setColor(event.completed ? '#33b679' : (event.color || "#039be5"));
       setCompleted(event.completed || false);
     } else {
       setTitle("");
@@ -72,6 +72,18 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
       setCompleted(false);
     }
   }, [mode, event, isOpen]);
+  
+  // Update color when completion status changes
+  useEffect(() => {
+    // If task is marked as completed, always set color to green (#33b679)
+    // Otherwise, keep the selected color
+    if (completed) {
+      setColor('#33b679'); // Green color
+    } else if (event && !completed && color === '#33b679') {
+      // Only reset color if we're unchecking and the current color is the "completed" green
+      setColor(event.color || '#039be5');
+    }
+  }, [completed, event]);
   
   const validateForm = () => {
     // Validate that end time is not before start time
@@ -184,6 +196,11 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Event title"
                   required
+                  style={{
+                    backgroundColor: theme === 'dark' ? 'var(--input-bg, #333)' : '',
+                    color: theme === 'dark' ? 'var(--text-color, #fff)' : '',
+                    borderColor: theme === 'dark' ? 'var(--border-color, #555)' : ''
+                  }}
                 />
               </div>
               
@@ -201,6 +218,11 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                       setStartDate(newDate);
                     }}
                     required
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'var(--input-bg, #333)' : '',
+                      color: theme === 'dark' ? 'var(--text-color, #fff)' : '',
+                      borderColor: theme === 'dark' ? 'var(--border-color, #555)' : ''
+                    }}
                   />
                 </div>
                 
@@ -217,6 +239,11 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                       setEndDate(newDate);
                     }}
                     required
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'var(--input-bg, #333)' : '',
+                      color: theme === 'dark' ? 'var(--text-color, #fff)' : '',
+                      borderColor: theme === 'dark' ? 'var(--border-color, #555)' : ''
+                    }}
                   />
                 </div>
               </div>
@@ -233,6 +260,11 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                       setStartDate(setMinutes(setHours(startDate, hours), minutes));
                     }}
                     required
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'var(--input-bg, #333)' : '',
+                      color: theme === 'dark' ? 'var(--text-color, #fff)' : '',
+                      borderColor: theme === 'dark' ? 'var(--border-color, #555)' : ''
+                    }}
                   />
                 </div>
                 
@@ -247,6 +279,11 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                       setEndDate(setMinutes(setHours(endDate, hours), minutes));
                     }}
                     required
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'var(--input-bg, #333)' : '',
+                      color: theme === 'dark' ? 'var(--text-color, #fff)' : '',
+                      borderColor: theme === 'dark' ? 'var(--border-color, #555)' : ''
+                    }}
                   />
                 </div>
               </div>
@@ -257,6 +294,13 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                   className="form-select"
                   value={color}
                   onChange={(e) => setColor(e.target.value)}
+                  disabled={completed}
+                  title={completed ? "Color is fixed to green when task is completed" : ""}
+                  style={{
+                    backgroundColor: theme === 'dark' ? 'var(--input-bg, #333)' : '',
+                    color: theme === 'dark' ? 'var(--text-color, #fff)' : '',
+                    borderColor: theme === 'dark' ? 'var(--border-color, #555)' : ''
+                  }}
                 >
                   {colorOptions.map((colorOption) => (
                     <option key={colorOption.value} value={colorOption.value}>
@@ -264,6 +308,11 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                     </option>
                   ))}
                 </select>
+                {completed && (
+                  <small className="text-muted" style={{ color: theme === 'dark' ? '#aaa' : '' }}>
+                    Color is set to green for completed tasks
+                  </small>
+                )}
               </div>
               
               <div className="mb-3 form-check">
@@ -288,6 +337,11 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
                   onChange={(e) => setDetails(e.target.value)}
                   placeholder="Add details"
                   rows="3"
+                  style={{
+                    backgroundColor: theme === 'dark' ? 'var(--input-bg, #333)' : '',
+                    color: theme === 'dark' ? 'var(--text-color, #fff)' : '',
+                    borderColor: theme === 'dark' ? 'var(--border-color, #555)' : ''
+                  }}
                 />
               </div>
             </div>
