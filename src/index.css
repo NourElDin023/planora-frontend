@@ -48,11 +48,13 @@ body.light {
   --card-bg: #ffffff;
   --icon-color: #007bff;
   --button-bg: #007bff;
+  --button-bg-rgb: 0, 123, 255;
   --button-hover-bg: #0056b3;
   --button-text: #ffffff;
   --cta-bg: #eaf4ff;
   --cta-button-bg: #007bff;
   --cta-button-hover-bg: #0056b3;
+  --border-color: #dee2e6;
 }
 
 body.light .card {
@@ -85,11 +87,13 @@ body.dark {
   --card-bg: #2c3e50;
   --icon-color: #66b2ff;
   --button-bg: #007bff;
+  --button-bg-rgb: 0, 123, 255;
   --button-hover-bg: #0056b3;
   --button-text: #ffffff;
   --cta-bg: #2c3e50;
   --cta-button-bg: #007bff;
   --cta-button-hover-bg: #0056b3;
+  --border-color: #345d7e;
 }
 
 body.dark .card {

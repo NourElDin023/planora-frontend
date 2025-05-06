@@ -4,6 +4,7 @@ import { format, addHours, setHours, setMinutes } from "date-fns";
 
 export const EventDialog = ({ isOpen, onClose, mode, event }) => {
   const { addEvent, updateEvent, deleteEvent } = useEvents();
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -11,6 +12,38 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(addHours(new Date(), 1));
   const [color, setColor] = useState("#039be5");
+
+  // Listen for theme changes
+  useEffect(() => {
+    const updateTheme = () => {
+      setTheme(localStorage.getItem('theme') || 'light');
+    };
+
+    // Initial setup
+    updateTheme();
+    
+    // Listen for storage events (when localStorage changes)
+    window.addEventListener('storage', updateTheme);
+    
+    // Create a MutationObserver to watch for body class changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          const bodyTheme = document.body.className;
+          if (bodyTheme && (bodyTheme === 'light' || bodyTheme === 'dark')) {
+            setTheme(bodyTheme);
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.body, { attributes: true });
+    
+    return () => {
+      window.removeEventListener('storage', updateTheme);
+      observer.disconnect();
+    };
+  }, []);
   
   // Initialize form when dialog is opened or event changes
   useEffect(() => {
@@ -72,12 +105,14 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
   return (
     <div className="modal d-block" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
       <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
+        <div className="modal-content" style={{ backgroundColor: theme === 'dark' ? 'var(--card-bg)' : 'white', color: 'var(--text-color)' }}>
+          <div className="modal-header" style={{ borderBottomColor: 'var(--border-color, #dee2e6)' }}>
             <h5 className="modal-title">
               {mode === "create" ? "Create Event" : "Edit Event"}
             </h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button type="button" className="btn-close" onClick={onClose} style={{ 
+              filter: theme === 'dark' ? 'invert(1)' : 'none' 
+            }}></button>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
@@ -192,7 +227,7 @@ export const EventDialog = ({ isOpen, onClose, mode, event }) => {
               </div>
             </div>
             
-            <div className="modal-footer justify-content-between">
+            <div className="modal-footer justify-content-between" style={{ borderTopColor: 'var(--border-color, #dee2e6)' }}>
               {mode === "edit" && (
                 <button 
                   type="button" 
