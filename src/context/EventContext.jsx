@@ -118,8 +118,8 @@ export const EventProvider = ({ children }) => {
       due_date,
       start_time,
       end_time,
+      color: eventData.color || "#039be5",
       completed: eventData.completed || false,
-      // Add any additional fields required by your API
     };
   };
 
