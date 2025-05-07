@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import axiosInstance from '../utils/axios';
 
 export default function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
@@ -81,24 +82,20 @@ export default function ChatWidget() {
                 apiMessage = `Here's what is on the page:\n${pageData}\n\nUser: ${message}`;
             }
 
-            const response = await fetch("http://localhost:8000/api/chat/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: apiMessage }),
+            const response = await axiosInstance.post("chat/", {
+                message: apiMessage
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
+            if (response.status === 200) {
                 setMessages(prev => [
                     ...prev,
                     { sender: "user", text: message },
-                    { sender: "ai", text: data.response }
+                    { sender: "ai", text: response.data.response }
                 ]);
                 setInput("");
                 setShowSuggestions(false);
             } else {
-                console.error("Error:", data);
+                console.error("Error:", response.data);
             }
         } catch (error) {
             console.error("Request failed:", error);
