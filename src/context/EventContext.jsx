@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { parse } from 'date-fns';
+import { parse, format } from 'date-fns';
 import axiosInstance from '../utils/axios';
 
 const EventContext = createContext();
@@ -85,7 +85,9 @@ export const EventProvider = ({ children }) => {
             category: task.category,
             completed: task.completed,
             owner: task.owner,
-            color: task.completed ? '#9e9e9e' : '#039be5',
+            color: task.completed ? '#9e9e9e' : (task.color || '#039be5'),
+            // Keep original task data for reference
+            originalTask: task,
           };
         })
         .filter((event) => event !== null);
@@ -104,6 +106,98 @@ export const EventProvider = ({ children }) => {
     }
   }, []);
 
+  // Format event data to match the API's expected task format
+  const formatEventToTask = (eventData) => {
+    const due_date = format(eventData.start, 'yyyy-MM-dd');
+    const start_time = format(eventData.start, 'HH:mm:ss');
+    const end_time = format(eventData.end, 'HH:mm:ss');
+
+    return {
+      title: eventData.title,
+      details: eventData.details || "",
+      due_date,
+      start_time,
+      end_time,
+      color: eventData.color || "#039be5",
+      completed: eventData.completed || false,
+    };
+  };
+
+  // Add a new event (task)
+  const addEvent = async (eventData) => {
+    try {
+      setLoading(true);
+      const taskData = formatEventToTask(eventData);
+      
+      // Send request to create a new task
+      const response = await axiosInstance.post('/tasks/', taskData);
+      
+      // Refresh the event list to include the new task
+      await fetchEvents();
+      
+      return response.data;
+    } catch (err) {
+      console.error('Error adding event:', err);
+      setError(err.response?.data?.message || 'Failed to add event');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Update an existing event (task)
+  const updateEvent = async (eventData) => {
+    try {
+      setLoading(true);
+      const taskData = formatEventToTask(eventData);
+      
+      // Send request to update the task
+      const response = await axiosInstance.patch(`/tasks/${eventData.id}/`, taskData);
+      
+      // Update events in state
+      setEvents(prevEvents => 
+        prevEvents.map(event => 
+          event.id === eventData.id 
+            ? { 
+                ...event, 
+                ...eventData, 
+                originalTask: { ...event.originalTask, ...taskData } 
+              } 
+            : event
+        )
+      );
+      
+      return response.data;
+    } catch (err) {
+      console.error('Error updating event:', err);
+      setError(err.response?.data?.message || 'Failed to update event');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Delete an existing event (task)
+  const deleteEvent = async (eventId) => {
+    try {
+      setLoading(true);
+      
+      // Send request to delete the task
+      await axiosInstance.delete(`/tasks/${eventId}/`);
+      
+      // Remove the deleted event from state
+      setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
+      
+      return true;
+    } catch (err) {
+      console.error('Error deleting event:', err);
+      setError(err.response?.data?.message || 'Failed to delete event');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
@@ -115,6 +209,9 @@ export const EventProvider = ({ children }) => {
         loading,
         error,
         refetchEvents: fetchEvents,
+        addEvent,
+        updateEvent,
+        deleteEvent
       }}
     >
       {children}
