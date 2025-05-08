@@ -21,7 +21,7 @@ import Profile from './pages/Profile'; // Import the new Profile component
 import SharedCollectionList from './pages/SharedCollectionList';
 import PublicSharedPage from './pages/PublicSharedPage';
 import Index from "./pages/Mycalendar";
-import ChatWidget from './components/chatwidget';
+import ChatWidget from './components/Chatwidget';
 
 function App() {
   const location = useLocation();

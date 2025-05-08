@@ -47,12 +47,11 @@ export const CalendarHeader = () => {
           <h2 className="calendar-title ms-2">{getHeaderTitle()}</h2>
         </div>
       </div>
-      <div className="d-flex align-items-center gap-3">
+      <div className="d-flex align-items-center gap-3" >
         <select 
           className="form-select form-select-sm" 
           value={view}
           onChange={(e) => setView(e.target.value)}
-          style={{ width: isMobile ? "80px" : "110px" }}
         >
           <option value="day">Day</option>
           <option value="week">Week</option>
