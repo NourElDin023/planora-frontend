@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: ../planora_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../planora_backend:/app
+
+  frontend:
+    build:
+      context: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app

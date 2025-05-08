@@ -1,10 +1,10 @@
 import React from "react";
 import { useCalendar } from "../../context/CalendarContext";
-import { CalendarHeader } from "./calendarHeader";
-import { CalendarSidebar }  from "./calendarsidebar";
+import { CalendarHeader } from "./CalendarHeader";
+import { CalendarSidebar }  from "./Calendarsidebar";
 import { WeekView } from "./WeekView";
 import { MonthView } from "./MonthView";
-import { DayView } from "./dayView";
+import { DayView } from "./DayView";
 import { useIsMobile } from "../../assets/use-mobile";
 import "./calendar.css";
 
