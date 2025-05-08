@@ -617,8 +617,10 @@ const Profile = () => {
           )}
           
           <div className="card mb-4">
-            <div className="card-body">
-              <h4 className="mb-4">Change Password</h4>
+          <div className="card-header bg-info-subtle text-white" data-bs-toggle="collapse" href="#passwordChange" role="button" aria-expanded="false" aria-controls="passwordChange">
+              <h4 className="mb-0" >Change Password</h4>
+              </div>
+            <div className="card-body collapse" id="passwordChange">
               <form onSubmit={handlePasswordSubmit}>
                 <div className="mb-3">
                   <label className="form-label">Current Password</label>
@@ -674,10 +676,10 @@ const Profile = () => {
 
           {/* Account Management Section */}
           <div className="card mb-4 border-danger">
-            <div className="card-header bg-danger text-white">
+            <div className="card-header bg-danger text-white" data-bs-toggle="collapse" href="#accountManagement" role="button" aria-expanded="false" aria-controls="accountManagement">
               <h4 className="mb-0">Account Management</h4>
             </div>
-            <div className="card-body">
+            <div className="card-body collapse" id="accountManagement">
               <div className="alert alert-warning">
                 <h5>Warning</h5>
                 <p>The actions below can limit or permanently remove your access to this account.</p>
