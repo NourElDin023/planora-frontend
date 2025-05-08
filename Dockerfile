@@ -4,9 +4,12 @@ FROM node:22.14.0-alpine
 # Set the working directory in the container
 WORKDIR /app
 
+# Install pnpm globally
+RUN npm install -g pnpm
+
 # Copy the package.json and install dependencies
 COPY package.json ./
-RUN npm install
+RUN pnpm install
 
 # Copy the rest of the application code
 COPY . .
@@ -15,4 +18,4 @@ COPY . .
 EXPOSE 5173
 
 # Command to run the application
-CMD ["npm", "run", "dev"]
+CMD ["pnpm", "run", "dev"]
