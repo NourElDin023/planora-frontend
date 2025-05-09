@@ -198,7 +198,7 @@ const VerifyEmail = () => {
               <div className="card-body p-5">
                 <div className="text-center mb-4">
                   <img 
-                    src="planora-logo-blue.png" 
+                    src="/planora-logo-blue.png" 
                     alt="Planora Logo" 
                     className="img-fluid mb-3" 
                     style={{ maxHeight: '80px' }} 
